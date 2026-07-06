@@ -407,6 +407,7 @@
           setupWindow(element);
         });
       });
+      
 
       // ----- OPEN CONTACT (external component) -----
       document.getElementById('contactIcon').addEventListener('dblclick', function(e) {
