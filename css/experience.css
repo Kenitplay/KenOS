@@ -1,0 +1,58 @@
+.exp-card {
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      transition: 0.2s;
+    }
+    .exp-card:last-child {
+      margin-bottom: 0;
+    }
+    .exp-card:hover {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.12);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.02);
+      transform: translateY(-1px);
+    }
+    .exp-card h5 {
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 4px;
+      font-size: 1rem;
+      font-family: 'Courier New', monospace;
+    }
+    .exp-card .company {
+      font-weight: 500;
+      color: #66e0ff;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-family: 'Courier New', monospace;
+    }
+    .exp-card .company i {
+      color: #00d4ff;
+      font-size: 13px;
+    }
+    .exp-card .desc {
+      color: #99ddff;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: 4px;
+      padding-left: 4px;
+    }
+    .badge-tag {
+      display: inline-block;
+      background: rgba(0, 212, 255, 0.06);
+      padding: 2px 12px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #00d4ff;
+      margin-right: 6px;
+      margin-top: 8px;
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      font-family: 'Courier New', monospace;
+    }

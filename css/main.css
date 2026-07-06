@@ -1,0 +1,109 @@
+.resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      cursor: nwse-resize;
+      background: transparent;
+      z-index: 10;
+    }
+    .resize-handle::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid rgba(0, 212, 255, 0.2);
+      border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    }
+    .kenos-window.fullscreen .resize-handle {
+      display: none;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .kenos-desktop {
+        gap: 18px;
+        padding: 16px 14px;
+      }
+      .desktop-icon {
+        width: 76px;
+      }
+      .icon-box {
+        font-size: 36px;
+        width: 64px;
+        padding: 4px 6px;
+      }
+      .kenos-taskbar {
+        padding: 6px 14px;
+        height: auto;
+        min-height: 64px;
+        justify-content: center;
+      }
+      .taskbar-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      .finder-pill {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+      .time-badge {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+      .kenos-window {
+        width: 94vw;
+        left: 3vw;
+        top: 40px;
+      }
+      .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .project-card img {
+        height: 100px;
+      }
+      .boot-logo {
+        font-size: 48px;
+      }
+      .boot-title {
+        font-size: 22px;
+      }
+      .boot-progress {
+        width: 280px;
+      }
+    }
+    @media (max-width: 500px) {
+      .taskbar-section {
+        gap: 4px;
+      }
+      .kenos-taskbar {
+        gap: 4px;
+      }
+      .divider-line {
+        display: none;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .boot-progress {
+        width: 200px;
+      }
+    }
+
+    /* ---------- CONTAINER FOR WINDOWS ---------- */
+    #windowContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #windowContainer>* {
+      pointer-events: auto;
+    }

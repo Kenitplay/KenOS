@@ -1,0 +1,116 @@
+.kenos-window {
+      position: absolute;
+      top: 70px;
+      left: 100px;
+      width: 700px;
+      max-width: 92vw;
+      background: rgba(8, 18, 30, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      display: none;
+      flex-direction: column;
+      min-height: 320px;
+      max-height: 80vh;
+      z-index: 1000;
+      overflow: hidden;
+      resize: both;
+      transition: none;
+    }
+    .kenos-window.active {
+      display: flex;
+    }
+    .kenos-window.fullscreen {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      border-radius: 0 !important;
+      resize: none !important;
+      z-index: 9999 !important;
+    }
+
+    .window-header {
+      padding: 10px 16px;
+      background: rgba(0, 20, 40, 0.8);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: grab;
+      border-radius: 6px 6px 0 0;
+      flex-shrink: 0;
+    }
+    .window-header:active {
+      cursor: grabbing;
+    }
+    .window-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #00d4ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Courier New', monospace;
+    }
+    .window-title i {
+      color: #00d4ff;
+      font-size: 14px;
+    }
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+    .window-controls span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: 0.15s;
+      cursor: pointer;
+    }
+    .win-close {
+      background: #ff4757;
+      box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
+    }
+    .win-close:hover {
+      background: #ff6b81;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+    }
+    .win-minimize {
+      background: #ffa502;
+      box-shadow: 0 0 10px rgba(255, 165, 2, 0.2);
+    }
+    .win-minimize:hover {
+      background: #ffbe76;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(255, 165, 2, 0.4);
+    }
+    .win-zoom {
+      background: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    .win-zoom:hover {
+      background: #4dd9ff;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .window-body {
+      padding: 18px 20px 22px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    .window-body::-webkit-scrollbar {
+      width: 4px;
+    }
+    .window-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.15);
+      border-radius: 10px;
+    }

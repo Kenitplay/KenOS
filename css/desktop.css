@@ -1,0 +1,25 @@
+.kenos-desktop {
+      height: calc(100vh - 68px);
+      width: 100%;
+      background: radial-gradient(ellipse at 30% 40%, #0d1a2b, #060b12 80%);
+      padding: 24px 20px 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 28px 32px;
+      overflow-y: auto;
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .kenos-desktop.visible {
+      opacity: 1;
+    }
+    .kenos-desktop::-webkit-scrollbar {
+      width: 5px;
+      background: transparent;
+    }
+    .kenos-desktop::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.2);
+      border-radius: 20px;
+    }

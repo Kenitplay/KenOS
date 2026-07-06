@@ -1,0 +1,54 @@
+.desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 92px;
+      color: #00d4ff;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      padding: 10px 6px 8px 6px;
+      border-radius: 8px;
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
+      cursor: default;
+      font-family: 'Courier New', monospace;
+    }
+    .desktop-icon:hover {
+      background: rgba(0, 212, 255, 0.06);
+      border-color: rgba(0, 212, 255, 0.15);
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.04);
+    }
+    .desktop-icon:active {
+      transform: scale(0.94);
+    }
+    .icon-box {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.15));
+      color: #00d4ff;
+      background: transparent;
+      padding: 6px 10px;
+      width: 76px;
+      text-align: center;
+    }
+    .desktop-icon:hover .icon-box {
+      color: #4dd9ff;
+      filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.3));
+    }
+    .icon-label {
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 4px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+    }

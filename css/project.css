@@ -1,0 +1,63 @@
+.projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+    }
+    .project-card {
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.03);
+    }
+    .project-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+      filter: grayscale(40%) contrast(1.1);
+    }
+    .project-card .card-body {
+      padding: 12px 14px 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card .card-body h6 {
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      font-family: 'Courier New', monospace;
+    }
+    .project-card .card-body p {
+      font-size: 0.8rem;
+      color: #66e0ff;
+      margin-bottom: 10px;
+      flex: 1;
+      line-height: 1.4;
+    }
+    .project-card .card-body .project-link {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #00d4ff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.15s;
+      font-family: 'Courier New', monospace;
+    }
+    .project-card .card-body .project-link:hover {
+      color: #4dd9ff;
+      gap: 10px;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }

@@ -1,0 +1,101 @@
+#bootScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0a0a0a;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #bootScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .boot-logo {
+      font-size: 72px;
+      color: #00d4ff;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.98); }
+    }
+    .boot-title {
+      font-size: 32px;
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .boot-title span {
+      color: #ff6b6b;
+    }
+    .boot-subtitle {
+      font-size: 13px;
+      color: #66e0ff;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 28px;
+      opacity: 0.7;
+      letter-spacing: 2px;
+    }
+    .boot-progress {
+      width: 420px;
+      max-width: 80vw;
+      height: 3px;
+      background: rgba(0, 212, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .boot-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      transition: width 0.1s linear;
+    }
+    .boot-status {
+      font-size: 12px;
+      color: #66e0ff;
+      font-family: 'Courier New', monospace;
+      opacity: 0.8;
+      min-height: 20px;
+    }
+    .boot-status .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 16px;
+      background: #00d4ff;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 4px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .boot-commands {
+      font-size: 10px;
+      color: #4dc9ff;
+      font-family: 'Courier New', monospace;
+      opacity: 0.4;
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+    .boot-commands .ok {
+      color: #00ff88;
+    }
+    .boot-commands .fail {
+      color: #ff6b6b;
+    }
