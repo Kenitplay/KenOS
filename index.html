@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KenOS · Portfolio</title>
+  <!-- Bootstrap 5 + Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background: #0a0a0a;
+      font-family: 'Courier New', 'Source Code Pro', 'Segoe UI', monospace;
+      user-select: none;
+    }
+
+    /* ---------- BOOT SCREEN ---------- */
+    #bootScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0a0a0a;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #bootScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .boot-logo {
+      font-size: 72px;
+      color: #00d4ff;
+      margin-bottom: 16px;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.98); }
+    }
+    .boot-title {
+      font-size: 32px;
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .boot-title span {
+      color: #ff6b6b;
+    }
+    .boot-subtitle {
+      font-size: 13px;
+      color: #66e0ff;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 28px;
+      opacity: 0.7;
+      letter-spacing: 2px;
+    }
+    .boot-progress {
+      width: 420px;
+      max-width: 80vw;
+      height: 3px;
+      background: rgba(0, 212, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .boot-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      transition: width 0.1s linear;
+    }
+    .boot-status {
+      font-size: 12px;
+      color: #66e0ff;
+      font-family: 'Courier New', monospace;
+      opacity: 0.8;
+      min-height: 20px;
+    }
+    .boot-status .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 16px;
+      background: #00d4ff;
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 4px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .boot-commands {
+      font-size: 10px;
+      color: #4dc9ff;
+      font-family: 'Courier New', monospace;
+      opacity: 0.4;
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.8;
+      letter-spacing: 0.5px;
+    }
+    .boot-commands .ok {
+      color: #00ff88;
+    }
+    .boot-commands .fail {
+      color: #ff6b6b;
+    }
+
+    /* ---------- KENOS DESKTOP ---------- */
+    .kenos-desktop {
+      height: calc(100vh - 68px);
+      width: 100%;
+      background: radial-gradient(ellipse at 30% 40%, #0d1a2b, #060b12 80%);
+      padding: 24px 20px 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 28px 32px;
+      overflow-y: auto;
+      position: relative;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .kenos-desktop.visible {
+      opacity: 1;
+    }
+    .kenos-desktop::-webkit-scrollbar {
+      width: 5px;
+      background: transparent;
+    }
+    .kenos-desktop::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.2);
+      border-radius: 20px;
+    }
+
+    /* ---------- DESKTOP ICON (KenOS style) ---------- */
+    .desktop-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 92px;
+      color: #00d4ff;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      padding: 10px 6px 8px 6px;
+      border-radius: 8px;
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
+      cursor: default;
+      font-family: 'Courier New', monospace;
+    }
+    .desktop-icon:hover {
+      background: rgba(0, 212, 255, 0.06);
+      border-color: rgba(0, 212, 255, 0.15);
+      transform: scale(1.03) translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.04);
+    }
+    .desktop-icon:active {
+      transform: scale(0.94);
+    }
+    .icon-box {
+      font-size: 44px;
+      line-height: 1;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.15));
+      color: #00d4ff;
+      background: transparent;
+      padding: 6px 10px;
+      width: 76px;
+      text-align: center;
+    }
+    .desktop-icon:hover .icon-box {
+      color: #4dd9ff;
+      filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.3));
+    }
+    .icon-label {
+      font-size: 11px;
+      font-weight: 500;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 4px 12px;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ---------- KENOS WINDOW ---------- */
+    .kenos-window {
+      position: absolute;
+      top: 70px;
+      left: 100px;
+      width: 700px;
+      max-width: 92vw;
+      background: rgba(8, 18, 30, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 6px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      display: none;
+      flex-direction: column;
+      min-height: 320px;
+      max-height: 80vh;
+      z-index: 1000;
+      overflow: hidden;
+      resize: both;
+      transition: none;
+    }
+    .kenos-window.active {
+      display: flex;
+    }
+    .kenos-window.fullscreen {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+      border-radius: 0 !important;
+      resize: none !important;
+      z-index: 9999 !important;
+    }
+
+    .window-header {
+      padding: 10px 16px;
+      background: rgba(0, 20, 40, 0.8);
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: grab;
+      border-radius: 6px 6px 0 0;
+      flex-shrink: 0;
+    }
+    .window-header:active {
+      cursor: grabbing;
+    }
+    .window-title {
+      font-weight: 600;
+      font-size: 13px;
+      color: #00d4ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Courier New', monospace;
+    }
+    .window-title i {
+      color: #00d4ff;
+      font-size: 14px;
+    }
+    .window-controls {
+      display: flex;
+      gap: 8px;
+    }
+    .window-controls span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      transition: 0.15s;
+      cursor: pointer;
+    }
+    .win-close {
+      background: #ff4757;
+      box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
+    }
+    .win-close:hover {
+      background: #ff6b81;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.4);
+    }
+    .win-minimize {
+      background: #ffa502;
+      box-shadow: 0 0 10px rgba(255, 165, 2, 0.2);
+    }
+    .win-minimize:hover {
+      background: #ffbe76;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(255, 165, 2, 0.4);
+    }
+    .win-zoom {
+      background: #00d4ff;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    .win-zoom:hover {
+      background: #4dd9ff;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .window-body {
+      padding: 18px 20px 22px;
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    .window-body::-webkit-scrollbar {
+      width: 4px;
+    }
+    .window-body::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.15);
+      border-radius: 10px;
+    }
+
+    /* ---------- EXPERIENCE CARDS (KenOS style) ---------- */
+    .exp-card {
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      transition: 0.2s;
+    }
+    .exp-card:last-child {
+      margin-bottom: 0;
+    }
+    .exp-card:hover {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.12);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.02);
+      transform: translateY(-1px);
+    }
+    .exp-card h5 {
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 4px;
+      font-size: 1rem;
+      font-family: 'Courier New', monospace;
+    }
+    .exp-card .company {
+      font-weight: 500;
+      color: #66e0ff;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-family: 'Courier New', monospace;
+    }
+    .exp-card .company i {
+      color: #00d4ff;
+      font-size: 13px;
+    }
+    .exp-card .desc {
+      color: #99ddff;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-top: 4px;
+      padding-left: 4px;
+    }
+    .badge-tag {
+      display: inline-block;
+      background: rgba(0, 212, 255, 0.06);
+      padding: 2px 12px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: #00d4ff;
+      margin-right: 6px;
+      margin-top: 8px;
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ---------- PROJECT CARDS (KenOS style) ---------- */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+    }
+    .project-card {
+      background: rgba(0, 212, 255, 0.02);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card:hover {
+      background: rgba(0, 212, 255, 0.04);
+      border-color: rgba(0, 212, 255, 0.12);
+      transform: translateY(-4px);
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.03);
+    }
+    .project-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+      filter: grayscale(40%) contrast(1.1);
+    }
+    .project-card .card-body {
+      padding: 12px 14px 14px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-card .card-body h6 {
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      font-family: 'Courier New', monospace;
+    }
+    .project-card .card-body p {
+      font-size: 0.8rem;
+      color: #66e0ff;
+      margin-bottom: 10px;
+      flex: 1;
+      line-height: 1.4;
+    }
+    .project-card .card-body .project-link {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #00d4ff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.15s;
+      font-family: 'Courier New', monospace;
+    }
+    .project-card .card-body .project-link:hover {
+      color: #4dd9ff;
+      gap: 10px;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    }
+
+    /* ---------- TASKBAR (KenOS style) ---------- */
+    .kenos-taskbar {
+      height: 68px;
+      background: rgba(6, 16, 28, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0, 212, 255, 0.06);
+      box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.8);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .kenos-taskbar.visible {
+      opacity: 1;
+    }
+    .taskbar-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .taskbar-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      background: rgba(0, 212, 255, 0.04);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #00d4ff;
+      transition: all 0.18s ease;
+      text-decoration: none;
+    }
+    .taskbar-btn:hover {
+      background: rgba(0, 212, 255, 0.08);
+      border-color: rgba(0, 212, 255, 0.15);
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.04);
+      color: #4dd9ff;
+    }
+    .taskbar-btn:active {
+      transform: scale(0.9);
+    }
+    .finder-pill {
+      background: rgba(0, 212, 255, 0.04);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 6px;
+      padding: 5px 16px 5px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      color: #00d4ff;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+    }
+    .finder-pill i {
+      font-size: 16px;
+    }
+    .divider-line {
+      width: 1px;
+      height: 28px;
+      background: rgba(0, 212, 255, 0.06);
+    }
+    .time-badge {
+      background: rgba(0, 212, 255, 0.04);
+      padding: 5px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #00d4ff;
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      letter-spacing: 0.3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ---------- RESIZE HANDLE ---------- */
+    .resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      cursor: nwse-resize;
+      background: transparent;
+      z-index: 10;
+    }
+    .resize-handle::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 10px;
+      height: 10px;
+      border-right: 2px solid rgba(0, 212, 255, 0.2);
+      border-bottom: 2px solid rgba(0, 212, 255, 0.2);
+    }
+    .kenos-window.fullscreen .resize-handle {
+      display: none;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .kenos-desktop {
+        gap: 18px;
+        padding: 16px 14px;
+      }
+      .desktop-icon {
+        width: 76px;
+      }
+      .icon-box {
+        font-size: 36px;
+        width: 64px;
+        padding: 4px 6px;
+      }
+      .kenos-taskbar {
+        padding: 6px 14px;
+        height: auto;
+        min-height: 64px;
+        justify-content: center;
+      }
+      .taskbar-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      .finder-pill {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+      .time-badge {
+        font-size: 11px;
+        padding: 4px 12px;
+      }
+      .kenos-window {
+        width: 94vw;
+        left: 3vw;
+        top: 40px;
+      }
+      .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .project-card img {
+        height: 100px;
+      }
+      .boot-logo {
+        font-size: 48px;
+      }
+      .boot-title {
+        font-size: 22px;
+      }
+      .boot-progress {
+        width: 280px;
+      }
+    }
+    @media (max-width: 500px) {
+      .taskbar-section {
+        gap: 4px;
+      }
+      .kenos-taskbar {
+        gap: 4px;
+      }
+      .divider-line {
+        display: none;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      .boot-progress {
+        width: 200px;
+      }
+    }
+
+    /* ---------- CONTAINER FOR WINDOWS ---------- */
+    #windowContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    #windowContainer>* {
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== BOOT SCREEN ========== -->
+  <div id="bootScreen">
+    <div class="boot-logo">
+      <i class="fas fa-microchip"></i>
+    </div>
+    <div class="boot-title">Ken<span>OS</span></div>
+    <div class="boot-subtitle">v2.0 · portfolio edition</div>
+    <div class="boot-progress">
+      <div class="boot-progress-bar" id="bootProgressBar"></div>
+    </div>
+    <div class="boot-status" id="bootStatus">
+      <span id="bootStatusText">Initializing system...</span>
+      <span class="cursor"></span>
+    </div>
+    <div class="boot-commands" id="bootCommands">
+      <span id="bootCommandText"><span class="ok">[  OK  ]</span> loading kernel modules</span><br>
+      <span id="bootCommandText2"><span class="ok">[  OK  ]</span> mounting filesystems</span>
+    </div>
+  </div>
+
+  <!-- ========== DESKTOP ========== -->
+  <div class="kenos-desktop" id="desktopArea">
+
+    <!-- Experience Icon -->
+    <div class="desktop-icon" id="experienceIcon">
+      <div class="icon-box"><i class="fas fa-terminal"></i></div>
+      <span class="icon-label">~$ experience</span>
+    </div>
+
+    <!-- Projects Icon -->
+    <div class="desktop-icon" id="projectsIcon">
+      <div class="icon-box"><i class="fas fa-folder-open"></i></div>
+      <span class="icon-label">~/projects</span>
+    </div>
+
+    <!-- Tools Icon -->
+    <div class="desktop-icon" id="toolsIcon">
+      <div class="icon-box"><i class="fas fa-tools"></i></div>
+      <span class="icon-label">~/tools</span>
+    </div>
+
+    <!-- Whoami Icon (About) -->
+    <div class="desktop-icon" id="whoamiIcon">
+      <div class="icon-box"><i class="fas fa-user-astronaut"></i></div>
+      <span class="icon-label">~$ whoami</span>
+    </div>
+
+    <!-- Certificates Icon -->
+    <div class="desktop-icon" id="certificatesIcon">
+      <div class="icon-box"><i class="fas fa-certificate"></i></div>
+      <span class="icon-label">~/certificates</span>
+    </div>
+
+    <!-- Contact Icon -->
+    <div class="desktop-icon" id="contactIcon">
+      <div class="icon-box"><i class="fas fa-envelope"></i></div>
+      <span class="icon-label">~/contact</span>
+    </div>
+
+    <!-- Other Icons (static) -->
+    <div class="desktop-icon" onclick="alert('🐙 git clone github.com/kenos-dev')">
+      <div class="icon-box"><i class="fab fa-github"></i></div>
+      <span class="icon-label">~/github</span>
+    </div>
+    <div class="desktop-icon" onclick="alert('$ clear')">
+      <div class="icon-box"><i class="fas fa-terminal"></i></div>
+      <span class="icon-label">~/terminal</span>
+    </div>
+
+    <!-- Window Container -->
+    <div id="windowContainer"></div>
+  </div>
+
+  <!-- ========== TASKBAR ========== -->
+  <div class="kenos-taskbar" id="taskbar">
+    <div class="taskbar-section">
+      <div class="finder-pill">
+        <i class="fas fa-microchip"></i>
+        <span>ken@kenos</span>
+      </div>
+      <div class="divider-line"></div>
+      <div class="finder-pill" style="background:rgba(0,212,255,0.02);padding:5px 12px;">
+        <i class="fas fa-th"></i>
+      </div>
+    </div>
+    <div class="taskbar-section">
+      <a href="#" class="taskbar-btn" onclick="alert('🔗 linkedin.com/in/your-profile')" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('📘 facebook.com/yourpage')" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('🐦 @yourhandle')" title="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('📸 @devportfolio')" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('🎥 youtube.com/devchannel')" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('🐙 github.com/your-dev')" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="#" class="taskbar-btn" onclick="alert('🎨 dribbble.com/your-portfolio')" title="Dribbble"><i class="fab fa-dribbble"></i></a>
+    </div>
+    <div class="taskbar-section">
+      <div class="time-badge" id="clockDisplay">
+        <i class="far fa-clock" style="margin-right:6px;"></i>
+        <span id="liveTime">--:--</span>
+      </div>
+      <div class="divider-line"></div>
+      <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('📶 Wi-Fi · Connected')"><i class="fas fa-wifi"></i></div>
+      <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('🔊 Volume 60%')"><i class="fas fa-volume-up"></i></div>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- SCRIPT: Boot Sequence + Component System                    -->
+  <!-- ========================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+  </script>
+  <script>
+    (function() {
+      // ----- BOOT SEQUENCE -----
+      const bootScreen = document.getElementById('bootScreen');
+      const bootProgress = document.getElementById('bootProgressBar');
+      const bootStatusText = document.getElementById('bootStatusText');
+      const bootCommandText = document.getElementById('bootCommandText');
+      const bootCommandText2 = document.getElementById('bootCommandText2');
+      const desktop = document.getElementById('desktopArea');
+      const taskbar = document.getElementById('taskbar');
+
+      const bootMessages = [
+        'Loading KenOS kernel...',
+        'Initializing hardware...',
+        'Setting up network interfaces...',
+        'Mounting filesystems...',
+        'Starting system services...',
+        'Loading user profile...',
+        'Starting desktop environment...',
+        'Welcome to KenOS Portfolio!'
+      ];
+
+      const bootCommands = [
+        '[  OK  ] loading kernel modules',
+        '[  OK  ] initializing hardware',
+        '[  OK  ] setting up network interfaces',
+        '[  OK  ] mounting filesystems',
+        '[  OK  ] starting system services',
+        '[  OK  ] loading user profile',
+        '[  OK  ] starting desktop environment',
+        '[  OK  ] system ready'
+      ];
+
+      let progress = 0;
+      let messageIndex = 0;
+      let audioContext = null;
+
+      // Create audio context and play a boot sound
+      function playBootSound() {
+        try {
+          audioContext = new(window.AudioContext || window.webkitAudioContext)();
+
+          // First beep - lower tone
+          const osc1 = audioContext.createOscillator();
+          const gain1 = audioContext.createGain();
+          osc1.connect(gain1);
+          gain1.connect(audioContext.destination);
+          osc1.frequency.value = 440;
+          osc1.type = 'sine';
+          gain1.gain.value = 0.08;
+          osc1.start();
+          osc1.stop(audioContext.currentTime + 0.1);
+
+          // Second beep - higher tone
+          const osc2 = audioContext.createOscillator();
+          const gain2 = audioContext.createGain();
+          osc2.connect(gain2);
+          gain2.connect(audioContext.destination);
+          osc2.frequency.value = 660;
+          osc2.type = 'sine';
+          gain2.gain.value = 0.07;
+          osc2.start(audioContext.currentTime + 0.15);
+          osc2.stop(audioContext.currentTime + 0.25);
+
+          // Third beep - success tone (nice chord)
+          const osc3 = audioContext.createOscillator();
+          const gain3 = audioContext.createGain();
+          osc3.connect(gain3);
+          gain3.connect(audioContext.destination);
+          osc3.frequency.value = 880;
+          osc3.type = 'sine';
+          gain3.gain.value = 0.06;
+          osc3.start(audioContext.currentTime + 0.35);
+          osc3.stop(audioContext.currentTime + 0.50);
+
+          // Fourth beep - slight higher for final
+          const osc4 = audioContext.createOscillator();
+          const gain4 = audioContext.createGain();
+          osc4.connect(gain4);
+          gain4.connect(audioContext.destination);
+          osc4.frequency.value = 1100;
+          osc4.type = 'sine';
+          gain4.gain.value = 0.05;
+          osc4.start(audioContext.currentTime + 0.55);
+          osc4.stop(audioContext.currentTime + 0.65);
+
+          console.log('🔊 KenOS boot sound played!');
+        } catch (e) {
+          console.warn('Audio not supported:', e);
+        }
+      }
+
+      function updateBootScreen() {
+        progress += Math.random() * 2.5 + 1;
+        if (progress > 100) progress = 100;
+
+        bootProgress.style.width = progress + '%';
+
+        if (messageIndex < bootMessages.length) {
+          bootStatusText.textContent = bootMessages[messageIndex];
+          if (messageIndex < bootCommands.length) {
+            bootCommandText.innerHTML = bootCommands[messageIndex];
+            if (messageIndex > 0) {
+              bootCommandText2.innerHTML = bootCommands[messageIndex - 1];
+            }
+          }
+          messageIndex++;
+        }
+
+        if (progress < 100) {
+          const delay = Math.random() * 120 + 80;
+          setTimeout(updateBootScreen, delay);
+        } else {
+          // Boot complete
+          setTimeout(() => {
+            bootScreen.classList.add('hidden');
+            desktop.classList.add('visible');
+            taskbar.classList.add('visible');
+            // Play boot sound when desktop appears
+            playBootSound();
+            console.log('✅ KenOS boot complete!');
+          }, 500);
+        }
+      }
+
+      // Start boot sequence after a short delay
+      setTimeout(updateBootScreen, 500);
+
+      // ----- CLOCK -----
+      function updateClock() {
+        const now = new Date();
+        let h = now.getHours();
+        const m = now.getMinutes();
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        document.getElementById('liveTime').textContent = `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+
+      // ----- HELPERS: make window draggable & wire controls -----
+      function setupWindow(windowEl) {
+        // Close
+        const closeBtn = windowEl.querySelector('#closeWindowBtn');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            windowEl.style.display = 'none';
+            windowEl.classList.remove('fullscreen');
+          });
+        }
+
+        // Minimize (hide)
+        const minBtn = windowEl.querySelector('#minimizeWindowBtn');
+        if (minBtn) {
+          minBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            windowEl.style.display = 'none';
+            windowEl.classList.remove('fullscreen');
+          });
+        }
+
+        // Zoom (toggle fullscreen)
+        const zoomBtn = windowEl.querySelector('#zoomWindowBtn');
+        if (zoomBtn) {
+          zoomBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Toggle fullscreen class
+            windowEl.classList.toggle('fullscreen');
+
+            // If not fullscreen, restore original size
+            if (!windowEl.classList.contains('fullscreen')) {
+              const w = windowEl.dataset.origWidth || '700px';
+              const h = windowEl.dataset.origHeight || 'auto';
+              windowEl.style.width = w;
+              windowEl.style.height = h;
+              windowEl.style.top = '70px';
+              windowEl.style.left = '100px';
+            } else {
+              // Store current dimensions before fullscreen
+              if (!windowEl.dataset.origWidth) {
+                windowEl.dataset.origWidth = windowEl.style.width || '700px';
+              }
+              if (!windowEl.dataset.origHeight) {
+                windowEl.dataset.origHeight = windowEl.style.height || 'auto';
+              }
+            }
+          });
+        }
+
+        // ----- Resize functionality (drag from bottom-right corner) -----
+        const resizeHandle = windowEl.querySelector('.resize-handle');
+        if (resizeHandle) {
+          let isResizing = false;
+          let startX, startY, startWidth, startHeight;
+
+          resizeHandle.addEventListener('mousedown', function(e) {
+            if (windowEl.classList.contains('fullscreen')) return;
+            e.stopPropagation();
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(document.defaultView.getComputedStyle(windowEl).width, 10);
+            startHeight = parseInt(document.defaultView.getComputedStyle(windowEl).height, 10);
+            document.body.style.cursor = 'nwse-resize';
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+          });
+
+          document.addEventListener('mousemove', function(e) {
+            if (!isResizing) return;
+            const newWidth = Math.max(300, startWidth + (e.clientX - startX));
+            const newHeight = Math.max(200, startHeight + (e.clientY - startY));
+            windowEl.style.width = newWidth + 'px';
+            windowEl.style.height = newHeight + 'px';
+          });
+
+          document.addEventListener('mouseup', function() {
+            if (isResizing) {
+              isResizing = false;
+              document.body.style.cursor = '';
+              document.body.style.userSelect = '';
+            }
+          });
+        }
+
+        // ----- Drag functionality -----
+        const header = windowEl.querySelector('#windowHeader');
+        if (header) {
+          let isDragging = false;
+          let offsetX = 0,
+            offsetY = 0;
+
+          header.addEventListener('mousedown', function(e) {
+            if (e.button !== 0) return;
+            if (windowEl.style.display === 'none') return;
+            if (windowEl.classList.contains('fullscreen')) return;
+            isDragging = true;
+            const rect = windowEl.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            windowEl.style.cursor = 'grabbing';
+            document.body.style.userSelect = 'none';
+            e.preventDefault();
+          });
+
+          document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            const newLeft = e.clientX - offsetX;
+            const newTop = e.clientY - offsetY;
+            const maxX = window.innerWidth - 200;
+            const maxY = window.innerHeight - 180;
+            windowEl.style.left = Math.min(Math.max(newLeft, 10), maxX) + 'px';
+            windowEl.style.top = Math.min(Math.max(newTop, 10), maxY) + 'px';
+            windowEl.style.right = 'auto';
+            windowEl.style.bottom = 'auto';
+          });
+
+          document.addEventListener('mouseup', function() {
+            if (isDragging) {
+              isDragging = false;
+              windowEl.style.cursor = '';
+              document.body.style.userSelect = '';
+            }
+          });
+        }
+      }
+
+      // ----- COMPONENT LOADER (fetch external HTML) -----
+      function loadComponent(url, callback) {
+        fetch(url)
+          .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.text();
+          })
+          .then(html => {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const element = wrapper.firstElementChild;
+            callback(element);
+          })
+          .catch(err => {
+            console.warn('Component load failed:', err);
+            // fallback: show inline placeholder
+            const fallback = document.createElement('div');
+            fallback.innerHTML =
+              `<div style="background:rgba(0,212,255,0.03);padding:20px;border-radius:6px;color:#00d4ff;border:1px solid rgba(0,212,255,0.06);font-family:'Courier New',monospace;">⚠️ Could not load component. Please check network.</div>`;
+            callback(fallback.firstElementChild);
+          });
+      }
+
+      // ----- COMPONENT FACTORIES -----
+      const container = document.getElementById('windowContainer');
+
+      let experienceWindow = null;
+      let projectsWindow = null;
+      let toolsWindow = null;
+      let whoamiWindow = null;
+      let certificatesWindow = null;
+      let contactWindow = null;
+
+      // ----- OPEN EXPERIENCE (external component) -----
+      document.getElementById('experienceIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (experienceWindow) {
+          experienceWindow.style.display = 'flex';
+          experienceWindow.style.zIndex = 1000 + Date.now() % 100;
+          experienceWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the experience component from external file
+        loadComponent('html/experience-component.html', function(element) {
+          experienceWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- OPEN PROJECTS (external component) -----
+      document.getElementById('projectsIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (projectsWindow) {
+          projectsWindow.style.display = 'flex';
+          projectsWindow.style.zIndex = 1000 + Date.now() % 100;
+          projectsWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the projects component from external file
+        loadComponent('projects-component.html', function(element) {
+          projectsWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- OPEN TOOLS (external component) -----
+      document.getElementById('toolsIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (toolsWindow) {
+          toolsWindow.style.display = 'flex';
+          toolsWindow.style.zIndex = 1000 + Date.now() % 100;
+          toolsWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the tools component from external file
+        loadComponent('tools-component.html', function(element) {
+          toolsWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- OPEN WHOAMI (external component) -----
+      document.getElementById('whoamiIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (whoamiWindow) {
+          whoamiWindow.style.display = 'flex';
+          whoamiWindow.style.zIndex = 1000 + Date.now() % 100;
+          whoamiWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the whoami component from external file
+        loadComponent('whoami-component.html', function(element) {
+          whoamiWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- OPEN CERTIFICATES (external component) -----
+      document.getElementById('certificatesIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (certificatesWindow) {
+          certificatesWindow.style.display = 'flex';
+          certificatesWindow.style.zIndex = 1000 + Date.now() % 100;
+          certificatesWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the certificates component from external file
+        loadComponent('certificates-component.html', function(element) {
+          certificatesWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- OPEN CONTACT (external component) -----
+      document.getElementById('contactIcon').addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+
+        // if window already exists, just show it
+        if (contactWindow) {
+          contactWindow.style.display = 'flex';
+          contactWindow.style.zIndex = 1000 + Date.now() % 100;
+          contactWindow.classList.remove('fullscreen');
+          return;
+        }
+
+        // load the contact component from external file
+        loadComponent('contact-component.html', function(element) {
+          contactWindow = element;
+          container.appendChild(element);
+          element.style.display = 'flex';
+          element.style.zIndex = 1000 + Date.now() % 100;
+          setupWindow(element);
+        });
+      });
+
+      // ----- Double-click desktop → close all windows -----
+      const desktopEl = document.getElementById('desktopArea');
+      desktopEl.addEventListener('dblclick', function(e) {
+        if (e.target === desktopEl || e.target.classList.contains('kenos-desktop')) {
+          if (experienceWindow) {
+            experienceWindow.style.display = 'none';
+            experienceWindow.classList.remove('fullscreen');
+          }
+          if (projectsWindow) {
+            projectsWindow.style.display = 'none';
+            projectsWindow.classList.remove('fullscreen');
+          }
+          if (toolsWindow) {
+            toolsWindow.style.display = 'none';
+            toolsWindow.classList.remove('fullscreen');
+          }
+          if (whoamiWindow) {
+            whoamiWindow.style.display = 'none';
+            whoamiWindow.classList.remove('fullscreen');
+          }
+          if (certificatesWindow) {
+            certificatesWindow.style.display = 'none';
+            certificatesWindow.classList.remove('fullscreen');
+          }
+          if (contactWindow) {
+            contactWindow.style.display = 'none';
+            contactWindow.classList.remove('fullscreen');
+          }
+        }
+      });
+
+      console.log('✨ KenOS components ready. Double-click Experience, Projects, Tools, Whoami, Certificates, or Contact icons.');
+    })();
+  </script>
+</body>
+</html>
