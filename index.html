@@ -16,6 +16,504 @@
   <link rel="stylesheet" href="css/experience.css"/>
   <link rel="stylesheet" href="css/project.css"/>
   <link rel="stylesheet" href="css/taskbar.css"/>
+  <style>
+    /* ---------- OVERRIDE: FORCE WATERMARK VISIBILITY (MORE SOLID) ---------- */
+    .desktop-watermark {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      font-size: 220px !important;
+      color: rgba(0, 212, 255, 0.25) !important;
+      pointer-events: none !important;
+      z-index: 999 !important;
+      text-shadow: 
+        0 0 80px rgba(0, 212, 255, 0.10),
+        0 0 150px rgba(0, 212, 255, 0.05) !important;
+      animation: watermark-float 8s ease-in-out infinite !important;
+      font-family: 'Courier New', monospace !important;
+      opacity: 1 !important;
+      display: block !important;
+      visibility: visible !important;
+      user-select: none !important;
+      text-align: center !important;
+    }
+    .desktop-watermark i {
+      display: block !important;
+      text-align: center !important;
+      font-size: 220px !important;
+      color: rgba(0, 212, 255, 0.25) !important;
+      filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.08)) !important;
+    }
+    .desktop-watermark .watermark-text {
+      display: block !important;
+      font-size: 34px !important;
+      letter-spacing: 4px !important;
+      margin-top: 16px !important;
+      text-transform: none !important;
+      font-weight: 400 !important;
+      text-align: center !important;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.06) !important;
+    }
+    .desktop-watermark .watermark-text .ken {
+      color: rgba(0, 212, 255, 0.25) !important;
+    }
+    .desktop-watermark .watermark-text .os {
+      color: rgba(255, 107, 107, 0.30) !important;
+    }
+    @keyframes watermark-float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1) !important; }
+      50% { transform: translate(-50%, -50%) scale(1.03) !important; }
+    }
+    /* ---------- CALENDAR WIDGET (ENLARGED) ---------- */
+    .calendar-widget {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(8, 18, 30, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px 30px 26px;
+      width: 340px;
+      max-width: 92vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(0, 212, 255, 0.05);
+      z-index: 100;
+      pointer-events: none;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+    }
+    .calendar-widget:hover {
+      border-color: rgba(0, 212, 255, 0.15);
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(0, 212, 255, 0.08);
+    }
+    .calendar-widget .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+    }
+    .calendar-widget .widget-header .icon {
+      color: rgba(0, 212, 255, 0.3);
+      font-size: 18px;
+    }
+    .calendar-widget .month-year {
+      color: #00d4ff;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 2px;
+      flex: 1;
+    }
+    .calendar-widget .widget-header .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.3);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .calendar-widget .day-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .calendar-widget .day-grid .day-name {
+      color: rgba(102, 224, 255, 0.4);
+      font-weight: 600;
+      padding: 8px 0;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .calendar-widget .day-grid .day-number {
+      color: #99ddff;
+      padding: 10px 0;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: 0.15s;
+      font-weight: 400;
+    }
+    .calendar-widget .day-grid .day-number.today {
+      color: #00d4ff;
+      background: rgba(0, 212, 255, 0.12);
+      font-weight: 700;
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 24px rgba(0, 212, 255, 0.05);
+    }
+    .calendar-widget .day-grid .day-number.other-month {
+      color: rgba(153, 221, 255, 0.15);
+    }
+    .calendar-widget .day-grid .day-number.weekend {
+      color: rgba(255, 107, 107, 0.4);
+    }
+    .calendar-widget .day-grid .day-number.weekend.today {
+      color: #ff6b6b;
+      border-color: rgba(255, 107, 107, 0.2);
+    }
+    .calendar-widget .time-display {
+      text-align: center;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(0, 212, 255, 0.06);
+    }
+    .calendar-widget .time-display .hours {
+      color: #00d4ff;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .calendar-widget .time-display .seconds {
+      color: rgba(102, 224, 255, 0.3);
+      font-size: 20px;
+      font-weight: 300;
+      margin-left: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .calendar-widget .time-display .ampm {
+      color: rgba(102, 224, 255, 0.3);
+      font-size: 16px;
+      margin-left: 10px;
+      font-weight: 300;
+    }
+    .calendar-widget .date-display {
+      text-align: center;
+      color: rgba(153, 221, 255, 0.35);
+      font-size: 14px;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+    .calendar-widget .weather-display {
+      text-align: center;
+      color: rgba(153, 221, 255, 0.25);
+      font-size: 13px;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .calendar-widget .weather-display i {
+      color: rgba(0, 212, 255, 0.2);
+      font-size: 16px;
+    }
+
+    /* ---------- QUICK STATS AT BOTTOM ---------- */
+    .quick-stats {
+      position: fixed;
+      bottom: 78px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+      z-index: 50;
+      pointer-events: none;
+      font-family: 'Courier New', monospace;
+      padding: 0 4px;
+    }
+    .quick-stats .stat-item {
+      background: rgba(8, 18, 30, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 10px;
+      padding: 10px 18px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .quick-stats .stat-item:hover {
+      border-color: rgba(0, 212, 255, 0.12);
+      background: rgba(8, 18, 30, 0.85);
+    }
+    .quick-stats .stat-item .stat-icon {
+      color: rgba(0, 212, 255, 0.25);
+      font-size: 18px;
+      width: 30px;
+      text-align: center;
+    }
+    .quick-stats .stat-item .stat-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .quick-stats .stat-item .stat-value {
+      color: #00d4ff;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    .quick-stats .stat-item .stat-label {
+      color: rgba(153, 221, 255, 0.4);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ---------- DESKTOP ENHANCEMENTS ---------- */
+    .kenos-desktop {
+      background: radial-gradient(ellipse at 30% 40%, #0d1a2b, #060b12 80%);
+      position: relative;
+    }
+    .kenos-desktop::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .system-info {
+      position: fixed;
+      bottom: 140px;
+      right: 28px;
+      color: rgba(0, 212, 255, 0.04);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      text-align: right;
+      letter-spacing: 1px;
+      pointer-events: none;
+      z-index: 0;
+      line-height: 1.8;
+    }
+    .system-info .highlight {
+      color: rgba(0, 212, 255, 0.08);
+    }
+    @media (max-width: 768px) {
+      .system-info {
+        display: none;
+      }
+    }
+
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.03);
+      pointer-events: none;
+      z-index: 0;
+      animation: float-particle 20s infinite linear;
+    }
+    @keyframes float-particle {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+    }
+
+    @media (max-width: 1024px) {
+      .calendar-widget {
+        width: 280px;
+        padding: 24px 20px 20px;
+        right: 14px;
+      }
+      .calendar-widget .month-year {
+        font-size: 18px;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 15px;
+        padding: 8px 0;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 30px;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 16px;
+      }
+      .quick-stats .stat-item {
+        padding: 8px 14px;
+        min-width: 100px;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 15px;
+      }
+      .desktop-watermark {
+        font-size: 120px !important;
+      }
+      .desktop-watermark i {
+        font-size: 120px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 20px !important;
+        letter-spacing: 3px !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .calendar-widget {
+        right: 10px;
+        padding: 18px 16px 16px;
+        width: 220px;
+        top: 80px;
+        transform: none;
+      }
+      .calendar-widget .month-year {
+        font-size: 14px;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 12px;
+        padding: 6px 0;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 10px;
+        padding: 5px 0;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 22px;
+        letter-spacing: 2px;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 13px;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 12px;
+      }
+      .calendar-widget .date-display {
+        font-size: 11px;
+      }
+      .calendar-widget .weather-display {
+        font-size: 10px;
+      }
+      .calendar-widget .widget-header .icon {
+        font-size: 14px;
+      }
+      .quick-stats {
+        bottom: 72px;
+        left: 14px;
+        right: 14px;
+        gap: 10px;
+      }
+      .quick-stats .stat-item {
+        padding: 6px 12px;
+        min-width: 80px;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 13px;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 14px;
+        width: 24px;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 8px;
+      }
+      .desktop-watermark {
+        font-size: 80px !important;
+      }
+      .desktop-watermark i {
+        font-size: 80px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 16px !important;
+        letter-spacing: 3px !important;
+      }
+    }
+    @media (max-width: 500px) {
+      .calendar-widget {
+        right: 6px;
+        width: 160px;
+        padding: 12px 10px 12px;
+        top: 70px;
+        border-radius: 10px;
+      }
+      .calendar-widget .month-year {
+        font-size: 11px;
+        letter-spacing: 1px;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 10px;
+        padding: 4px 0;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 8px;
+        padding: 3px 0;
+      }
+      .calendar-widget .day-grid {
+        gap: 2px;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 10px;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 10px;
+      }
+      .calendar-widget .date-display {
+        font-size: 9px;
+      }
+      .calendar-widget .weather-display {
+        font-size: 8px;
+      }
+      .calendar-widget .widget-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+      .calendar-widget .widget-header .icon {
+        font-size: 11px;
+      }
+      .calendar-widget .widget-header .status-dot {
+        width: 6px;
+        height: 6px;
+      }
+      .quick-stats {
+        bottom: 66px;
+        left: 8px;
+        right: 8px;
+        gap: 6px;
+      }
+      .quick-stats .stat-item {
+        padding: 4px 10px;
+        min-width: 60px;
+        border-radius: 6px;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 11px;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 11px;
+        width: 18px;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 7px;
+        letter-spacing: 0.5px;
+      }
+      .desktop-watermark {
+        font-size: 50px !important;
+      }
+      .desktop-watermark i {
+        font-size: 50px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 12px !important;
+        letter-spacing: 2px !important;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -37,6 +535,88 @@
       <span id="bootCommandText"><span class="ok">[  OK  ]</span> loading kernel modules</span><br>
       <span id="bootCommandText2"><span class="ok">[  OK  ]</span> mounting filesystems</span>
     </div>
+  </div>
+
+  <!-- ========== FLOATING PARTICLES ========== -->
+  <div class="particle" style="width:4px;height:4px;left:10%;top:20%;animation-duration:25s;"></div>
+  <div class="particle" style="width:6px;height:6px;left:30%;top:40%;animation-duration:30s;animation-delay:5s;"></div>
+  <div class="particle" style="width:3px;height:3px;left:50%;top:10%;animation-duration:22s;animation-delay:10s;"></div>
+  <div class="particle" style="width:5px;height:5px;left:70%;top:30%;animation-duration:28s;animation-delay:3s;"></div>
+  <div class="particle" style="width:4px;height:4px;left:90%;top:50%;animation-duration:35s;animation-delay:7s;"></div>
+
+  <!-- ========== DESKTOP WATERMARK LOGO WITH KEN/OS COLORS ========== -->
+  <div class="desktop-watermark">
+    <i class="fas fa-microchip"></i>
+    <span class="watermark-text">
+      <span class="ken">Ken</span><span class="os">OS</span>
+    </span>
+  </div>
+
+  <!-- ========== CALENDAR WIDGET ========== -->
+  <div class="calendar-widget" id="calendarWidget">
+    <div class="widget-header">
+      <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+      <span class="month-year" id="monthYear">January 2025</span>
+      <span class="status-dot"></span>
+    </div>
+    <div class="day-grid" id="dayGrid">
+      <span class="day-name">S</span>
+      <span class="day-name">M</span>
+      <span class="day-name">T</span>
+      <span class="day-name">W</span>
+      <span class="day-name">T</span>
+      <span class="day-name">F</span>
+      <span class="day-name">S</span>
+    </div>
+    <div class="time-display">
+      <span class="hours" id="clockHours">00:00</span>
+      <span class="seconds" id="clockSeconds">00</span>
+      <span class="ampm" id="clockAmPm">AM</span>
+    </div>
+    <div class="date-display" id="dateDisplay">January 1, 2025</div>
+    <div class="weather-display">
+      <i class="fas fa-cloud-sun"></i>
+      <span id="weatherDisplay">🌤 72°F · Clear</span>
+    </div>
+  </div>
+
+  <!-- ========== QUICK STATS AT BOTTOM ========== -->
+  <div class="quick-stats">
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-briefcase"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">6+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-code"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">20+</span>
+        <span class="stat-label">Projects</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-certificate"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">6</span>
+        <span class="stat-label">Certifications</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-code-branch"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">1.2k</span>
+        <span class="stat-label">Commits</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SYSTEM INFO ========== -->
+  <div class="system-info">
+    <span class="highlight">KenOS v2.0</span><br>
+    <span class="highlight">Kernel 5.15.0</span><br>
+    <span class="highlight">Uptime: <span id="uptimeDisplay">00:00:00</span></span>
   </div>
 
   <!-- ========== DESKTOP ========== -->
@@ -101,13 +681,10 @@
       </div>
     </div>
     <div class="taskbar-section">
-      <a href="#" class="taskbar-btn" onclick="alert('🔗 linkedin.com/in/your-profile')" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('📘 facebook.com/yourpage')" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('🐦 @yourhandle')" title="Twitter"><i class="fab fa-twitter"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('📸 @devportfolio')" title="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('🎥 youtube.com/devchannel')" title="YouTube"><i class="fab fa-youtube"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('🐙 github.com/your-dev')" title="GitHub"><i class="fab fa-github"></i></a>
-      <a href="#" class="taskbar-btn" onclick="alert('🎨 dribbble.com/your-portfolio')" title="Dribbble"><i class="fab fa-dribbble"></i></a>
+      <a href="https://linkedin.com/in/your-profile" target="_blank" class="taskbar-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://facebook.com/yourpage" target="_blank" class="taskbar-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://youtube.com/devchannel" target="_blank" class="taskbar-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://github.com/your-dev" target="_blank" class="taskbar-btn" title="GitHub"><i class="fab fa-github"></i></a>
     </div>
     <div class="taskbar-section">
       <div class="time-badge" id="clockDisplay">
@@ -121,140 +698,113 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- SCRIPT: Boot Sequence + Component System                    -->
+  <!-- SCRIPT: Calendar + Component System (Boot in component.js)  -->
   <!-- ========================================================== -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
   </script>
+  <script src="js/component.js"></script>
   <script>
+    // ============================================================
+    // CALENDAR WIDGET (fixed clock)
+    // ============================================================
     (function() {
-      // ----- BOOT SEQUENCE -----
-      const bootScreen = document.getElementById('bootScreen');
-      const bootProgress = document.getElementById('bootProgressBar');
-      const bootStatusText = document.getElementById('bootStatusText');
-      const bootCommandText = document.getElementById('bootCommandText');
-      const bootCommandText2 = document.getElementById('bootCommandText2');
-      const desktop = document.getElementById('desktopArea');
-      const taskbar = document.getElementById('taskbar');
+      const monthYearEl = document.getElementById('monthYear');
+      const dayGridEl = document.getElementById('dayGrid');
+      const clockHoursEl = document.getElementById('clockHours');
+      const clockSecondsEl = document.getElementById('clockSeconds');
+      const clockAmPmEl = document.getElementById('clockAmPm');
+      const dateDisplayEl = document.getElementById('dateDisplay');
+      const uptimeDisplay = document.getElementById('uptimeDisplay');
 
-      const bootMessages = [
-        'Loading KenOS kernel...',
-        'Initializing hardware...',
-        'Setting up network interfaces...',
-        'Mounting filesystems...',
-        'Starting system services...',
-        'Loading user profile...',
-        'Starting desktop environment...',
-        'Welcome to KenOS Portfolio!'
-      ];
+      const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-      const bootCommands = [
-        '[  OK  ] loading kernel modules',
-        '[  OK  ] initializing hardware',
-        '[  OK  ] setting up network interfaces',
-        '[  OK  ] mounting filesystems',
-        '[  OK  ] starting system services',
-        '[  OK  ] loading user profile',
-        '[  OK  ] starting desktop environment',
-        '[  OK  ] system ready'
-      ];
+      // Uptime tracking
+      let startTime = Date.now();
 
-      let progress = 0;
-      let messageIndex = 0;
-      let audioContext = null;
+      function updateCalendar() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth();
+        const today = now.getDate();
 
-      // Create audio context and play a boot sound
-      function playBootSound() {
-        try {
-          audioContext = new(window.AudioContext || window.webkitAudioContext)();
+        monthYearEl.textContent = `${monthNames[month]} ${year}`;
 
-          // First beep - lower tone
-          const osc1 = audioContext.createOscillator();
-          const gain1 = audioContext.createGain();
-          osc1.connect(gain1);
-          gain1.connect(audioContext.destination);
-          osc1.frequency.value = 440;
-          osc1.type = 'sine';
-          gain1.gain.value = 0.08;
-          osc1.start();
-          osc1.stop(audioContext.currentTime + 0.1);
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-          // Second beep - higher tone
-          const osc2 = audioContext.createOscillator();
-          const gain2 = audioContext.createGain();
-          osc2.connect(gain2);
-          gain2.connect(audioContext.destination);
-          osc2.frequency.value = 660;
-          osc2.type = 'sine';
-          gain2.gain.value = 0.07;
-          osc2.start(audioContext.currentTime + 0.15);
-          osc2.stop(audioContext.currentTime + 0.25);
+        let html = '';
+        dayNames.forEach(name => {
+          html += `<span class="day-name">${name}</span>`;
+        });
 
-          // Third beep - success tone (nice chord)
-          const osc3 = audioContext.createOscillator();
-          const gain3 = audioContext.createGain();
-          osc3.connect(gain3);
-          gain3.connect(audioContext.destination);
-          osc3.frequency.value = 880;
-          osc3.type = 'sine';
-          gain3.gain.value = 0.06;
-          osc3.start(audioContext.currentTime + 0.35);
-          osc3.stop(audioContext.currentTime + 0.50);
-
-          // Fourth beep - slight higher for final
-          const osc4 = audioContext.createOscillator();
-          const gain4 = audioContext.createGain();
-          osc4.connect(gain4);
-          gain4.connect(audioContext.destination);
-          osc4.frequency.value = 1100;
-          osc4.type = 'sine';
-          gain4.gain.value = 0.05;
-          osc4.start(audioContext.currentTime + 0.55);
-          osc4.stop(audioContext.currentTime + 0.65);
-
-          console.log('🔊 KenOS boot sound played!');
-        } catch (e) {
-          console.warn('Audio not supported:', e);
+        const prevMonthStart = daysInPrevMonth - firstDay + 1;
+        for (let i = 0; i < firstDay; i++) {
+          html += `<span class="day-number other-month">${prevMonthStart + i}</span>`;
         }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const isToday = d === today ? 'today' : '';
+          const dayOfWeek = new Date(year, month, d).getDay();
+          const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
+          html += `<span class="day-number ${isToday} ${isWeekend}">${d}</span>`;
+        }
+
+        const totalCells = firstDay + daysInMonth;
+        const remainingCells = (7 - (totalCells % 7)) % 7;
+        for (let i = 1; i <= remainingCells; i++) {
+          html += `<span class="day-number other-month">${i}</span>`;
+        }
+
+        dayGridEl.innerHTML = html;
+
+        const dateStr = now.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        dateDisplayEl.textContent = dateStr;
       }
 
-      function updateBootScreen() {
-        progress += Math.random() * 2.5 + 1;
-        if (progress > 100) progress = 100;
-
-        bootProgress.style.width = progress + '%';
-
-        if (messageIndex < bootMessages.length) {
-          bootStatusText.textContent = bootMessages[messageIndex];
-          if (messageIndex < bootCommands.length) {
-            bootCommandText.innerHTML = bootCommands[messageIndex];
-            if (messageIndex > 0) {
-              bootCommandText2.innerHTML = bootCommands[messageIndex - 1];
-            }
-          }
-          messageIndex++;
-        }
-
-        if (progress < 100) {
-          const delay = Math.random() * 120 + 80;
-          setTimeout(updateBootScreen, delay);
-        } else {
-          // Boot complete
-          setTimeout(() => {
-            bootScreen.classList.add('hidden');
-            desktop.classList.add('visible');
-            taskbar.classList.add('visible');
-            // Play boot sound when desktop appears
-            playBootSound();
-            console.log('✅ KenOS boot complete!');
-          }, 500);
-        }
-      }
-
-      // Start boot sequence after a short delay
-      setTimeout(updateBootScreen, 500);
-
-      // ----- CLOCK -----
       function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        const hoursStr = String(hours).padStart(2, '0');
+
+        clockHoursEl.textContent = `${hoursStr}:${minutes}`;
+        clockSecondsEl.textContent = seconds;
+        clockAmPmEl.textContent = ampm;
+      }
+
+      function updateUptime() {
+        const elapsed = Date.now() - startTime;
+        const seconds = Math.floor(elapsed / 1000);
+        const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        const s = String(seconds % 60).padStart(2, '0');
+        uptimeDisplay.textContent = `${h}:${m}:${s}`;
+      }
+
+      // Weather simulation
+      function updateWeather() {
+        const weathers = ['🌤 72°F · Clear', '⛅ 68°F · Partly Cloudy', '🌧 62°F · Light Rain', '☀️ 75°F · Sunny', '🌤 70°F · Mostly Clear'];
+        const weatherEl = document.getElementById('weatherDisplay');
+        if (weatherEl) {
+          const randomWeather = weathers[Math.floor(Math.random() * weathers.length)];
+          if (!weatherEl.dataset.initialized) {
+            weatherEl.textContent = randomWeather;
+            weatherEl.dataset.initialized = 'true';
+          }
+        }
+      }
+
+      // ----- TASKBAR CLOCK (separate from main clock) -----
+      function updateTaskbarClock() {
         const now = new Date();
         let h = now.getHours();
         const m = now.getMinutes();
@@ -262,334 +812,20 @@
         h = h % 12 || 12;
         document.getElementById('liveTime').textContent = `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
       }
+
+      updateCalendar();
       updateClock();
+      updateUptime();
+      updateWeather();
+      updateTaskbarClock();
+
       setInterval(updateClock, 1000);
+      setInterval(updateUptime, 1000);
+      setInterval(updateTaskbarClock, 1000);
+      setInterval(updateCalendar, 60000);
+      setInterval(updateWeather, 300000);
 
-      // ----- HELPERS: make window draggable & wire controls -----
-      function setupWindow(windowEl) {
-        // Close
-        const closeBtn = windowEl.querySelector('#closeWindowBtn');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            windowEl.style.display = 'none';
-            windowEl.classList.remove('fullscreen');
-          });
-        }
-
-        // Minimize (hide)
-        const minBtn = windowEl.querySelector('#minimizeWindowBtn');
-        if (minBtn) {
-          minBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            windowEl.style.display = 'none';
-            windowEl.classList.remove('fullscreen');
-          });
-        }
-
-        // Zoom (toggle fullscreen)
-        const zoomBtn = windowEl.querySelector('#zoomWindowBtn');
-        if (zoomBtn) {
-          zoomBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            // Toggle fullscreen class
-            windowEl.classList.toggle('fullscreen');
-
-            // If not fullscreen, restore original size
-            if (!windowEl.classList.contains('fullscreen')) {
-              const w = windowEl.dataset.origWidth || '700px';
-              const h = windowEl.dataset.origHeight || 'auto';
-              windowEl.style.width = w;
-              windowEl.style.height = h;
-              windowEl.style.top = '70px';
-              windowEl.style.left = '100px';
-            } else {
-              // Store current dimensions before fullscreen
-              if (!windowEl.dataset.origWidth) {
-                windowEl.dataset.origWidth = windowEl.style.width || '700px';
-              }
-              if (!windowEl.dataset.origHeight) {
-                windowEl.dataset.origHeight = windowEl.style.height || 'auto';
-              }
-            }
-          });
-        }
-
-        // ----- Resize functionality (drag from bottom-right corner) -----
-        const resizeHandle = windowEl.querySelector('.resize-handle');
-        if (resizeHandle) {
-          let isResizing = false;
-          let startX, startY, startWidth, startHeight;
-
-          resizeHandle.addEventListener('mousedown', function(e) {
-            if (windowEl.classList.contains('fullscreen')) return;
-            e.stopPropagation();
-            isResizing = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startWidth = parseInt(document.defaultView.getComputedStyle(windowEl).width, 10);
-            startHeight = parseInt(document.defaultView.getComputedStyle(windowEl).height, 10);
-            document.body.style.cursor = 'nwse-resize';
-            document.body.style.userSelect = 'none';
-            e.preventDefault();
-          });
-
-          document.addEventListener('mousemove', function(e) {
-            if (!isResizing) return;
-            const newWidth = Math.max(300, startWidth + (e.clientX - startX));
-            const newHeight = Math.max(200, startHeight + (e.clientY - startY));
-            windowEl.style.width = newWidth + 'px';
-            windowEl.style.height = newHeight + 'px';
-          });
-
-          document.addEventListener('mouseup', function() {
-            if (isResizing) {
-              isResizing = false;
-              document.body.style.cursor = '';
-              document.body.style.userSelect = '';
-            }
-          });
-        }
-
-        // ----- Drag functionality -----
-        const header = windowEl.querySelector('#windowHeader');
-        if (header) {
-          let isDragging = false;
-          let offsetX = 0,
-            offsetY = 0;
-
-          header.addEventListener('mousedown', function(e) {
-            if (e.button !== 0) return;
-            if (windowEl.style.display === 'none') return;
-            if (windowEl.classList.contains('fullscreen')) return;
-            isDragging = true;
-            const rect = windowEl.getBoundingClientRect();
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-            windowEl.style.cursor = 'grabbing';
-            document.body.style.userSelect = 'none';
-            e.preventDefault();
-          });
-
-          document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            const newLeft = e.clientX - offsetX;
-            const newTop = e.clientY - offsetY;
-            const maxX = window.innerWidth - 200;
-            const maxY = window.innerHeight - 180;
-            windowEl.style.left = Math.min(Math.max(newLeft, 10), maxX) + 'px';
-            windowEl.style.top = Math.min(Math.max(newTop, 10), maxY) + 'px';
-            windowEl.style.right = 'auto';
-            windowEl.style.bottom = 'auto';
-          });
-
-          document.addEventListener('mouseup', function() {
-            if (isDragging) {
-              isDragging = false;
-              windowEl.style.cursor = '';
-              document.body.style.userSelect = '';
-            }
-          });
-        }
-      }
-
-      // ----- COMPONENT LOADER (fetch external HTML) -----
-      function loadComponent(url, callback) {
-        fetch(url)
-          .then(response => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.text();
-          })
-          .then(html => {
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = html;
-            const element = wrapper.firstElementChild;
-            callback(element);
-          })
-          .catch(err => {
-            console.warn('Component load failed:', err);
-            // fallback: show inline placeholder
-            const fallback = document.createElement('div');
-            fallback.innerHTML =
-              `<div style="background:rgba(0,212,255,0.03);padding:20px;border-radius:6px;color:#00d4ff;border:1px solid rgba(0,212,255,0.06);font-family:'Courier New',monospace;">⚠️ Could not load component. Please check network.</div>`;
-            callback(fallback.firstElementChild);
-          });
-      }
-
-      // ----- COMPONENT FACTORIES -----
-      const container = document.getElementById('windowContainer');
-
-      let experienceWindow = null;
-      let projectsWindow = null;
-      let toolsWindow = null;
-      let whoamiWindow = null;
-      let certificatesWindow = null;
-      let contactWindow = null;
-
-      // ----- OPEN EXPERIENCE (external component) -----
-      document.getElementById('experienceIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (experienceWindow) {
-          experienceWindow.style.display = 'flex';
-          experienceWindow.style.zIndex = 1000 + Date.now() % 100;
-          experienceWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the experience component from external file
-        loadComponent('html/experience-component.html', function(element) {
-          experienceWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN PROJECTS (external component) -----
-      document.getElementById('projectsIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (projectsWindow) {
-          projectsWindow.style.display = 'flex';
-          projectsWindow.style.zIndex = 1000 + Date.now() % 100;
-          projectsWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the projects component from external file
-        loadComponent('html/projects-component.html', function(element) {
-          projectsWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN TOOLS (external component) -----
-      document.getElementById('toolsIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (toolsWindow) {
-          toolsWindow.style.display = 'flex';
-          toolsWindow.style.zIndex = 1000 + Date.now() % 100;
-          toolsWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the tools component from external file
-        loadComponent('html/tools-component.html', function(element) {
-          toolsWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN WHOAMI (external component) -----
-      document.getElementById('whoamiIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (whoamiWindow) {
-          whoamiWindow.style.display = 'flex';
-          whoamiWindow.style.zIndex = 1000 + Date.now() % 100;
-          whoamiWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the whoami component from external file
-        loadComponent('htmlwhoami-component.html', function(element) {
-          whoamiWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN CERTIFICATES (external component) -----
-      document.getElementById('certificatesIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (certificatesWindow) {
-          certificatesWindow.style.display = 'flex';
-          certificatesWindow.style.zIndex = 1000 + Date.now() % 100;
-          certificatesWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the certificates component from external file
-        loadComponent('html/certificates-component.html', function(element) {
-          certificatesWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN CONTACT (external component) -----
-      document.getElementById('contactIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (contactWindow) {
-          contactWindow.style.display = 'flex';
-          contactWindow.style.zIndex = 1000 + Date.now() % 100;
-          contactWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the contact component from external file
-        loadComponent('html/contact-component.html', function(element) {
-          contactWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- Double-click desktop → close all windows -----
-      const desktopEl = document.getElementById('desktopArea');
-      desktopEl.addEventListener('dblclick', function(e) {
-        if (e.target === desktopEl || e.target.classList.contains('kenos-desktop')) {
-          if (experienceWindow) {
-            experienceWindow.style.display = 'none';
-            experienceWindow.classList.remove('fullscreen');
-          }
-          if (projectsWindow) {
-            projectsWindow.style.display = 'none';
-            projectsWindow.classList.remove('fullscreen');
-          }
-          if (toolsWindow) {
-            toolsWindow.style.display = 'none';
-            toolsWindow.classList.remove('fullscreen');
-          }
-          if (whoamiWindow) {
-            whoamiWindow.style.display = 'none';
-            whoamiWindow.classList.remove('fullscreen');
-          }
-          if (certificatesWindow) {
-            certificatesWindow.style.display = 'none';
-            certificatesWindow.classList.remove('fullscreen');
-          }
-          if (contactWindow) {
-            contactWindow.style.display = 'none';
-            contactWindow.classList.remove('fullscreen');
-          }
-        }
-      });
-
-      console.log('✨ KenOS components ready. Double-click Experience, Projects, Tools, Whoami, Certificates, or Contact icons.');
+      console.log('📅 Calendar widget loaded');
     })();
   </script>
 </body>
