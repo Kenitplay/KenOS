@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>KenOS · Portfolio</title>
   <!-- Bootstrap 5 + Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -16,8 +16,9 @@
   <link rel="stylesheet" href="css/experience.css"/>
   <link rel="stylesheet" href="css/project.css"/>
   <link rel="stylesheet" href="css/taskbar.css"/>
+  <link rel="stylesheet" href="css/extra.css"/>
   <style>
-    /* ---------- OVERRIDE: FORCE WATERMARK VISIBILITY (MORE SOLID) ---------- */
+    /* ---------- OVERRIDE: FORCE WATERMARK VISIBILITY ---------- */
     .desktop-watermark {
       position: fixed !important;
       top: 50% !important;
@@ -65,7 +66,8 @@
       0%, 100% { transform: translate(-50%, -50%) scale(1) !important; }
       50% { transform: translate(-50%, -50%) scale(1.03) !important; }
     }
-    /* ---------- CALENDAR WIDGET (ENLARGED) ---------- */
+
+    /* ---------- CALENDAR WIDGET ---------- */
     .calendar-widget {
       position: fixed;
       right: 20px;
@@ -84,10 +86,6 @@
       pointer-events: none;
       font-family: 'Courier New', monospace;
       transition: all 0.3s ease;
-    }
-    .calendar-widget:hover {
-      border-color: rgba(0, 212, 255, 0.15);
-      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(0, 212, 255, 0.08);
     }
     .calendar-widget .widget-header {
       display: flex;
@@ -239,10 +237,6 @@
       transition: all 0.3s ease;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
-    .quick-stats .stat-item:hover {
-      border-color: rgba(0, 212, 255, 0.12);
-      background: rgba(8, 18, 30, 0.85);
-    }
     .quick-stats .stat-item .stat-icon {
       color: rgba(0, 212, 255, 0.25);
       font-size: 18px;
@@ -303,11 +297,6 @@
     .system-info .highlight {
       color: rgba(0, 212, 255, 0.08);
     }
-    @media (max-width: 768px) {
-      .system-info {
-        display: none;
-      }
-    }
 
     .particle {
       position: fixed;
@@ -324,193 +313,266 @@
       100% { transform: translateY(-100vh) scale(0); opacity: 0; }
     }
 
-    @media (max-width: 1024px) {
+    /* ---------- RESPONSIVE BREAKPOINTS ---------- */
+    @media (max-width: 1199px) {
       .calendar-widget {
         width: 280px;
         padding: 24px 20px 20px;
         right: 14px;
       }
-      .calendar-widget .month-year {
-        font-size: 18px;
-      }
-      .calendar-widget .day-grid .day-number {
-        font-size: 15px;
-        padding: 8px 0;
-      }
-      .calendar-widget .time-display .hours {
-        font-size: 30px;
-      }
-      .calendar-widget .time-display .seconds {
-        font-size: 16px;
-      }
-      .quick-stats .stat-item {
-        padding: 8px 14px;
-        min-width: 100px;
-      }
-      .quick-stats .stat-item .stat-value {
-        font-size: 15px;
-      }
-      .desktop-watermark {
-        font-size: 120px !important;
-      }
-      .desktop-watermark i {
-        font-size: 120px !important;
-      }
-      .desktop-watermark .watermark-text {
-        font-size: 20px !important;
-        letter-spacing: 3px !important;
-      }
+      .calendar-widget .month-year { font-size: 18px; }
+      .calendar-widget .day-grid .day-number { font-size: 15px; padding: 8px 0; }
+      .calendar-widget .time-display .hours { font-size: 30px; }
+      .calendar-widget .time-display .seconds { font-size: 16px; }
+      .quick-stats .stat-item { padding: 8px 14px; min-width: 100px; }
+      .quick-stats .stat-item .stat-value { font-size: 15px; }
+      .desktop-watermark { font-size: 120px !important; }
+      .desktop-watermark i { font-size: 120px !important; }
+      .desktop-watermark .watermark-text { font-size: 20px !important; letter-spacing: 3px !important; }
     }
+
+    @media (max-width: 991px) {
+      .desktop-icon { cursor: pointer !important; width: 100px !important; padding: 14px 8px 10px 8px !important; }
+      .icon-box { font-size: 48px !important; width: 72px !important; padding: 8px 10px !important; }
+      .icon-label { font-size: 13px !important; padding: 4px 14px !important; }
+      .quick-stats .stat-item { padding: 10px 18px !important; min-width: 130px !important; }
+      .quick-stats .stat-item .stat-value { font-size: 20px !important; }
+      .quick-stats .stat-item .stat-icon { font-size: 22px !important; width: 34px !important; }
+      .quick-stats .stat-item .stat-label { font-size: 11px !important; }
+      .calendar-widget { right: 12px; padding: 20px 16px 18px; width: 250px; }
+      .calendar-widget .month-year { font-size: 16px; letter-spacing: 1px; }
+      .calendar-widget .day-grid .day-number { font-size: 13px; padding: 6px 0; }
+      .calendar-widget .day-grid .day-name { font-size: 11px; padding: 6px 0; }
+      .calendar-widget .time-display .hours { font-size: 26px; }
+      .calendar-widget .time-display .seconds { font-size: 14px; }
+      .calendar-widget .time-display .ampm { font-size: 13px; }
+      .calendar-widget .date-display { font-size: 12px; }
+      .calendar-widget .weather-display { font-size: 11px; }
+      .desktop-watermark { font-size: 100px !important; }
+      .desktop-watermark i { font-size: 100px !important; }
+      .desktop-watermark .watermark-text { font-size: 18px !important; letter-spacing: 3px !important; }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os { font-size: 18px !important; }
+    }
+
+    @media (max-width: 767px) {
+      .kenos-taskbar {
+        display: none !important;
+      }
+      
+      .calendar-widget { display: none !important; }
+      .desktop-icon { cursor: pointer !important; -webkit-tap-highlight-color: transparent !important; width: 85px !important; padding: 10px 4px 6px 4px !important; gap: 2px !important; }
+      .icon-box { font-size: 38px !important; width: 58px !important; padding: 4px 6px !important; }
+      .icon-label { font-size: 10px !important; padding: 2px 10px !important; }
+      .quick-stats { bottom: 20px !important; left: 10px !important; right: 10px !important; gap: 8px !important; justify-content: center !important; padding: 0 !important; }
+      .quick-stats .stat-item { padding: 6px 12px !important; min-width: 80px !important; max-width: 45% !important; flex: 1 1 calc(50% - 8px) !important; border-radius: 8px !important; gap: 6px !important; justify-content: center !important; }
+      .quick-stats .stat-item .stat-value { font-size: 16px !important; }
+      .quick-stats .stat-item .stat-icon { font-size: 14px !important; width: 24px !important; }
+      .quick-stats .stat-item .stat-label { font-size: 8px !important; letter-spacing: 0.3px !important; }
+      .system-info { display: none !important; }
+      .desktop-watermark { font-size: 50px !important; }
+      .desktop-watermark i { font-size: 50px !important; }
+      .desktop-watermark .watermark-text { font-size: 11px !important; letter-spacing: 2px !important; margin-top: 6px !important; }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os { font-size: 11px !important; }
+      .particle { display: none !important; }
+      .kenos-desktop::before { background-size: 30px 30px !important; }
+      .kenos-desktop { height: calc(100vh - 20px) !important; padding: 12px 10px 6px 10px !important; gap: 6px !important; align-content: flex-start !important; flex-wrap: wrap !important; display: flex !important; }
+      .mobile-bottom-menu { display: none !important; }
+      #bootScreen .boot-logo { font-size: 48px !important; }
+      #bootScreen .boot-title { font-size: 22px !important; letter-spacing: 3px !important; }
+      #bootScreen .boot-subtitle { font-size: 11px !important; margin-bottom: 20px !important; }
+      #bootScreen .boot-progress { width: 280px !important; }
+      .kenos-desktop { display: flex !important; flex-wrap: wrap !important; align-content: flex-start !important; }
+      .desktop-icon { flex: 0 0 auto !important; }
+      .calendar-widget-mobile { flex: 0 0 100% !important; order: 10 !important; margin: 4px 0 2px 0 !important; }
+    }
+
+    @media (max-width: 575px) {
+      .desktop-icon { width: 72px !important; padding: 8px 3px 4px 3px !important; }
+      .icon-box { font-size: 32px !important; width: 48px !important; padding: 3px 4px !important; }
+      .icon-label { font-size: 9px !important; padding: 2px 8px !important; }
+      .quick-stats { bottom: 16px !important; left: 8px !important; right: 8px !important; gap: 6px !important; }
+      .quick-stats .stat-item { padding: 5px 10px !important; min-width: 65px !important; flex: 1 1 calc(50% - 6px) !important; border-radius: 6px !important; gap: 4px !important; }
+      .quick-stats .stat-item .stat-value { font-size: 14px !important; }
+      .quick-stats .stat-item .stat-icon { font-size: 12px !important; width: 20px !important; }
+      .quick-stats .stat-item .stat-label { font-size: 7px !important; }
+      .desktop-watermark { font-size: 40px !important; }
+      .desktop-watermark i { font-size: 40px !important; }
+      .desktop-watermark .watermark-text { font-size: 9px !important; letter-spacing: 1px !important; margin-top: 4px !important; }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os { font-size: 9px !important; }
+      .kenos-desktop { height: calc(100vh - 16px) !important; padding: 8px 6px 4px 6px !important; gap: 4px !important; }
+    }
+
+    @media (max-width: 400px) {
+      .desktop-icon { width: 60px !important; padding: 6px 2px 3px 2px !important; }
+      .icon-box { font-size: 26px !important; width: 40px !important; padding: 2px 3px !important; }
+      .icon-label { font-size: 7px !important; padding: 1px 6px !important; }
+      .quick-stats { bottom: 12px !important; left: 4px !important; right: 4px !important; gap: 4px !important; }
+      .quick-stats .stat-item { padding: 4px 8px !important; min-width: 50px !important; flex: 1 1 calc(50% - 4px) !important; border-radius: 5px !important; gap: 3px !important; }
+      .quick-stats .stat-item .stat-value { font-size: 11px !important; }
+      .quick-stats .stat-item .stat-icon { font-size: 10px !important; width: 16px !important; }
+      .quick-stats .stat-item .stat-label { font-size: 6px !important; }
+      .desktop-watermark { font-size: 30px !important; }
+      .desktop-watermark i { font-size: 30px !important; }
+      .desktop-watermark .watermark-text { font-size: 7px !important; letter-spacing: 1px !important; margin-top: 4px !important; }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os { font-size: 7px !important; }
+      .kenos-desktop { height: calc(100vh - 12px) !important; padding: 4px 3px 2px 3px !important; gap: 3px !important; }
+    }
+
     @media (max-width: 768px) {
-      .calendar-widget {
-        right: 10px;
-        padding: 18px 16px 16px;
-        width: 220px;
-        top: 80px;
-        transform: none;
-      }
-      .calendar-widget .month-year {
-        font-size: 14px;
-      }
-      .calendar-widget .day-grid .day-number {
-        font-size: 12px;
-        padding: 6px 0;
-      }
-      .calendar-widget .day-grid .day-name {
-        font-size: 10px;
-        padding: 5px 0;
-      }
-      .calendar-widget .time-display .hours {
-        font-size: 22px;
-        letter-spacing: 2px;
-      }
-      .calendar-widget .time-display .seconds {
-        font-size: 13px;
-      }
-      .calendar-widget .time-display .ampm {
-        font-size: 12px;
-      }
-      .calendar-widget .date-display {
-        font-size: 11px;
-      }
-      .calendar-widget .weather-display {
-        font-size: 10px;
-      }
-      .calendar-widget .widget-header .icon {
-        font-size: 14px;
-      }
-      .quick-stats {
-        bottom: 72px;
-        left: 14px;
-        right: 14px;
-        gap: 10px;
-      }
-      .quick-stats .stat-item {
-        padding: 6px 12px;
-        min-width: 80px;
-      }
-      .quick-stats .stat-item .stat-value {
-        font-size: 13px;
-      }
-      .quick-stats .stat-item .stat-icon {
-        font-size: 14px;
-        width: 24px;
-      }
-      .quick-stats .stat-item .stat-label {
-        font-size: 8px;
-      }
-      .desktop-watermark {
-        font-size: 80px !important;
-      }
-      .desktop-watermark i {
-        font-size: 80px !important;
-      }
-      .desktop-watermark .watermark-text {
-        font-size: 16px !important;
-        letter-spacing: 3px !important;
-      }
+      .taskbar-section { gap: 6px !important; }
+      .kenos-taskbar { gap: 4px !important; }
     }
     @media (max-width: 500px) {
-      .calendar-widget {
-        right: 6px;
-        width: 160px;
-        padding: 12px 10px 12px;
-        top: 70px;
-        border-radius: 10px;
+      .taskbar-section { gap: 3px !important; }
+      .kenos-taskbar { gap: 2px !important; }
+    }
+
+    @media (max-width: 991px) {
+      .desktop-icon { cursor: pointer !important; }
+      .desktop-icon * { pointer-events: none !important; }
+    }
+
+    /* Mobile calendar clone */
+    .calendar-widget-mobile {
+      display: none !important;
+    }
+    @media (max-width: 767px) {
+      .calendar-widget-mobile {
+        display: block !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 6px 0 4px 0 !important;
+        padding: 14px 12px 12px !important;
+        border-radius: 10px !important;
+        flex-shrink: 0 !important;
+        pointer-events: none !important;
+        background: rgba(8, 18, 30, 0.88) !important;
+        backdrop-filter: blur(20px) !important;
+        border: 1px solid rgba(0, 212, 255, 0.08) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+        order: 10 !important;
+        flex: 0 0 100% !important;
       }
-      .calendar-widget .month-year {
-        font-size: 11px;
-        letter-spacing: 1px;
+      .calendar-widget-mobile .widget-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 8px !important;
+        padding-bottom: 6px !important;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.06) !important;
       }
-      .calendar-widget .day-grid .day-number {
-        font-size: 10px;
-        padding: 4px 0;
-      }
-      .calendar-widget .day-grid .day-name {
-        font-size: 8px;
-        padding: 3px 0;
-      }
-      .calendar-widget .day-grid {
-        gap: 2px;
-      }
-      .calendar-widget .time-display .hours {
-        font-size: 16px;
-        letter-spacing: 1px;
-      }
-      .calendar-widget .time-display .seconds {
-        font-size: 10px;
-      }
-      .calendar-widget .time-display .ampm {
-        font-size: 10px;
-      }
-      .calendar-widget .date-display {
-        font-size: 9px;
-      }
-      .calendar-widget .weather-display {
-        font-size: 8px;
-      }
-      .calendar-widget .widget-header {
-        margin-bottom: 10px;
-        padding-bottom: 8px;
-      }
-      .calendar-widget .widget-header .icon {
-        font-size: 11px;
-      }
-      .calendar-widget .widget-header .status-dot {
-        width: 6px;
-        height: 6px;
-      }
-      .quick-stats {
-        bottom: 66px;
-        left: 8px;
-        right: 8px;
-        gap: 6px;
-      }
-      .quick-stats .stat-item {
-        padding: 4px 10px;
-        min-width: 60px;
-        border-radius: 6px;
-      }
-      .quick-stats .stat-item .stat-value {
-        font-size: 11px;
-      }
-      .quick-stats .stat-item .stat-icon {
-        font-size: 11px;
-        width: 18px;
-      }
-      .quick-stats .stat-item .stat-label {
-        font-size: 7px;
-        letter-spacing: 0.5px;
-      }
-      .desktop-watermark {
-        font-size: 50px !important;
-      }
-      .desktop-watermark i {
-        font-size: 50px !important;
-      }
-      .desktop-watermark .watermark-text {
+      .calendar-widget-mobile .widget-header .icon {
+        color: rgba(0, 212, 255, 0.3) !important;
         font-size: 12px !important;
+      }
+      .calendar-widget-mobile .month-year {
+        color: #00d4ff !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        text-align: center !important;
+        letter-spacing: 1px !important;
+        flex: 1 !important;
+      }
+      .calendar-widget-mobile .widget-header .status-dot {
+        width: 6px !important;
+        height: 6px !important;
+        border-radius: 50% !important;
+        background: #00ff88 !important;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3) !important;
+        animation: pulse-dot 2s ease-in-out infinite !important;
+      }
+      .calendar-widget-mobile .day-grid {
+        display: grid !important;
+        grid-template-columns: repeat(7, 1fr) !important;
+        gap: 2px !important;
+        text-align: center !important;
+        font-size: 11px !important;
+      }
+      .calendar-widget-mobile .day-grid .day-name {
+        color: rgba(102, 224, 255, 0.4) !important;
+        font-weight: 600 !important;
+        padding: 4px 0 !important;
+        font-size: 8px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+      }
+      .calendar-widget-mobile .day-grid .day-number {
+        color: #99ddff !important;
+        padding: 4px 0 !important;
+        border-radius: 4px !important;
+        font-size: 10px !important;
+        transition: 0.15s !important;
+      }
+      .calendar-widget-mobile .day-grid .day-number.today {
+        color: #00d4ff !important;
+        background: rgba(0, 212, 255, 0.12) !important;
+        font-weight: 700 !important;
+        border: 1px solid rgba(0, 212, 255, 0.15) !important;
+      }
+      .calendar-widget-mobile .day-grid .day-number.other-month {
+        color: rgba(153, 221, 255, 0.15) !important;
+      }
+      .calendar-widget-mobile .day-grid .day-number.weekend {
+        color: rgba(255, 107, 107, 0.4) !important;
+      }
+      .calendar-widget-mobile .day-grid .day-number.weekend.today {
+        color: #ff6b6b !important;
+        border-color: rgba(255, 107, 107, 0.2) !important;
+      }
+      .calendar-widget-mobile .time-display {
+        text-align: center !important;
+        margin-top: 8px !important;
+        padding-top: 8px !important;
+        border-top: 1px solid rgba(0, 212, 255, 0.06) !important;
+      }
+      .calendar-widget-mobile .time-display .hours {
+        color: #00d4ff !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
         letter-spacing: 2px !important;
+        font-variant-numeric: tabular-nums !important;
+      }
+      .calendar-widget-mobile .time-display .seconds {
+        color: rgba(102, 224, 255, 0.3) !important;
+        font-size: 11px !important;
+        font-weight: 300 !important;
+        margin-left: 4px !important;
+      }
+      .calendar-widget-mobile .time-display .ampm {
+        color: rgba(102, 224, 255, 0.3) !important;
+        font-size: 10px !important;
+        margin-left: 4px !important;
+        font-weight: 300 !important;
+      }
+      .calendar-widget-mobile .date-display {
+        text-align: center !important;
+        color: rgba(153, 221, 255, 0.35) !important;
+        font-size: 9px !important;
+        margin-top: 4px !important;
+        letter-spacing: 0.5px !important;
+      }
+      .calendar-widget-mobile .weather-display {
+        text-align: center !important;
+        color: rgba(153, 221, 255, 0.25) !important;
+        font-size: 8px !important;
+        margin-top: 4px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+      }
+      .calendar-widget-mobile .weather-display i {
+        color: rgba(0, 212, 255, 0.2) !important;
+        font-size: 10px !important;
       }
     }
   </style>
@@ -544,7 +606,7 @@
   <div class="particle" style="width:5px;height:5px;left:70%;top:30%;animation-duration:28s;animation-delay:3s;"></div>
   <div class="particle" style="width:4px;height:4px;left:90%;top:50%;animation-duration:35s;animation-delay:7s;"></div>
 
-  <!-- ========== DESKTOP WATERMARK LOGO WITH KEN/OS COLORS ========== -->
+  <!-- ========== DESKTOP WATERMARK LOGO ========== -->
   <div class="desktop-watermark">
     <i class="fas fa-microchip"></i>
     <span class="watermark-text">
@@ -552,7 +614,7 @@
     </span>
   </div>
 
-  <!-- ========== CALENDAR WIDGET ========== -->
+  <!-- ========== CALENDAR WIDGET (Desktop) ========== -->
   <div class="calendar-widget" id="calendarWidget">
     <div class="widget-header">
       <span class="icon"><i class="fas fa-calendar-alt"></i></span>
@@ -592,8 +654,8 @@
     <div class="stat-item">
       <span class="stat-icon"><i class="fas fa-code"></i></span>
       <div class="stat-info">
-        <span class="stat-value">20+</span>
-        <span class="stat-label">Projects</span>
+        <span class="stat-value" id="repoCount">...</span>
+        <span class="stat-label">Repositories</span>
       </div>
     </div>
     <div class="stat-item">
@@ -601,13 +663,6 @@
       <div class="stat-info">
         <span class="stat-value">6</span>
         <span class="stat-label">Certifications</span>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon"><i class="fas fa-code-branch"></i></span>
-      <div class="stat-info">
-        <span class="stat-value">1.2k</span>
-        <span class="stat-label">Commits</span>
       </div>
     </div>
   </div>
@@ -623,45 +678,69 @@
   <div class="kenos-desktop" id="desktopArea">
 
     <!-- Experience Icon -->
-    <div class="desktop-icon" id="experienceIcon">
+    <div class="desktop-icon" id="experienceIcon" onclick="handleIconClick('experienceIcon')">
       <div class="icon-box"><i class="fas fa-briefcase"></i></div>
       <span class="icon-label">~$ experience</span>
     </div>
 
     <!-- Projects Icon -->
-    <div class="desktop-icon" id="projectsIcon">
+    <div class="desktop-icon" id="projectsIcon" onclick="handleIconClick('projectsIcon')">
       <div class="icon-box"><i class="fas fa-folder-open"></i></div>
       <span class="icon-label">~/projects</span>
     </div>
 
     <!-- Tools Icon -->
-    <div class="desktop-icon" id="toolsIcon">
+    <div class="desktop-icon" id="toolsIcon" onclick="handleIconClick('toolsIcon')">
       <div class="icon-box"><i class="fas fa-tools"></i></div>
       <span class="icon-label">~/tools</span>
     </div>
 
     <!-- Whoami Icon (About) -->
-    <div class="desktop-icon" id="whoamiIcon">
+    <div class="desktop-icon" id="whoamiIcon" onclick="handleIconClick('whoamiIcon')">
       <div class="icon-box"><i class="fas fa-user-astronaut"></i></div>
       <span class="icon-label">~$ whoami</span>
     </div>
 
     <!-- Certificates Icon -->
-    <div class="desktop-icon" id="certificatesIcon">
+    <div class="desktop-icon" id="certificatesIcon" onclick="handleIconClick('certificatesIcon')">
       <div class="icon-box"><i class="fas fa-certificate"></i></div>
       <span class="icon-label">~/certificates</span>
     </div>
 
     <!-- Contact Icon -->
-    <div class="desktop-icon" id="contactIcon">
+    <div class="desktop-icon" id="contactIcon" onclick="handleIconClick('contactIcon')">
       <div class="icon-box"><i class="fas fa-envelope"></i></div>
       <span class="icon-label">~/contact</span>
     </div>
 
-    <!-- Other Icons (static) -->
-    <div class="desktop-icon" onclick="alert('🐙 git clone github.com/kenos-dev')">
+    <!-- GitHub Icon -->
+    <div class="desktop-icon" onclick="window.open('https://github.com/Kenitplay', '_blank')">
       <div class="icon-box"><i class="fab fa-github"></i></div>
       <span class="icon-label">~/github</span>
+    </div>
+
+    <!-- MOBILE CALENDAR WIDGET (cloned inside desktop area) -->
+    <div class="calendar-widget-mobile" id="calendarWidgetMobile">
+      <div class="widget-header">
+        <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+        <span class="month-year" id="monthYearMobile">January 2025</span>
+        <span class="status-dot"></span>
+      </div>
+      <div class="day-grid" id="dayGridMobile">
+        <span class="day-name">S</span>
+        <span class="day-name">M</span>
+        <span class="day-name">T</span>
+        <span class="day-name">W</span>
+        <span class="day-name">T</span>
+        <span class="day-name">F</span>
+        <span class="day-name">S</span>
+      </div>
+      <div class="time-display">
+        <span class="hours" id="clockHoursMobile">00:00</span>
+        <span class="seconds" id="clockSecondsMobile">00</span>
+        <span class="ampm" id="clockAmPmMobile">AM</span>
+      </div>
+      <div class="date-display" id="dateDisplayMobile">January 1, 2025</div>
     </div>
 
     <!-- Window Container -->
@@ -681,10 +760,10 @@
       </div>
     </div>
     <div class="taskbar-section">
-      <a href="https://linkedin.com/in/your-profile" target="_blank" class="taskbar-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      <a href="https://facebook.com/yourpage" target="_blank" class="taskbar-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-      <a href="https://youtube.com/devchannel" target="_blank" class="taskbar-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
-      <a href="https://github.com/your-dev" target="_blank" class="taskbar-btn" title="GitHub"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="taskbar-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.facebook.com/alken.valledor" target="_blank" class="taskbar-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="taskbar-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+      <a href="https://github.com/Kenitplay" target="_blank" class="taskbar-btn" title="GitHub"><i class="fab fa-github"></i></a>
     </div>
     <div class="taskbar-section">
       <div class="time-badge" id="clockDisplay">
@@ -698,135 +777,13 @@
   </div>
 
   <!-- ========================================================== -->
-  <!-- SCRIPT: Calendar + Component System (Boot in component.js)  -->
+  <!-- SCRIPT: Config + Calendar + Component System + GitHub API  -->
   <!-- ========================================================== -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
   </script>
+  
   <script src="js/component.js"></script>
-  <script>
-    // ============================================================
-    // CALENDAR WIDGET (fixed clock)
-    // ============================================================
-    (function() {
-      const monthYearEl = document.getElementById('monthYear');
-      const dayGridEl = document.getElementById('dayGrid');
-      const clockHoursEl = document.getElementById('clockHours');
-      const clockSecondsEl = document.getElementById('clockSeconds');
-      const clockAmPmEl = document.getElementById('clockAmPm');
-      const dateDisplayEl = document.getElementById('dateDisplay');
-      const uptimeDisplay = document.getElementById('uptimeDisplay');
-
-      const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-      // Uptime tracking
-      let startTime = Date.now();
-
-      function updateCalendar() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth();
-        const today = now.getDate();
-
-        monthYearEl.textContent = `${monthNames[month]} ${year}`;
-
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-        let html = '';
-        dayNames.forEach(name => {
-          html += `<span class="day-name">${name}</span>`;
-        });
-
-        const prevMonthStart = daysInPrevMonth - firstDay + 1;
-        for (let i = 0; i < firstDay; i++) {
-          html += `<span class="day-number other-month">${prevMonthStart + i}</span>`;
-        }
-
-        for (let d = 1; d <= daysInMonth; d++) {
-          const isToday = d === today ? 'today' : '';
-          const dayOfWeek = new Date(year, month, d).getDay();
-          const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6) ? 'weekend' : '';
-          html += `<span class="day-number ${isToday} ${isWeekend}">${d}</span>`;
-        }
-
-        const totalCells = firstDay + daysInMonth;
-        const remainingCells = (7 - (totalCells % 7)) % 7;
-        for (let i = 1; i <= remainingCells; i++) {
-          html += `<span class="day-number other-month">${i}</span>`;
-        }
-
-        dayGridEl.innerHTML = html;
-
-        const dateStr = now.toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric'
-        });
-        dateDisplayEl.textContent = dateStr;
-      }
-
-      function updateClock() {
-        const now = new Date();
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12 || 12;
-        const hoursStr = String(hours).padStart(2, '0');
-
-        clockHoursEl.textContent = `${hoursStr}:${minutes}`;
-        clockSecondsEl.textContent = seconds;
-        clockAmPmEl.textContent = ampm;
-      }
-
-      function updateUptime() {
-        const elapsed = Date.now() - startTime;
-        const seconds = Math.floor(elapsed / 1000);
-        const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
-        const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-        const s = String(seconds % 60).padStart(2, '0');
-        uptimeDisplay.textContent = `${h}:${m}:${s}`;
-      }
-
-      // Weather simulation
-      function updateWeather() {
-        const weathers = ['🌤 72°F · Clear', '⛅ 68°F · Partly Cloudy', '🌧 62°F · Light Rain', '☀️ 75°F · Sunny', '🌤 70°F · Mostly Clear'];
-        const weatherEl = document.getElementById('weatherDisplay');
-        if (weatherEl) {
-          const randomWeather = weathers[Math.floor(Math.random() * weathers.length)];
-          if (!weatherEl.dataset.initialized) {
-            weatherEl.textContent = randomWeather;
-            weatherEl.dataset.initialized = 'true';
-          }
-        }
-      }
-
-      // ----- TASKBAR CLOCK (separate from main clock) -----
-      function updateTaskbarClock() {
-        const now = new Date();
-        let h = now.getHours();
-        const m = now.getMinutes();
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        h = h % 12 || 12;
-        document.getElementById('liveTime').textContent = `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
-      }
-
-      updateCalendar();
-      updateClock();
-      updateUptime();
-      updateWeather();
-      updateTaskbarClock();
-
-      setInterval(updateClock, 1000);
-      setInterval(updateUptime, 1000);
-      setInterval(updateTaskbarClock, 1000);
-      setInterval(updateCalendar, 60000);
-      setInterval(updateWeather, 300000);
-
-      console.log('📅 Calendar widget loaded');
-    })();
-  </script>
+  <script src="js/calendar.js"></script>
+  <script src="js/github.js"></script>
 </body>
 </html>

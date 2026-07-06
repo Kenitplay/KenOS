@@ -1,0 +1,980 @@
+/* ---------- OVERRIDE: FORCE WATERMARK VISIBILITY ---------- */
+    .desktop-watermark {
+      position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      font-size: 220px !important;
+      color: rgba(0, 212, 255, 0.25) !important;
+      pointer-events: none !important;
+      z-index: 999 !important;
+      text-shadow: 
+        0 0 80px rgba(0, 212, 255, 0.10),
+        0 0 150px rgba(0, 212, 255, 0.05) !important;
+      animation: watermark-float 8s ease-in-out infinite !important;
+      font-family: 'Courier New', monospace !important;
+      opacity: 1 !important;
+      display: block !important;
+      visibility: visible !important;
+      user-select: none !important;
+      text-align: center !important;
+    }
+    .desktop-watermark i {
+      display: block !important;
+      text-align: center !important;
+      font-size: 220px !important;
+      color: rgba(0, 212, 255, 0.25) !important;
+      filter: drop-shadow(0 0 60px rgba(0, 212, 255, 0.08)) !important;
+    }
+    .desktop-watermark .watermark-text {
+      display: block !important;
+      font-size: 34px !important;
+      letter-spacing: 4px !important;
+      margin-top: 16px !important;
+      text-transform: none !important;
+      font-weight: 400 !important;
+      text-align: center !important;
+      text-shadow: 0 0 40px rgba(0, 212, 255, 0.06) !important;
+    }
+    .desktop-watermark .watermark-text .ken {
+      color: rgba(0, 212, 255, 0.25) !important;
+    }
+    .desktop-watermark .watermark-text .os {
+      color: rgba(255, 107, 107, 0.30) !important;
+    }
+    @keyframes watermark-float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1) !important; }
+      50% { transform: translate(-50%, -50%) scale(1.03) !important; }
+    }
+
+    /* ---------- CALENDAR WIDGET ---------- */
+    .calendar-widget {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(8, 18, 30, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 212, 255, 0.08);
+      border-radius: 16px;
+      padding: 32px 30px 26px;
+      width: 340px;
+      max-width: 92vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(0, 212, 255, 0.05);
+      z-index: 100;
+      pointer-events: none;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+    }
+    .calendar-widget .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.06);
+    }
+    .calendar-widget .widget-header .icon {
+      color: rgba(0, 212, 255, 0.3);
+      font-size: 18px;
+    }
+    .calendar-widget .month-year {
+      color: #00d4ff;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 2px;
+      flex: 1;
+    }
+    .calendar-widget .widget-header .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 16px rgba(0, 255, 136, 0.3);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .calendar-widget .day-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+      font-size: 16px;
+    }
+    .calendar-widget .day-grid .day-name {
+      color: rgba(102, 224, 255, 0.4);
+      font-weight: 600;
+      padding: 8px 0;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .calendar-widget .day-grid .day-number {
+      color: #99ddff;
+      padding: 10px 0;
+      border-radius: 8px;
+      font-size: 18px;
+      transition: 0.15s;
+      font-weight: 400;
+    }
+    .calendar-widget .day-grid .day-number.today {
+      color: #00d4ff;
+      background: rgba(0, 212, 255, 0.12);
+      font-weight: 700;
+      border: 1px solid rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 24px rgba(0, 212, 255, 0.05);
+    }
+    .calendar-widget .day-grid .day-number.other-month {
+      color: rgba(153, 221, 255, 0.15);
+    }
+    .calendar-widget .day-grid .day-number.weekend {
+      color: rgba(255, 107, 107, 0.4);
+    }
+    .calendar-widget .day-grid .day-number.weekend.today {
+      color: #ff6b6b;
+      border-color: rgba(255, 107, 107, 0.2);
+    }
+    .calendar-widget .time-display {
+      text-align: center;
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(0, 212, 255, 0.06);
+    }
+    .calendar-widget .time-display .hours {
+      color: #00d4ff;
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .calendar-widget .time-display .seconds {
+      color: rgba(102, 224, 255, 0.3);
+      font-size: 20px;
+      font-weight: 300;
+      margin-left: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .calendar-widget .time-display .ampm {
+      color: rgba(102, 224, 255, 0.3);
+      font-size: 16px;
+      margin-left: 10px;
+      font-weight: 300;
+    }
+    .calendar-widget .date-display {
+      text-align: center;
+      color: rgba(153, 221, 255, 0.35);
+      font-size: 14px;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+    .calendar-widget .weather-display {
+      text-align: center;
+      color: rgba(153, 221, 255, 0.25);
+      font-size: 13px;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .calendar-widget .weather-display i {
+      color: rgba(0, 212, 255, 0.2);
+      font-size: 16px;
+    }
+
+    /* ---------- QUICK STATS AT BOTTOM ---------- */
+    .quick-stats {
+      position: fixed;
+      bottom: 78px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 20px;
+      flex-wrap: wrap;
+      z-index: 50;
+      pointer-events: none;
+      font-family: 'Courier New', monospace;
+      padding: 0 4px;
+    }
+    .quick-stats .stat-item {
+      background: rgba(8, 18, 30, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 212, 255, 0.06);
+      border-radius: 10px;
+      padding: 10px 18px;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .quick-stats .stat-item .stat-icon {
+      color: rgba(0, 212, 255, 0.25);
+      font-size: 18px;
+      width: 30px;
+      text-align: center;
+    }
+    .quick-stats .stat-item .stat-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .quick-stats .stat-item .stat-value {
+      color: #00d4ff;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    .quick-stats .stat-item .stat-label {
+      color: rgba(153, 221, 255, 0.4);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ---------- DESKTOP ENHANCEMENTS ---------- */
+    .kenos-desktop {
+      background: radial-gradient(ellipse at 30% 40%, #0d1a2b, #060b12 80%);
+      position: relative;
+    }
+    .kenos-desktop::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(0, 212, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .system-info {
+      position: fixed;
+      bottom: 140px;
+      right: 28px;
+      color: rgba(0, 212, 255, 0.04);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      text-align: right;
+      letter-spacing: 1px;
+      pointer-events: none;
+      z-index: 0;
+      line-height: 1.8;
+    }
+    .system-info .highlight {
+      color: rgba(0, 212, 255, 0.08);
+    }
+
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      background: rgba(0, 212, 255, 0.03);
+      pointer-events: none;
+      z-index: 0;
+      animation: float-particle 20s infinite linear;
+    }
+    @keyframes float-particle {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+    }
+
+    /* ============================================================ */
+    /* RESPONSIVE BREAKPOINTS - ENLARGED ICONS & TASKBAR */
+    /* ============================================================ */
+
+    /* Large screens (1200px and up) */
+    @media (min-width: 1200px) {
+      .calendar-widget {
+        width: 340px;
+        padding: 32px 30px 26px;
+        right: 20px;
+      }
+      .desktop-watermark {
+        font-size: 220px !important;
+      }
+      .desktop-watermark i {
+        font-size: 220px !important;
+      }
+      .quick-stats .stat-item {
+        min-width: 130px;
+        padding: 12px 20px;
+      }
+    }
+
+    /* Tablets & small laptops (992px - 1199px) */
+    @media (max-width: 1199px) {
+      .calendar-widget {
+        width: 280px;
+        padding: 24px 20px 20px;
+        right: 14px;
+      }
+      .calendar-widget .month-year {
+        font-size: 18px;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 15px;
+        padding: 8px 0;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 30px;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 16px;
+      }
+      .quick-stats .stat-item {
+        padding: 8px 14px;
+        min-width: 100px;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 15px;
+      }
+      .desktop-watermark {
+        font-size: 120px !important;
+      }
+      .desktop-watermark i {
+        font-size: 120px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 20px !important;
+        letter-spacing: 3px !important;
+      }
+    }
+
+    /* Tablets (768px - 991px) - DISABLE DOUBLE CLICK, ENLARGE ICONS */
+    @media (max-width: 991px) {
+      /* Disable double-click on desktop icons */
+      .desktop-icon {
+        cursor: pointer !important;
+      }
+      
+      /* Enlarged desktop icons */
+      .desktop-icon {
+        width: 100px !important;
+        padding: 14px 8px 10px 8px !important;
+      }
+      .icon-box {
+        font-size: 48px !important;
+        width: 72px !important;
+        padding: 8px 10px !important;
+      }
+      .icon-label {
+        font-size: 13px !important;
+        padding: 4px 14px !important;
+      }
+
+      /* ENLARGED QUICK STATS */
+      .quick-stats .stat-item {
+        padding: 10px 18px !important;
+        min-width: 130px !important;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 20px !important;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 22px !important;
+        width: 34px !important;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 11px !important;
+      }
+
+      .calendar-widget {
+        right: 12px;
+        padding: 20px 16px 18px;
+        width: 250px;
+      }
+      .calendar-widget .month-year {
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 13px;
+        padding: 6px 0;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 11px;
+        padding: 6px 0;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 26px;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 14px;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 13px;
+      }
+      .calendar-widget .date-display {
+        font-size: 12px;
+      }
+      .calendar-widget .weather-display {
+        font-size: 11px;
+      }
+      .desktop-watermark {
+        font-size: 100px !important;
+      }
+      .desktop-watermark i {
+        font-size: 100px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 18px !important;
+        letter-spacing: 3px !important;
+      }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os {
+        font-size: 18px !important;
+      }
+    }
+
+    /* ============================================================ */
+    /* MOBILE RESPONSIVE - ENLARGED ICONS, CALENDAR BELOW APPS */
+    /* ============================================================ */
+
+    /* Small tablets & large phones (576px - 767px) */
+    @media (max-width: 767px) {
+      /* Disable double-click on desktop icons */
+      .desktop-icon {
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent !important;
+      }
+
+      /* ENLARGED DESKTOP ICONS */
+      .desktop-icon {
+        width: 90px !important;
+        padding: 12px 6px 8px 6px !important;
+        gap: 4px !important;
+      }
+      .icon-box {
+        font-size: 42px !important;
+        width: 64px !important;
+        padding: 6px 8px !important;
+      }
+      .icon-label {
+        font-size: 11px !important;
+        padding: 3px 12px !important;
+      }
+
+      /* ENLARGED QUICK STATS */
+      .quick-stats {
+        bottom: 82px !important;
+        left: 10px !important;
+        right: 10px !important;
+        gap: 10px !important;
+      }
+      .quick-stats .stat-item {
+        padding: 8px 16px !important;
+        min-width: 90px !important;
+        border-radius: 10px !important;
+        gap: 10px !important;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 18px !important;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 18px !important;
+        width: 28px !important;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 10px !important;
+        letter-spacing: 0.5px !important;
+      }
+
+      /* Calendar widget - BELOW icons, full width */
+      .calendar-widget {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: none !important;
+        width: calc(100% - 20px) !important;
+        max-width: 100% !important;
+        margin: 10px auto 0 auto !important;
+        padding: 16px 14px 14px !important;
+        border-radius: 12px !important;
+        flex-shrink: 0 !important;
+        pointer-events: none !important;
+        order: 10 !important;
+      }
+      .calendar-widget .widget-header {
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+      }
+      .calendar-widget .widget-header .icon {
+        font-size: 14px !important;
+      }
+      .calendar-widget .month-year {
+        font-size: 14px !important;
+        letter-spacing: 1px !important;
+      }
+      .calendar-widget .widget-header .status-dot {
+        width: 8px !important;
+        height: 8px !important;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 12px !important;
+        padding: 6px 0 !important;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 10px !important;
+        padding: 5px 0 !important;
+      }
+      .calendar-widget .day-grid {
+        gap: 2px !important;
+      }
+      .calendar-widget .time-display {
+        margin-top: 10px !important;
+        padding-top: 10px !important;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 22px !important;
+        letter-spacing: 2px !important;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 13px !important;
+        margin-left: 4px !important;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 12px !important;
+        margin-left: 6px !important;
+      }
+      .calendar-widget .date-display {
+        font-size: 11px !important;
+        margin-top: 4px !important;
+      }
+      .calendar-widget .weather-display {
+        font-size: 10px !important;
+        margin-top: 6px !important;
+        gap: 6px !important;
+      }
+      .calendar-widget .weather-display i {
+        font-size: 12px !important;
+      }
+
+      /* Remove mobile calendar button since calendar is always visible */
+      .mobile-calendar-btn {
+        display: none !important;
+      }
+      .mobile-calendar-overlay {
+        display: none !important;
+      }
+
+      /* System info hidden on mobile */
+      .system-info {
+        display: none !important;
+      }
+
+      /* Watermark smaller */
+      .desktop-watermark {
+        font-size: 60px !important;
+      }
+      .desktop-watermark i {
+        font-size: 60px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 13px !important;
+        letter-spacing: 2px !important;
+        margin-top: 8px !important;
+      }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os {
+        font-size: 13px !important;
+      }
+
+      /* Hide particles */
+      .particle {
+        display: none !important;
+      }
+      .kenos-desktop::before {
+        background-size: 30px 30px !important;
+      }
+
+      /* ENLARGED TASKBAR ON MOBILE */
+      .kenos-taskbar {
+        display: flex !important;
+        height: 72px !important;
+        padding: 8px 16px !important;
+        gap: 8px !important;
+        align-items: center !important;
+      }
+      .taskbar-btn {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 22px !important;
+        border-radius: 8px !important;
+      }
+      .finder-pill {
+        font-size: 13px !important;
+        padding: 6px 14px !important;
+        border-radius: 8px !important;
+      }
+      .finder-pill i {
+        font-size: 16px !important;
+      }
+      .time-badge {
+        font-size: 13px !important;
+        padding: 6px 14px !important;
+        border-radius: 8px !important;
+      }
+      .divider-line {
+        height: 30px !important;
+      }
+
+      /* Adjust desktop height for larger taskbar */
+      .kenos-desktop {
+        height: calc(100vh - 72px) !important;
+        padding: 16px 14px 10px 14px !important;
+        gap: 12px !important;
+        align-content: flex-start !important;
+        flex-wrap: wrap !important;
+      }
+
+      /* Hide mobile bottom menu - using desktop taskbar instead */
+      .mobile-bottom-menu {
+        display: none !important;
+      }
+
+      /* Update boot screen for mobile */
+      #bootScreen .boot-logo {
+        font-size: 48px !important;
+      }
+      #bootScreen .boot-title {
+        font-size: 22px !important;
+        letter-spacing: 3px !important;
+      }
+      #bootScreen .boot-subtitle {
+        font-size: 11px !important;
+        margin-bottom: 20px !important;
+      }
+      #bootScreen .boot-progress {
+        width: 280px !important;
+      }
+
+      /* Calendar should be below icons - flex order */
+      .kenos-desktop {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-content: flex-start !important;
+      }
+      .desktop-icon {
+        flex: 0 0 auto !important;
+      }
+      .calendar-widget {
+        flex: 0 0 100% !important;
+        margin-top: 12px !important;
+      }
+    }
+
+    /* Mobile phones (400px - 575px) */
+    @media (max-width: 575px) {
+      /* ENLARGED ICONS - slightly smaller but still large */
+      .desktop-icon {
+        width: 78px !important;
+        padding: 10px 4px 6px 4px !important;
+      }
+      .icon-box {
+        font-size: 36px !important;
+        width: 54px !important;
+        padding: 4px 6px !important;
+      }
+      .icon-label {
+        font-size: 10px !important;
+        padding: 2px 10px !important;
+      }
+
+      /* ENLARGED QUICK STATS */
+      .quick-stats {
+        bottom: 74px !important;
+        left: 8px !important;
+        right: 8px !important;
+        gap: 6px !important;
+      }
+      .quick-stats .stat-item {
+        padding: 6px 12px !important;
+        min-width: 70px !important;
+        border-radius: 8px !important;
+        gap: 6px !important;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 15px !important;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 15px !important;
+        width: 22px !important;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 8px !important;
+        letter-spacing: 0.3px !important;
+      }
+
+      /* Calendar full width - BELOW icons */
+      .calendar-widget {
+        padding: 12px 12px 12px !important;
+        margin: 8px auto 0 auto !important;
+      }
+      .calendar-widget .month-year {
+        font-size: 12px !important;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 10px !important;
+        padding: 4px 0 !important;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 8px !important;
+        padding: 4px 0 !important;
+      }
+      .calendar-widget .day-grid {
+        gap: 2px !important;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 18px !important;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 11px !important;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 10px !important;
+      }
+      .calendar-widget .date-display {
+        font-size: 9px !important;
+      }
+      .calendar-widget .weather-display {
+        font-size: 8px !important;
+      }
+
+      .desktop-watermark {
+        font-size: 45px !important;
+      }
+      .desktop-watermark i {
+        font-size: 45px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 10px !important;
+        letter-spacing: 1px !important;
+        margin-top: 6px !important;
+      }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os {
+        font-size: 10px !important;
+      }
+
+      /* ENLARGED TASKBAR - slightly smaller but still large */
+      .kenos-taskbar {
+        height: 64px !important;
+        padding: 6px 12px !important;
+        gap: 6px !important;
+      }
+      .taskbar-btn {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 18px !important;
+      }
+      .finder-pill {
+        font-size: 11px !important;
+        padding: 4px 12px !important;
+      }
+      .finder-pill i {
+        font-size: 14px !important;
+      }
+      .time-badge {
+        font-size: 11px !important;
+        padding: 4px 12px !important;
+      }
+      .divider-line {
+        height: 24px !important;
+      }
+
+      .kenos-desktop {
+        height: calc(100vh - 64px) !important;
+        padding: 10px 8px 6px 8px !important;
+        gap: 8px !important;
+      }
+      .calendar-widget {
+        margin-top: 8px !important;
+      }
+    }
+
+    /* Extra small phones (up to 400px) */
+    @media (max-width: 400px) {
+      .desktop-icon {
+        width: 65px !important;
+        padding: 8px 3px 4px 3px !important;
+      }
+      .icon-box {
+        font-size: 28px !important;
+        width: 44px !important;
+        padding: 3px 4px !important;
+      }
+      .icon-label {
+        font-size: 8px !important;
+        padding: 2px 8px !important;
+      }
+
+      /* ENLARGED QUICK STATS - compact but readable */
+      .quick-stats {
+        bottom: 66px !important;
+        left: 4px !important;
+        right: 4px !important;
+        gap: 4px !important;
+      }
+      .quick-stats .stat-item {
+        padding: 4px 10px !important;
+        min-width: 55px !important;
+        border-radius: 6px !important;
+        gap: 4px !important;
+      }
+      .quick-stats .stat-item .stat-value {
+        font-size: 12px !important;
+      }
+      .quick-stats .stat-item .stat-icon {
+        font-size: 12px !important;
+        width: 18px !important;
+      }
+      .quick-stats .stat-item .stat-label {
+        font-size: 7px !important;
+      }
+
+      .calendar-widget {
+        padding: 10px 8px 10px !important;
+        margin: 4px auto 0 auto !important;
+      }
+      .calendar-widget .month-year {
+        font-size: 10px !important;
+      }
+      .calendar-widget .day-grid .day-number {
+        font-size: 8px !important;
+        padding: 3px 0 !important;
+      }
+      .calendar-widget .day-grid .day-name {
+        font-size: 7px !important;
+        padding: 3px 0 !important;
+      }
+      .calendar-widget .time-display .hours {
+        font-size: 15px !important;
+      }
+      .calendar-widget .time-display .seconds {
+        font-size: 9px !important;
+      }
+      .calendar-widget .time-display .ampm {
+        font-size: 8px !important;
+      }
+      .calendar-widget .date-display {
+        font-size: 8px !important;
+      }
+      .calendar-widget .weather-display {
+        font-size: 7px !important;
+      }
+
+      .desktop-watermark {
+        font-size: 30px !important;
+      }
+      .desktop-watermark i {
+        font-size: 30px !important;
+      }
+      .desktop-watermark .watermark-text {
+        font-size: 8px !important;
+        letter-spacing: 1px !important;
+        margin-top: 4px !important;
+      }
+      .desktop-watermark .watermark-text .ken,
+      .desktop-watermark .watermark-text .os {
+        font-size: 8px !important;
+      }
+
+      .kenos-taskbar {
+        height: 56px !important;
+        padding: 4px 8px !important;
+        gap: 4px !important;
+      }
+      .taskbar-btn {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 15px !important;
+      }
+      .finder-pill {
+        font-size: 9px !important;
+        padding: 3px 10px !important;
+      }
+      .finder-pill i {
+        font-size: 12px !important;
+      }
+      .time-badge {
+        font-size: 9px !important;
+        padding: 3px 10px !important;
+      }
+      .divider-line {
+        display: none !important;
+      }
+
+      .kenos-desktop {
+        height: calc(100vh - 56px) !important;
+        padding: 6px 4px 4px 4px !important;
+        gap: 6px !important;
+      }
+      .calendar-widget {
+        margin-top: 6px !important;
+      }
+    }
+
+    /* ---------- TASKBAR RESPONSIVE OVERRIDES ---------- */
+    @media (max-width: 768px) {
+      .taskbar-section {
+        gap: 8px !important;
+      }
+      .kenos-taskbar {
+        gap: 6px !important;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .taskbar-section {
+        gap: 4px !important;
+      }
+      .kenos-taskbar {
+        gap: 4px !important;
+      }
+    }
+
+    /* Force single click on mobile/tablet */
+    @media (max-width: 991px) {
+      .desktop-icon {
+        cursor: pointer !important;
+      }
+      .desktop-icon * {
+        pointer-events: none !important;
+      }
+    }
+
+    /* Calendar below icons - flex order for desktop and mobile */
+    .calendar-widget {
+      order: 99;
+    }
+    @media (max-width: 767px) {
+      .kenos-desktop {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-content: flex-start !important;
+      }
+      .desktop-icon {
+        flex: 0 0 auto !important;
+      }
+      .calendar-widget {
+        flex: 0 0 100% !important;
+        margin-top: 12px !important;
+        order: 10 !important;
+      }
+    }
