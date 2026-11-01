@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>KenOS · Portfolio</title>
   <!-- ========== FAVICON - Microchip Icon ========== -->
-    <!-- ========== FAVICON - Microchip Icon (Same as Desktop Watermark) ========== -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300d4ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='16' height='16' rx='2'/%3E%3Crect x='9' y='9' width='6' height='6' rx='1'/%3E%3Cpath d='M9 1v2'/%3E%3Cpath d='M15 1v2'/%3E%3Cpath d='M9 21v2'/%3E%3Cpath d='M15 21v2'/%3E%3Cpath d='M1 9h2'/%3E%3Cpath d='M1 15h2'/%3E%3Cpath d='M21 9h2'/%3E%3Cpath d='M21 15h2'/%3E%3C/svg%3E" />
   <!-- Bootstrap 5 + Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -203,6 +202,11 @@
       <div class="finder-pill" style="background:rgba(0,212,255,0.02);padding:5px 12px;">
         <i class="fas fa-th"></i>
       </div>
+      <div class="divider-line"></div>
+      <!-- RESET ICON POSITIONS BUTTON -->
+      <div class="taskbar-btn" id="resetIconsBtn" title="Reset icon positions" style="width:36px;height:36px;font-size:16px;">
+        <i class="fas fa-undo-alt"></i>
+      </div>
     </div>
     <div class="taskbar-section">
       <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="taskbar-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -230,5 +234,271 @@
   <script src="js/component.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/github.js"></script>
+
+  <!-- ========== DRAG & DROP + RESET SCRIPT ========== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Default layout constants
+      const DEFAULT_START_X = 20;
+      const DEFAULT_START_Y = 20;
+      const DEFAULT_GAP = 100;
+
+      document.addEventListener('DOMContentLoaded', function() {
+        initDraggableIcons();
+      });
+
+      setTimeout(initDraggableIcons, 800);
+      setTimeout(initDraggableIcons, 2000);
+
+      // ========== RESET ICON POSITIONS ==========
+      window.resetIconPositions = function() {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
+
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+        icons.forEach(function(icon, index) {
+          icon.style.transition = 'left 0.3s ease, top 0.3s ease';
+          icon.style.left = (DEFAULT_START_X + index * DEFAULT_GAP) + 'px';
+          icon.style.top = DEFAULT_START_Y + 'px';
+          delete icon.dataset.hasBeenDragged;
+          setTimeout(function() {
+            icon.style.transition = '';
+          }, 350);
+        });
+      };
+
+      // ========== DRAG HANDLER FOR ICONS ==========
+      function makeDraggable(element, clampTarget) {
+        if (!element || element.dataset.dragBound === 'true') return;
+        element.dataset.dragBound = 'true';
+
+        element.style.userSelect = 'none';
+        element.style.touchAction = 'none';
+
+        if (window.getComputedStyle(element).position !== 'absolute') {
+          element.style.position = 'absolute';
+        }
+
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let startLeft = 0, startTop = 0;
+        let clickMoved = false;
+        let clickStartX = 0, clickStartY = 0;
+
+        function getLeft() {
+          return parseFloat(element.style.left) || 0;
+        }
+        function getTop() {
+          return parseFloat(element.style.top) || 0;
+        }
+
+        // ---- MOUSE ----
+        function onMouseDown(e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+
+          isDragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = getLeft();
+          startTop = getTop();
+
+          clickStartX = e.clientX;
+          clickStartY = e.clientY;
+          clickMoved = false;
+
+          element.style.cursor = 'grabbing';
+          element.style.opacity = '0.85';
+          element.style.zIndex = '9999';
+
+          document.addEventListener('mousemove', onMouseMove);
+          document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+
+          if (Math.abs(e.clientX - clickStartX) > 5 || Math.abs(e.clientY - clickStartY) > 5) {
+            clickMoved = true;
+          }
+
+          let newLeft = startLeft + dx;
+          let newTop = startTop + dy;
+
+          const clampRect = clampTarget.getBoundingClientRect();
+          const elemRect = element.getBoundingClientRect();
+          const w = elemRect.width;
+          const h = elemRect.height;
+
+          const minLeft = 5;
+          const minTop = 5;
+          const maxLeft = clampRect.width - w - 5;
+          const maxTop = clampRect.height - h - 5;
+
+          newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+          newTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+        }
+
+        function onMouseUp(e) {
+          if (!isDragging) return;
+          isDragging = false;
+
+          element.style.cursor = '';
+          element.style.opacity = '';
+          element.style.zIndex = '';
+
+          if (clickMoved) {
+            element.dataset.hasBeenDragged = 'true';
+          }
+
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        // ---- TOUCH ----
+        let touchDragging = false;
+        let touchStartX = 0, touchStartY = 0;
+        let touchStartLeft = 0, touchStartTop = 0;
+        let touchMoved = false;
+        let touchClickStartX = 0, touchClickStartY = 0;
+
+        function onTouchStart(e) {
+          const touch = e.touches[0];
+          if (!touch) return;
+
+          touchDragging = true;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchStartLeft = getLeft();
+          touchStartTop = getTop();
+
+          touchClickStartX = touch.clientX;
+          touchClickStartY = touch.clientY;
+          touchMoved = false;
+
+          element.style.cursor = 'grabbing';
+          element.style.opacity = '0.85';
+          element.style.zIndex = '9999';
+
+          document.addEventListener('touchmove', onTouchMove, { passive: false });
+          document.addEventListener('touchend', onTouchEnd);
+          document.addEventListener('touchcancel', onTouchEnd);
+        }
+
+        function onTouchMove(e) {
+          if (!touchDragging) return;
+          const touch = e.touches[0];
+          if (!touch) return;
+          e.preventDefault();
+
+          const dx = touch.clientX - touchStartX;
+          const dy = touch.clientY - touchStartY;
+
+          if (Math.abs(touch.clientX - touchClickStartX) > 5 || Math.abs(touch.clientY - touchClickStartY) > 5) {
+            touchMoved = true;
+          }
+
+          let newLeft = touchStartLeft + dx;
+          let newTop = touchStartTop + dy;
+
+          const clampRect = clampTarget.getBoundingClientRect();
+          const elemRect = element.getBoundingClientRect();
+          const w = elemRect.width;
+          const h = elemRect.height;
+
+          const minLeft = 5;
+          const minTop = 5;
+          const maxLeft = clampRect.width - w - 5;
+          const maxTop = clampRect.height - h - 5;
+
+          newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+          newTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+        }
+
+        function onTouchEnd(e) {
+          if (!touchDragging) return;
+          touchDragging = false;
+
+          element.style.cursor = '';
+          element.style.opacity = '';
+          element.style.zIndex = '';
+
+          if (touchMoved) {
+            element.dataset.hasBeenDragged = 'true';
+          }
+
+          document.removeEventListener('touchmove', onTouchMove);
+          document.removeEventListener('touchend', onTouchEnd);
+          document.removeEventListener('touchcancel', onTouchEnd);
+        }
+
+        element.addEventListener('mousedown', onMouseDown);
+        element.addEventListener('touchstart', onTouchStart, { passive: true });
+        element.addEventListener('dragstart', function(e) { e.preventDefault(); });
+
+        // Block clicks after drag
+        element.addEventListener('click', function(e) {
+          if (clickMoved || touchMoved) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            clickMoved = false;
+            touchMoved = false;
+          }
+        }, true);
+      }
+
+      // ========== INIT DRAGGABLE ICONS ==========
+      function initDraggableIcons() {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
+
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+
+        if (window.__kenosDragInitialized && window.__kenosDragInitializedCount === icons.length) {
+          return;
+        }
+        window.__kenosDragInitialized = true;
+        window.__kenosDragInitializedCount = icons.length;
+
+        // Default horizontal row layout
+        icons.forEach(function(icon, index) {
+          if (!icon.dataset.hasBeenDragged) {
+            if (!icon.style.left && !icon.style.top) {
+              icon.style.position = 'absolute';
+              icon.style.left = (DEFAULT_START_X + index * DEFAULT_GAP) + 'px';
+              icon.style.top = DEFAULT_START_Y + 'px';
+            }
+          }
+          makeDraggable(icon, desktop);
+        });
+
+        // Reset button
+        const resetBtn = document.getElementById('resetIconsBtn');
+        if (resetBtn && !resetBtn.dataset.bound) {
+          resetBtn.dataset.bound = 'true';
+          resetBtn.addEventListener('click', function() {
+            window.resetIconPositions();
+            resetBtn.style.transition = 'transform 0.4s ease';
+            resetBtn.style.transform = 'rotate(-360deg)';
+            setTimeout(function() {
+              resetBtn.style.transform = '';
+            }, 400);
+          });
+        }
+      }
+    })();
+  </script>
 </body>
 </html>
