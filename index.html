@@ -163,7 +163,7 @@
       <span class="icon-label">~/resume</span>
     </div>
 
-    <!-- MOBILE CALENDAR WIDGET (cloned inside desktop area) -->
+    <!-- MOBILE CALENDAR WIDGET (hidden on phones via CSS) -->
     <div class="calendar-widget-mobile" id="calendarWidgetMobile">
       <div class="widget-header">
         <span class="icon"><i class="fas fa-calendar-alt"></i></span>
@@ -225,6 +225,15 @@
     </div>
   </div>
 
+  <!-- ========== INLINE STYLE: HIDE MOBILE CALENDAR ON PHONES ========== -->
+  <style>
+    @media (max-width: 480px) {
+      .calendar-widget-mobile {
+        display: none !important;
+      }
+    }
+  </style>
+
   <!-- ========================================================== -->
   <!-- SCRIPT: Config + Calendar + Component System + GitHub API  -->
   <!-- ========================================================== -->
@@ -240,36 +249,113 @@
     (function() {
       'use strict';
 
-      // Default layout constants
-      const DEFAULT_START_X = 20;
-      const DEFAULT_START_Y = 20;
-      const DEFAULT_GAP = 100;
+      // ============================================================
+      // RESPONSIVE LAYOUT CONFIGURATION
+      // ============================================================
+      function getResponsiveConfig() {
+        const w = window.innerWidth;
 
-      document.addEventListener('DOMContentLoaded', function() {
-        initDraggableIcons();
-      });
+        if (w <= 480) {
+          // ---- PHONE ----
+          // 4 columns, tight spacing, start below the boot screen area
+          return {
+            startX: 8,
+            startY: 40,
+            gap: 70,
+            rowGap: 82,
+            cols: 4
+          };
+        } else if (w <= 1024) {
+          // ---- TABLET ----
+          return {
+            startX: 20,
+            startY: 20,
+            gap: 88,
+            rowGap: 100,
+            cols: 5
+          };
+        } else {
+          // ---- LAPTOP / DESKTOP ----
+          return {
+            startX: 20,
+            startY: 20,
+            gap: 100,
+            rowGap: 110,
+            cols: 99
+          };
+        }
+      }
 
-      setTimeout(initDraggableIcons, 800);
-      setTimeout(initDraggableIcons, 2000);
+      // ============================================================
+      // STATE
+      // ============================================================
+      let lastLayoutConfig = null;
+      let resizeTimeout = null;
 
-      // ========== RESET ICON POSITIONS ==========
+      // ============================================================
+      // APPLY DEFAULT LAYOUT (used everywhere)
+      // ============================================================
+      function applyDefaultLayout(forceAll) {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
+
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+        const cfg = getResponsiveConfig();
+
+        icons.forEach(function(icon, index) {
+          if (forceAll || !icon.dataset.hasBeenDragged) {
+            const col = index % cfg.cols;
+            const row = Math.floor(index / cfg.cols);
+
+            icon.style.position = 'absolute';
+            icon.style.left = (cfg.startX + col * cfg.gap) + 'px';
+            icon.style.top = (cfg.startY + row * cfg.rowGap) + 'px';
+          }
+        });
+      }
+
+      // ============================================================
+      // EARLY LAYOUT: run immediately (before DOMContentLoaded / paint)
+      // This is the critical fix for phones — icons get inline left/top
+      // before the browser's first paint, so they are visible instantly.
+      // ============================================================
+      (function applyEarlyLayout() {
+        // The <script> tag is at the end of body, so the DOM above it
+        // is already parsed. Icons exist now.
+        applyDefaultLayout(true);
+      })();
+
+      // ============================================================
+      // RESET ICON POSITIONS
+      // ============================================================
       window.resetIconPositions = function() {
         const desktop = document.getElementById('desktopArea');
         if (!desktop) return;
 
         const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+        const cfg = getResponsiveConfig();
+
         icons.forEach(function(icon, index) {
+          const col = index % cfg.cols;
+          const row = Math.floor(index / cfg.cols);
+
+          const left = cfg.startX + col * cfg.gap;
+          const top = cfg.startY + row * cfg.rowGap;
+
           icon.style.transition = 'left 0.3s ease, top 0.3s ease';
-          icon.style.left = (DEFAULT_START_X + index * DEFAULT_GAP) + 'px';
-          icon.style.top = DEFAULT_START_Y + 'px';
+          icon.style.left = left + 'px';
+          icon.style.top = top + 'px';
           delete icon.dataset.hasBeenDragged;
+
           setTimeout(function() {
             icon.style.transition = '';
           }, 350);
         });
       };
 
-      // ========== DRAG HANDLER FOR ICONS ==========
+      // ============================================================
+      // DRAG HANDLER
+      // ============================================================
       function makeDraggable(element, clampTarget) {
         if (!element || element.dataset.dragBound === 'true') return;
         element.dataset.dragBound = 'true';
@@ -459,30 +545,31 @@
         }, true);
       }
 
-      // ========== INIT DRAGGABLE ICONS ==========
+      // ============================================================
+      // INIT DRAGGABLE ICONS
+      // ============================================================
       function initDraggableIcons() {
         const desktop = document.getElementById('desktopArea');
         if (!desktop) return;
 
         const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
 
-        if (window.__kenosDragInitialized && window.__kenosDragInitializedCount === icons.length) {
-          return;
+        // Bind drag handlers once
+        if (!window.__kenosDragInitialized) {
+          window.__kenosDragInitialized = true;
+          icons.forEach(function(icon) {
+            makeDraggable(icon, desktop);
+          });
         }
-        window.__kenosDragInitialized = true;
-        window.__kenosDragInitializedCount = icons.length;
 
-        // Default horizontal row layout
-        icons.forEach(function(icon, index) {
-          if (!icon.dataset.hasBeenDragged) {
-            if (!icon.style.left && !icon.style.top) {
-              icon.style.position = 'absolute';
-              icon.style.left = (DEFAULT_START_X + index * DEFAULT_GAP) + 'px';
-              icon.style.top = DEFAULT_START_Y + 'px';
-            }
-          }
-          makeDraggable(icon, desktop);
-        });
+        // Apply responsive default layout if not yet set
+        const currentCfg = getResponsiveConfig();
+        const cfgKey = JSON.stringify(currentCfg);
+
+        if (!lastLayoutConfig || lastLayoutConfig !== cfgKey) {
+          applyDefaultLayout(false);
+          lastLayoutConfig = cfgKey;
+        }
 
         // Reset button
         const resetBtn = document.getElementById('resetIconsBtn');
@@ -498,6 +585,30 @@
           });
         }
       }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        initDraggableIcons();
+      });
+
+      setTimeout(initDraggableIcons, 800);
+      setTimeout(initDraggableIcons, 2000);
+
+      // ============================================================
+      // RESPONSIVE HANDLER: re-apply layout when crossing breakpoints
+      // ============================================================
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          const cfg = getResponsiveConfig();
+          const cfgKey = JSON.stringify(cfg);
+
+          if (lastLayoutConfig !== cfgKey) {
+            lastLayoutConfig = cfgKey;
+            applyDefaultLayout(false);
+          }
+        }, 150);
+      });
+
     })();
   </script>
 </body>
