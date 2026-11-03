@@ -113,8 +113,13 @@
           // Boot complete
           setTimeout(() => {
             bootScreen.classList.add('hidden');
-            desktop.classList.add('visible');
-            taskbar.classList.add('visible');
+            const normalSite = document.getElementById('normalSite');
+            if (document.body.classList.contains('layout-normal')) {
+              if (normalSite) normalSite.style.display = 'block';
+            } else {
+              desktop.classList.add('visible');
+              taskbar.classList.add('visible');
+            }
             // Play boot sound when desktop appears
             playBootSound();
             console.log('✅ KenOS boot complete!');

@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="css/project.css"/>
   <link rel="stylesheet" href="css/taskbar.css"/>
   <link rel="stylesheet" href="css/extra.css"/>
+  <link rel="stylesheet" href="css/normal-site.css"/>
 </head>
 <body>
 
@@ -199,6 +200,12 @@
         <span>ken@kenos</span>
       </div>
       <div class="divider-line"></div>
+      <!-- TOGGLE TO NORMAL SITE BUTTON -->
+      <div class="taskbar-layout-pill" id="taskbarLayoutToggleBtn" title="Switch to Normal Website View" role="button" tabindex="0">
+        <i class="fas fa-globe"></i>
+        <span>Web Mode</span>
+      </div>
+      <div class="divider-line"></div>
       <div class="finder-pill" style="background:rgba(0,212,255,0.02);padding:5px 12px;">
         <i class="fas fa-th"></i>
       </div>
@@ -225,6 +232,758 @@
     </div>
   </div>
 
+  <!-- ========================================================== -->
+  <!-- ========== NORMAL PORTFOLIO SITE LAYOUT CONTAINER ========== -->
+  <!-- ========================================================== -->
+  <div id="normalSite">
+    
+    <!-- Top Sticky Navigation Bar -->
+    <nav class="normal-navbar" id="normalNavbar">
+      <a href="#normal-hero" class="normal-nav-brand">
+        <i class="fas fa-microchip"></i>
+        <span><span class="brand-ken">Ken</span><span class="brand-os">OS</span></span>
+        <span class="brand-ver">v2.0</span>
+      </a>
+
+      <!-- Desktop & Tablet Navigation Links -->
+      <ul class="normal-nav-links">
+        <li><a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About</a></li>
+        <li><a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience</a></li>
+        <li><a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects</a></li>
+        <li><a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills</a></li>
+        <li><a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates</a></li>
+        <li><a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="normal-nav-actions">
+        <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
+          <i class="fas fa-file-pdf"></i>
+          <span>Resume</span>
+        </a>
+        <button class="nav-btn nav-toggle-btn" id="navDesktopToggleBtn" title="Switch to KenOS Desktop OS">
+          <i class="fas fa-desktop"></i>
+          <span>Desktop OS</span>
+        </button>
+        <button class="normal-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Dropdown Menu -->
+    <div class="normal-mobile-menu" id="normalMobileMenu">
+      <a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About (~$ whoami)</a>
+      <a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience (~$ experience)</a>
+      <a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects (~/projects)</a>
+      <a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills (~/tools)</a>
+      <a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates (~/certificates)</a>
+      <a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact (~/contact)</a>
+      <div class="mobile-actions">
+        <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
+          <i class="fas fa-file-pdf"></i> Resume PDF
+        </a>
+        <button class="nav-btn nav-toggle-btn" id="mobileMenuDesktopBtn">
+          <i class="fas fa-desktop"></i> Switch to Desktop OS View
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="normal-hero" id="normal-hero">
+      <div class="hero-terminal-pill">
+        <span class="pulse-dot"></span>
+        <span>ken@developer:~$ system --profile</span>
+      </div>
+
+      <h1 class="hero-title">
+        Hi, I'm <span class="hero-glow-text">Ken Valledor</span>
+      </h1>
+
+      <div class="hero-role">
+        <span>Full-Stack Developer & Cloud Architect</span><span class="cursor"></span>
+      </div>
+
+      <p class="hero-description">
+        Passionate engineer specializing in high-performance web systems, distributed cloud architecture, and sleek digital experiences. Merging clean code with modern design to build resilient, user-centric software.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#normal-projects" class="normal-btn primary-btn">
+          <i class="fas fa-folder-open"></i> View Projects
+        </a>
+        <a href="#normal-contact" class="normal-btn secondary-btn">
+          <i class="fas fa-envelope"></i> Get In Touch
+        </a>
+        <a href="assets/resume.pdf" target="_blank" class="normal-btn outline-btn">
+          <i class="fas fa-file-pdf"></i> Download Resume
+        </a>
+        <button class="normal-btn outline-btn" id="heroDesktopToggleBtn" title="Experience KenOS in interactive desktop mode">
+          <i class="fas fa-desktop"></i> Desktop OS View
+        </button>
+      </div>
+
+      <!-- Quick Stats Strip -->
+      <div class="hero-stats-grid">
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-briefcase"></i></div>
+          <div>
+            <div class="hero-stat-val">6+</div>
+            <div class="hero-stat-lbl">Years Experience</div>
+          </div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-code"></i></div>
+          <div>
+            <div class="hero-stat-val">20+</div>
+            <div class="hero-stat-lbl">Projects Built</div>
+          </div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-certificate"></i></div>
+          <div>
+            <div class="hero-stat-val">6</div>
+            <div class="hero-stat-lbl">Certifications</div>
+          </div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-users"></i></div>
+          <div>
+            <div class="hero-stat-val">15+</div>
+            <div class="hero-stat-lbl">Clients Served</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section (~$ whoami) -->
+    <section class="normal-section" id="normal-about">
+      <div class="section-header">
+        <span class="section-tag">// 01. PROFILE</span>
+        <h2 class="section-title"><i class="fas fa-user-astronaut"></i> ~$ whoami</h2>
+        <p class="section-subtitle">Developer background, philosophy, and core technical passions</p>
+      </div>
+
+      <div class="about-grid">
+        <!-- Left: Cyber Terminal Card -->
+        <div class="cyber-window-card">
+          <div class="cyber-window-header">
+            <div class="window-dots">
+              <span class="dot-red"></span>
+              <span class="dot-yellow"></span>
+              <span class="dot-cyan"></span>
+            </div>
+            <div class="window-tab-title">
+              <i class="fas fa-terminal"></i> ken@kenos:~ (bash)
+            </div>
+            <div style="width: 40px;"></div>
+          </div>
+          <div class="cyber-window-body">
+            <div class="about-profile-header">
+              <div class="about-avatar-box">
+                <i class="fas fa-user-astronaut"></i>
+              </div>
+              <div>
+                <div class="about-user-tag">ken@developer:~$</div>
+                <div class="about-status-line">
+                  <span style="color:#00ff88;">●</span> Active · Open to opportunities
+                </div>
+                <div class="about-meta-row">
+                  <span class="about-meta-pill"><i class="fas fa-map-marker-alt"></i> Remote · Global</span>
+                  <span class="about-meta-pill"><i class="fas fa-briefcase"></i> 6+ years</span>
+                  <span class="about-meta-pill"><i class="fas fa-graduation-cap"></i> M.Sc. CS</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-command-block">
+              <span class="cmd-prompt">ken@kenos:~$</span> echo "I'm a passionate full-stack developer with a love for building clean, efficient, and user-centric applications. I thrive at the intersection of design and engineering, creating digital experiences that are both beautiful and functional."
+            </div>
+
+            <div class="about-quote-box">
+              <i class="fas fa-quote-left" style="color:#00d4ff; opacity:0.4; margin-right:6px;"></i>
+              "The best way to predict the future is to build it."
+              <span class="quote-author">— Alan Kay</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Stats & Passions -->
+        <div class="about-side-cards">
+          <div class="about-stat-grid">
+            <div class="about-stat-cell">
+              <div class="about-stat-num">20+</div>
+              <div class="about-stat-desc">Projects</div>
+            </div>
+            <div class="about-stat-cell">
+              <div class="about-stat-num">15+</div>
+              <div class="about-stat-desc">Clients</div>
+            </div>
+            <div class="about-stat-cell">
+              <div class="about-stat-num">4</div>
+              <div class="about-stat-desc">Awards</div>
+            </div>
+            <div class="about-stat-cell">
+              <div class="about-stat-num">∞</div>
+              <div class="about-stat-desc">Curiosity</div>
+            </div>
+          </div>
+
+          <div class="about-passions-card">
+            <div class="about-passions-title">
+              <i class="fas fa-heart" style="color:#ff6b6b;"></i> Core Passions & Focus
+            </div>
+            <div class="about-tags-flex">
+              <span class="normal-badge-tag"><i class="fas fa-code"></i> Clean Code</span>
+              <span class="normal-badge-tag"><i class="fas fa-paint-brush"></i> UI/UX Design</span>
+              <span class="normal-badge-tag"><i class="fas fa-cloud"></i> Cloud Architecture</span>
+              <span class="normal-badge-tag"><i class="fas fa-robot"></i> AI / ML</span>
+              <span class="normal-badge-tag"><i class="fas fa-shield-alt"></i> Security</span>
+              <span class="normal-badge-tag"><i class="fas fa-mobile-alt"></i> Mobile Responsive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section (~$ experience) -->
+    <section class="normal-section" id="normal-experience">
+      <div class="section-header">
+        <span class="section-tag">// 02. CAREER PATH</span>
+        <h2 class="section-title"><i class="fas fa-briefcase"></i> ~$ experience</h2>
+        <p class="section-subtitle">Professional software engineering milestones and technical leadership</p>
+      </div>
+
+      <div class="exp-timeline">
+        <!-- Experience 1 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@senior-dev:~$</div>
+            <span class="normal-badge-tag" style="background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.3); color:#00ff88;">
+              <i class="fas fa-circle" style="font-size:7px;"></i> Current Role
+            </span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> TechFlow Inc. · 2022 – Present
+          </div>
+          <div class="exp-desc">
+            Led the architectural redesign of the core customer dashboard, cutting page load latencies by 40%. Engineered scalable microservices using Node.js and React, and orchestrated automated multi-region AWS cloud infrastructure.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">React</span>
+            <span class="normal-badge-tag">Node.js</span>
+            <span class="normal-badge-tag">AWS</span>
+            <span class="normal-badge-tag">Docker</span>
+            <span class="normal-badge-tag">Microservices</span>
+          </div>
+        </div>
+
+        <!-- Experience 2 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@architect:~$</div>
+            <span class="normal-badge-tag">2020 – 2022</span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> Creative Digital · 2020 – 2022
+          </div>
+          <div class="exp-desc">
+            Designed and maintained a centralized design system and reusable component library adopted across 12 product lines. Spearheaded TypeScript migration and elevated test coverage above 85% using Storybook and Jest.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">TypeScript</span>
+            <span class="normal-badge-tag">Vue.js</span>
+            <span class="normal-badge-tag">Storybook</span>
+            <span class="normal-badge-tag">Jest</span>
+            <span class="normal-badge-tag">Design Systems</span>
+          </div>
+        </div>
+
+        <!-- Experience 3 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@devops:~$</div>
+            <span class="normal-badge-tag">2018 – 2020</span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> CloudSphere · 2018 – 2020
+          </div>
+          <div class="exp-desc">
+            Automated resilient CI/CD pipelines with GitHub Actions and Terraform infrastructure-as-code. Managed production Kubernetes clusters, decreasing system downtime and deployment anomalies by 70%.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">Kubernetes</span>
+            <span class="normal-badge-tag">Terraform</span>
+            <span class="normal-badge-tag">GitHub Actions</span>
+            <span class="normal-badge-tag">GCP</span>
+            <span class="normal-badge-tag">CI/CD</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section (~/projects) -->
+    <section class="normal-section" id="normal-projects">
+      <div class="section-header">
+        <span class="section-tag">// 03. FEATURED WORK</span>
+        <h2 class="section-title"><i class="fas fa-folder-open"></i> ~/projects</h2>
+        <p class="section-subtitle">Real-world applications, interactive systems, and production platforms</p>
+      </div>
+
+      <div class="projects-responsive-grid">
+        <!-- Project 1 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken1/600/400" alt="AI Chat Dashboard" loading="lazy" />
+            <span class="project-tag-overlay">WebSockets</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">AI Chat Dashboard</h3>
+            <p class="project-card-desc">Real-time analytics dashboard for AI conversation metrics with live WebSocket telemetry, sentiment tracking, and latency benchmarks.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">React · WebSocket</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: AI Chat Dashboard')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken2/600/400" alt="E-commerce Platform" loading="lazy" />
+            <span class="project-tag-overlay">Full-Stack</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">E-commerce Platform</h3>
+            <p class="project-card-desc">Full-featured online store with Stripe payment integration, real-time inventory management, dynamic filtering, and order tracking.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Node · Express · MongoDB</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: E-commerce Platform')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken3/600/400" alt="DevOps Monitoring" loading="lazy" />
+            <span class="project-tag-overlay">Cloud Ops</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">DevOps Monitoring</h3>
+            <p class="project-card-desc">Infrastructure monitoring tool featuring real-time alerts, distributed log aggregation, SLA tracking, and container health metrics.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Kubernetes · Prometheus</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: DevOps Monitoring')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken4/600/400" alt="Portfolio Builder" loading="lazy" />
+            <span class="project-tag-overlay">SaaS</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">Portfolio Builder</h3>
+            <p class="project-card-desc">Interactive visual builder for software creators with customizable cyber themes, live code preview, and one-click GitHub Pages deployment.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">TypeScript · Vue.js</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: Portfolio Builder')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken5/600/400" alt="Weather Forecast App" loading="lazy" />
+            <span class="project-tag-overlay">API App</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">Weather Forecast App</h3>
+            <p class="project-card-desc">Minimalist meteorological client featuring 7-day radar forecasts, geolocation auto-detect, dynamic weather shaders, and air quality indices.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Vanilla JS · REST API</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: Weather Forecast App')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="https://picsum.photos/seed/ken6/600/400" alt="Task Manager" loading="lazy" />
+            <span class="project-tag-overlay">Productivity</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">Task Manager</h3>
+            <p class="project-card-desc">Kanban-style project board with fluid drag-and-drop task sorting, milestone timers, markdown notes, and team collaboration channels.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">React · Redux · Firebase</span>
+              <button class="project-link-btn" onclick="alert('🔗 Project details: Task Manager')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills & Tools Section (~/tools) -->
+    <section class="normal-section" id="normal-skills">
+      <div class="section-header">
+        <span class="section-tag">// 04. TECH STACK</span>
+        <h2 class="section-title"><i class="fas fa-tools"></i> ~/tools</h2>
+        <p class="section-subtitle">Programming languages, frameworks, databases, and DevOps toolchains</p>
+      </div>
+
+      <div class="skills-grid-container">
+        <!-- Languages -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-code"></i> Languages
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> JavaScript</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Python</span>
+            <span class="skill-pill"><i class="fab fa-java" style="color:#007396;"></i> Java</span>
+            <span class="skill-pill"><i class="fas fa-code" style="color:#3178c6;"></i> TypeScript</span>
+            <span class="skill-pill"><i class="fas fa-database" style="color:#4479a1;"></i> SQL</span>
+            <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> PHP</span>
+            <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby</span>
+            <span class="skill-pill"><i class="fas fa-crown" style="color:#a8b9cc;"></i> Swift</span>
+          </div>
+        </div>
+
+        <!-- Frontend Frameworks -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-paint-brush"></i> Frontend Frameworks
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-react" style="color:#61dafb;"></i> React</span>
+            <span class="skill-pill"><i class="fab fa-vuejs" style="color:#4fc08d;"></i> Vue.js</span>
+            <span class="skill-pill"><i class="fab fa-angular" style="color:#dd0031;"></i> Angular</span>
+            <span class="skill-pill"><i class="fab fa-bootstrap" style="color:#7952b3;"></i> Bootstrap</span>
+            <span class="skill-pill"><i class="fas fa-wind" style="color:#06b6d4;"></i> Tailwind CSS</span>
+            <span class="skill-pill"><i class="fab fa-sass" style="color:#cc6699;"></i> SASS/SCSS</span>
+            <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> jQuery</span>
+            <span class="skill-pill"><i class="fas fa-cube" style="color:#00bcd4;"></i> Three.js</span>
+          </div>
+        </div>
+
+        <!-- Backend Frameworks -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-server"></i> Backend Frameworks
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-node" style="color:#339933;"></i> Node.js</span>
+            <span class="skill-pill"><i class="fas fa-leaf" style="color:#6db33f;"></i> Spring Boot</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Django</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Flask</span>
+            <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby on Rails</span>
+            <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> Laravel</span>
+            <span class="skill-pill"><i class="fas fa-bolt" style="color:#00d4ff;"></i> Express.js</span>
+            <span class="skill-pill"><i class="fas fa-database" style="color:#00684a;"></i> MongoDB</span>
+          </div>
+        </div>
+
+        <!-- DevOps & Tools -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-cloud"></i> DevOps & Cloud
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-docker" style="color:#2496ed;"></i> Docker</span>
+            <span class="skill-pill"><i class="fas fa-cubes" style="color:#326ce5;"></i> Kubernetes</span>
+            <span class="skill-pill"><i class="fab fa-aws" style="color:#ff9900;"></i> AWS</span>
+            <span class="skill-pill"><i class="fab fa-git-alt" style="color:#f05032;"></i> Git</span>
+            <span class="skill-pill"><i class="fab fa-github" style="color:#ffffff;"></i> GitHub Actions</span>
+            <span class="skill-pill"><i class="fas fa-code-branch" style="color:#f34f29;"></i> Terraform</span>
+            <span class="skill-pill"><i class="fas fa-chart-line" style="color:#f7df1e;"></i> Prometheus</span>
+            <span class="skill-pill"><i class="fas fa-terminal" style="color:#00d4ff;"></i> Linux</span>
+            <span class="skill-pill"><i class="fas fa-code" style="color:#007acc;"></i> VS Code</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates Section (~/certificates) -->
+    <section class="normal-section" id="normal-certificates">
+      <div class="section-header">
+        <span class="section-tag">// 05. CREDENTIALS</span>
+        <h2 class="section-title"><i class="fas fa-certificate"></i> ~/certificates</h2>
+        <p class="section-subtitle">Verified industry certifications and professional accreditations</p>
+      </div>
+
+      <div class="certs-grid">
+        <!-- Cert 1 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/aws-cert/500/250" alt="AWS Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fab fa-aws"></i> AWS</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">AWS Certified</div>
+            <div class="cert-subtitle">Solutions Architect - Associate</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2023</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> AWS-12345</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Cloud</span>
+              <span class="normal-badge-tag">Architecture</span>
+              <span class="normal-badge-tag">DevOps</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 2 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/gcp-cert/500/250" alt="Google Cloud Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GCP</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Google Certified</div>
+            <div class="cert-subtitle">Professional Cloud Architect</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2022</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> GCP-67890</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">GCP</span>
+              <span class="normal-badge-tag">Kubernetes</span>
+              <span class="normal-badge-tag">Security</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 3 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/azure-cert/500/250" alt="Azure Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fab fa-microsoft"></i> Azure</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Microsoft Certified</div>
+            <div class="cert-subtitle">Azure Solutions Expert</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2021</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> AZ-204</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Azure</span>
+              <span class="normal-badge-tag">DevOps</span>
+              <span class="normal-badge-tag">Migration</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 4 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/python-cert/500/250" alt="Python Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fab fa-python"></i> Python</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Python Institute</div>
+            <div class="cert-subtitle">PCAP Certified Associate</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2020</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> PCAP-98765</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Python</span>
+              <span class="normal-badge-tag">Scripting</span>
+              <span class="normal-badge-tag">Automation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 5 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/docker-cert/500/250" alt="Docker Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fab fa-docker"></i> Docker</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Docker Certified</div>
+            <div class="cert-subtitle">Containerization Expert</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2021</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> DOCK-54321</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Docker</span>
+              <span class="normal-badge-tag">Kubernetes</span>
+              <span class="normal-badge-tag">Containers</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 6 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <img src="https://picsum.photos/seed/security-cert/500/250" alt="Security+ Certificate" loading="lazy" />
+            <div class="cert-issuer-badge"><i class="fas fa-shield-alt"></i> CompTIA</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">CompTIA Security+</div>
+            <div class="cert-subtitle">Certified Security Professional</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2022</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> SEC-123456</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Security</span>
+              <span class="normal-badge-tag">Compliance</span>
+              <span class="normal-badge-tag">Auditing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section (~/contact) -->
+    <section class="normal-section" id="normal-contact">
+      <div class="section-header">
+        <span class="section-tag">// 06. TRANSMISSION</span>
+        <h2 class="section-title"><i class="fas fa-envelope"></i> ~/contact</h2>
+        <p class="section-subtitle">Reach out for collaborations, architecture consulting, or full-time opportunities</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact Options -->
+        <div class="contact-options-list">
+          <!-- Gmail -->
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=hello@kenos.dev&su=Hello%20Ken%20-%20Portfolio%20Inquiry" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-gmail">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">Email (Gmail)</div>
+              <div class="contact-subtext">hello@kenos.dev</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-linkedin">
+              <i class="fab fa-linkedin-in"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">LinkedIn</div>
+              <div class="contact-subtext">linkedin.com/in/alken-valledor</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- GitHub -->
+          <a href="https://github.com/Kenitplay" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-github">
+              <i class="fab fa-github"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">GitHub</div>
+              <div class="contact-subtext">github.com/Kenitplay</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-youtube">
+              <i class="fab fa-youtube"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">YouTube</div>
+              <div class="contact-subtext">@KenitplayGaming</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- Quick Response Note -->
+          <div style="padding:14px 18px; background:rgba(0,212,255,0.03); border-left:3px solid #00d4ff; border-radius:0 8px 8px 0; font-family:'Courier New',monospace; font-size:0.85rem; color:#66e0ff;">
+            <i class="fas fa-robot" style="color:#00d4ff; margin-right:6px;"></i>
+            <span>ken@kenos:~$ echo "I respond within 24 hours"</span>
+            <span style="color:#00ff88; margin-left:4px;">✓</span>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-card">
+          <form id="normalContactForm">
+            <div class="form-group">
+              <label for="contactName"><i class="fas fa-user" style="margin-right:6px;"></i> Your Name</label>
+              <input type="text" id="contactName" name="name" placeholder="Alex Mercer" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contactEmail"><i class="fas fa-at" style="margin-right:6px;"></i> Email Address</label>
+              <input type="email" id="contactEmail" name="email" placeholder="alex@domain.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contactSubject"><i class="fas fa-tag" style="margin-right:6px;"></i> Subject</label>
+              <input type="text" id="contactSubject" name="subject" placeholder="Project Inquiry / Job Opportunity" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contactMessage"><i class="fas fa-comment-alt" style="margin-right:6px;"></i> Message</label>
+              <textarea id="contactMessage" name="message" rows="4" placeholder="Hello Ken, I'd like to talk about..." required></textarea>
+            </div>
+
+            <button type="submit" class="normal-btn primary-btn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+
+            <div class="form-status-msg" id="formStatusMsg"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="normal-footer" id="normalFooter">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="brand-text">
+            <i class="fas fa-microchip" style="color:#00d4ff;"></i> KenOS · Portfolio Edition v2.0
+          </div>
+          <div class="brand-tagline">
+            Engineered for high performance, accessibility, and visual elegance.
+          </div>
+        </div>
+
+        <div class="footer-social-links">
+          <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="footer-social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/Kenitplay" target="_blank" class="footer-social-btn" title="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.facebook.com/alken.valledor" target="_blank" class="footer-social-btn" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="footer-social-btn" title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>© 2025 Ken Valledor. All rights reserved. Built with passion & KenOS.</div>
+        <div>
+          <button class="footer-layout-switch" id="footerDesktopToggleBtn">
+            <i class="fas fa-desktop"></i> Switch to KenOS Desktop
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Layout Switcher Pill -->
+    <div class="floating-layout-pill" id="floatingLayoutToggleBtn" title="Switch to KenOS Desktop View">
+      <i class="fas fa-desktop"></i>
+      <span>Desktop OS</span>
+    </div>
+
+  </div>
+
   <!-- ========== INLINE STYLE: HIDE MOBILE CALENDAR ON PHONES ========== -->
   <style>
     @media (max-width: 480px) {
@@ -243,6 +1002,7 @@
   <script src="js/component.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/github.js"></script>
+  <script src="js/layout.js"></script>
 
   <!-- ========== DRAG & DROP + RESET SCRIPT ========== -->
   <script>
