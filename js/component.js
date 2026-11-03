@@ -119,9 +119,8 @@
             } else {
               desktop.classList.add('visible');
               taskbar.classList.add('visible');
+              playBootSound();
             }
-            // Play boot sound when desktop appears
-            playBootSound();
             console.log('✅ KenOS boot complete!');
           }, 500);
         }

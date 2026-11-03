@@ -1,27 +1,35 @@
 // ============================================================
 // KenOS Portfolio - Layout Switching & Normal Site Controller
-// Seamlessly toggles between Desktop OS Simulation & Standard Portfolio Site
+// Laptops, PCs & 4K displays default onto Desktop OS mode
+// Mobile phones default onto Web Mode
 // ============================================================
 
-(function() {
+(function () {
   'use strict';
 
-  const STORAGE_KEY = 'kenos_preferred_layout';
-  const MOBILE_BREAKPOINT = 768;
+  // Use a fresh storage key so any stale testing values in the user's browser are reset
+  const STORAGE_KEY = 'kenos_layout_mode_v3';
 
-  function isSmallDevice() {
-    return window.innerWidth <= MOBILE_BREAKPOINT;
+  // Accurate detection for mobile phones (small handheld screens)
+  function isPhoneOrTablet() {
+    const isMobileUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isSmallScreen = window.innerWidth <= 600;
+    return isMobileUA || isSmallScreen;
   }
 
   // Determine initial layout mode:
-  // 1. Check user's saved preference
-  // 2. If none, SMALL DEVICES DEFAULT TO 'normal', DESKTOP DEFAULTS TO 'desktop'
+  // 1. Mobile phones default to 'normal' (Web Mode)
+  // 2. Laptops, PCs, and 4K views default onto 'desktop' (Desktop OS Mode)
   function getInitialMode() {
+    if (isPhoneOrTablet()) {
+      return 'normal';
+    }
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'normal' || saved === 'desktop') {
       return saved;
     }
-    return isSmallDevice() ? 'normal' : 'desktop';
+    // Laptops, PCs, and 4K displays default onto Desktop OS!
+    return 'desktop';
   }
 
   let currentMode = getInitialMode();
@@ -29,13 +37,17 @@
 
   // Apply layout mode
   function setLayoutMode(mode, userInitiated = false) {
+    if (isPhoneOrTablet()) {
+      mode = 'normal';
+    }
+
     currentMode = mode;
     const body = document.body;
     const desktopArea = document.getElementById('desktopArea');
     const normalSite = document.getElementById('normalSite');
     const taskbar = document.getElementById('taskbar');
 
-    if (userInitiated) {
+    if (userInitiated && !isPhoneOrTablet()) {
       userExplicitlyToggled = true;
       try {
         localStorage.setItem(STORAGE_KEY, mode);
@@ -69,7 +81,7 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
-      console.log('🌐 Switched to Normal Website Mode');
+      console.log('🌐 Active: Normal Website Mode');
     } else {
       body.classList.remove('layout-normal');
       body.classList.add('layout-desktop');
@@ -89,34 +101,71 @@
         setTimeout(window.resetIconPositions, 50);
       }
 
-      console.log('💻 Switched to KenOS Desktop Mode');
+      console.log('💻 Active: KenOS Desktop Mode');
     }
 
     updateToggleButtons();
   }
 
-  // Update button icons/titles
+  // Update button visibility & titles
   function updateToggleButtons() {
+    const isLockedMobile = isPhoneOrTablet();
+
     const taskbarBtn = document.getElementById('taskbarLayoutToggleBtn');
     if (taskbarBtn) {
-      taskbarBtn.title = currentMode === 'desktop' 
-        ? 'Switch to Normal Website View' 
+      taskbarBtn.title = currentMode === 'desktop'
+        ? 'Switch to Normal Website View'
         : 'Switch to KenOS Desktop View';
+      if (isLockedMobile) {
+        taskbarBtn.style.display = 'none';
+      } else {
+        taskbarBtn.style.display = 'flex';
+      }
     }
 
     const floatingBtn = document.getElementById('floatingLayoutToggleBtn');
     if (floatingBtn) {
-      floatingBtn.style.display = currentMode === 'normal' ? 'flex' : 'none';
+      // Floating switch to desktop OS shows on laptops/PCs when in normal mode
+      floatingBtn.style.display = (!isLockedMobile && currentMode === 'normal') ? 'flex' : 'none';
+    }
+
+    const navDesktopBtn = document.getElementById('navDesktopToggleBtn');
+    if (navDesktopBtn) {
+      navDesktopBtn.style.display = isLockedMobile ? 'none' : 'inline-flex';
+    }
+
+    const heroDesktopBtn = document.getElementById('heroDesktopToggleBtn');
+    if (heroDesktopBtn) {
+      heroDesktopBtn.style.display = isLockedMobile ? 'none' : 'inline-flex';
+    }
+
+    const footerDesktopBtn = document.getElementById('footerDesktopToggleBtn');
+    if (footerDesktopBtn) {
+      footerDesktopBtn.style.display = isLockedMobile ? 'none' : 'inline-flex';
+    }
+
+    const mobileMenuDesktopBtn = document.getElementById('mobileMenuDesktopBtn');
+    if (mobileMenuDesktopBtn) {
+      mobileMenuDesktopBtn.style.display = isLockedMobile ? 'none' : 'flex';
     }
   }
 
-  // Fast boot / skip boot helper
+  // Fast boot on mobile / click to skip on desktop
   function setupBootSkip() {
     const bootScreen = document.getElementById('bootScreen');
     if (!bootScreen) return;
 
-    // Allow user to click boot screen to skip immediately
-    bootScreen.addEventListener('click', function() {
+    // Only skip on small mobile phones
+    if (isPhoneOrTablet()) {
+      bootScreen.classList.add('hidden');
+      bootScreen.style.display = 'none';
+      const normalSite = document.getElementById('normalSite');
+      if (normalSite) normalSite.style.display = 'block';
+      return;
+    }
+
+    // Allow user to click boot screen to skip immediately if in desktop mode or web mode on laptops/PCs
+    bootScreen.addEventListener('click', function () {
       bootScreen.classList.add('hidden');
       const desktop = document.getElementById('desktopArea');
       const taskbar = document.getElementById('taskbar');
@@ -128,17 +177,6 @@
         if (taskbar) taskbar.classList.add('visible');
       }
     });
-
-    // If initial mode is normal on mobile, finish boot screen quickly
-    if (currentMode === 'normal' && isSmallDevice()) {
-      setTimeout(function() {
-        if (!bootScreen.classList.contains('hidden')) {
-          bootScreen.classList.add('hidden');
-          const normalSite = document.getElementById('normalSite');
-          if (normalSite) normalSite.style.display = 'block';
-        }
-      }, 700);
-    }
   }
 
   // Mobile menu dropdown
@@ -147,7 +185,7 @@
     const menu = document.getElementById('normalMobileMenu');
     if (!toggleBtn || !menu) return;
 
-    toggleBtn.addEventListener('click', function(e) {
+    toggleBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       menu.classList.toggle('open');
       const icon = toggleBtn.querySelector('i');
@@ -162,7 +200,7 @@
 
     // Close menu when clicking links
     menu.querySelectorAll('a, button').forEach(item => {
-      item.addEventListener('click', function() {
+      item.addEventListener('click', function () {
         menu.classList.remove('open');
         const icon = toggleBtn.querySelector('i');
         if (icon) icon.className = 'fas fa-bars';
@@ -170,7 +208,7 @@
     });
 
     // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
       if (menu.classList.contains('open') && !menu.contains(e.target) && e.target !== toggleBtn) {
         menu.classList.remove('open');
         const icon = toggleBtn.querySelector('i');
@@ -185,7 +223,7 @@
     const statusMsg = document.getElementById('formStatusMsg');
     if (!form || !statusMsg) return;
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       const submitBtn = form.querySelector('button[type="submit"]');
       if (submitBtn) {
@@ -193,14 +231,14 @@
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transmitting...';
         submitBtn.disabled = true;
 
-        setTimeout(function() {
+        setTimeout(function () {
           submitBtn.innerHTML = originalText;
           submitBtn.disabled = false;
           statusMsg.className = 'form-status-msg success';
           statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> Message received! Thank you, Ken will get back to you shortly.';
           form.reset();
 
-          setTimeout(function() {
+          setTimeout(function () {
             statusMsg.style.display = 'none';
           }, 6000);
         }, 800);
@@ -211,7 +249,7 @@
   // Smooth scroll for nav anchor links
   function setupSmoothScroll() {
     document.querySelectorAll('a[href^="#normal-"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
+      anchor.addEventListener('click', function (e) {
         const targetId = this.getAttribute('href');
         if (targetId && targetId !== '#') {
           const targetElem = document.querySelector(targetId);
@@ -233,22 +271,24 @@
 
   // Attach event listeners to all layout switch buttons
   function bindToggleTriggers() {
-    // 1. Taskbar toggle button
+    // 1. Taskbar toggle button (Desktop OS view -> switch to Normal Web Mode)
     const taskbarBtn = document.getElementById('taskbarLayoutToggleBtn');
     if (taskbarBtn) {
-      taskbarBtn.addEventListener('click', function(e) {
+      taskbarBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
+        if (isPhoneOrTablet()) return;
         const nextMode = currentMode === 'desktop' ? 'normal' : 'desktop';
         setLayoutMode(nextMode, true);
       });
     }
 
-    // 2. Normal navbar desktop toggle button
+    // 2. Normal navbar desktop toggle button (Web Mode -> switch to Desktop OS)
     const navBtn = document.getElementById('navDesktopToggleBtn');
     if (navBtn) {
-      navBtn.addEventListener('click', function(e) {
+      navBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (isPhoneOrTablet()) return;
         setLayoutMode('desktop', true);
       });
     }
@@ -256,8 +296,9 @@
     // 3. Hero desktop toggle button
     const heroBtn = document.getElementById('heroDesktopToggleBtn');
     if (heroBtn) {
-      heroBtn.addEventListener('click', function(e) {
+      heroBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (isPhoneOrTablet()) return;
         setLayoutMode('desktop', true);
       });
     }
@@ -265,8 +306,9 @@
     // 4. Footer desktop toggle button
     const footerBtn = document.getElementById('footerDesktopToggleBtn');
     if (footerBtn) {
-      footerBtn.addEventListener('click', function(e) {
+      footerBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (isPhoneOrTablet()) return;
         setLayoutMode('desktop', true);
       });
     }
@@ -274,34 +316,23 @@
     // 5. Floating toggle button
     const floatingBtn = document.getElementById('floatingLayoutToggleBtn');
     if (floatingBtn) {
-      floatingBtn.addEventListener('click', function(e) {
+      floatingBtn.addEventListener('click', function (e) {
         e.preventDefault();
+        if (isPhoneOrTablet()) return;
         const nextMode = currentMode === 'normal' ? 'desktop' : 'normal';
         setLayoutMode(nextMode, true);
-      });
-    }
-
-    // 6. Mobile menu desktop toggle button
-    const mobileMenuDesktopBtn = document.getElementById('mobileMenuDesktopBtn');
-    if (mobileMenuDesktopBtn) {
-      mobileMenuDesktopBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        setLayoutMode('desktop', true);
       });
     }
   }
 
   // Responsive resize handler:
-  // If user hasn't explicitly chosen a mode, adapt automatically across breakpoint
   let resizeTimer = null;
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function() {
-      if (!userExplicitlyToggled) {
-        const shouldBeNormal = isSmallDevice();
-        const targetMode = shouldBeNormal ? 'normal' : 'desktop';
-        if (targetMode !== currentMode) {
-          setLayoutMode(targetMode, false);
+    resizeTimer = setTimeout(function () {
+      if (isPhoneOrTablet()) {
+        if (currentMode !== 'normal') {
+          setLayoutMode('normal', false);
         }
       }
       updateToggleButtons();
@@ -309,19 +340,20 @@
   });
 
   // Early setup (before full page load)
-  // Set class on body immediately to prevent layout flash
   (function earlyInit() {
     const initialMode = getInitialMode();
     if (initialMode === 'normal') {
       document.body.classList.add('layout-normal');
+      document.body.classList.remove('layout-desktop');
     } else {
       document.body.classList.add('layout-desktop');
+      document.body.classList.remove('layout-normal');
     }
   })();
 
   // Document ready
-  document.addEventListener('DOMContentLoaded', function() {
-    setLayoutMode(currentMode, false);
+  document.addEventListener('DOMContentLoaded', function () {
+    setLayoutMode(getInitialMode(), false);
     bindToggleTriggers();
     setupBootSkip();
     setupMobileMenu();
@@ -333,9 +365,9 @@
   // Expose global controller for debugging or external calls
   window.KenOSLayout = {
     getMode: () => currentMode,
+    isPhoneOrTablet: isPhoneOrTablet,
     setMode: (mode) => setLayoutMode(mode, true),
     toggle: () => setLayoutMode(currentMode === 'normal' ? 'desktop' : 'normal', true)
   };
 
 })();
-
