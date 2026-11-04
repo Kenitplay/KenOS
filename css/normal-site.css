@@ -1244,16 +1244,34 @@ body.layout-normal #normalSite {
 
 /* ---------- CONTACT SECTION ---------- */
 .contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 36px;
-  align-items: start;
+  max-width: 820px;
+  margin: 0 auto;
 }
 
 .contact-options-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 680px) {
+  .contact-options-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.contact-response-note {
+  grid-column: 1 / -1;
+  padding: 16px 20px;
+  background: rgba(0, 212, 255, 0.03);
+  border-left: 3px solid #00d4ff;
+  border-radius: 0 8px 8px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.88rem;
+  color: #66e0ff;
   display: flex;
-  flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  margin-top: 6px;
 }
 
 .contact-method-card {
@@ -1338,74 +1356,6 @@ body.layout-normal #normalSite {
   transform: translate(2px, -2px);
 }
 
-/* Contact Form Card */
-.contact-form-card {
-  background: rgba(8, 18, 30, 0.85);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 212, 255, 0.12);
-  border-radius: 10px;
-  padding: 28px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-}
-
-.contact-form-card .form-group {
-  margin-bottom: 18px;
-}
-
-.contact-form-card label {
-  display: block;
-  font-family: 'Courier New', monospace;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #00d4ff;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.contact-form-card input,
-.contact-form-card textarea {
-  width: 100%;
-  background: rgba(0, 20, 40, 0.6);
-  border: 1px solid rgba(0, 212, 255, 0.15);
-  border-radius: 6px;
-  padding: 12px 14px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9rem;
-  color: #e0f4ff;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-.contact-form-card input:focus,
-.contact-form-card textarea:focus {
-  border-color: #00d4ff;
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.25);
-  background: rgba(0, 25, 50, 0.8);
-}
-
-.contact-form-card button[type="submit"] {
-  width: 100%;
-  padding: 14px;
-  font-size: 1rem;
-  justify-content: center;
-}
-
-.form-status-msg {
-  display: none;
-  margin-top: 14px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-}
-
-.form-status-msg.success {
-  display: block;
-  background: rgba(0, 255, 136, 0.1);
-  border: 1px solid rgba(0, 255, 136, 0.3);
-  color: #00ff88;
-}
 
 /* ---------- FOOTER ---------- */
 .normal-footer {
@@ -1582,8 +1532,7 @@ body.layout-desktop .floating-layout-pill {
       display: flex;
     }
 
-    .about-grid,
-    .contact-grid {
+    .about-grid {
       grid-template-columns: 1fr;
     }
 

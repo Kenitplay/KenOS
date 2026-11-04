@@ -217,35 +217,6 @@
     });
   }
 
-  // Contact form submission
-  function setupContactForm() {
-    const form = document.getElementById('normalContactForm');
-    const statusMsg = document.getElementById('formStatusMsg');
-    if (!form || !statusMsg) return;
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Transmitting...';
-        submitBtn.disabled = true;
-
-        setTimeout(function () {
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
-          statusMsg.className = 'form-status-msg success';
-          statusMsg.innerHTML = '<i class="fas fa-check-circle"></i> Message received! Thank you, Ken will get back to you shortly.';
-          form.reset();
-
-          setTimeout(function () {
-            statusMsg.style.display = 'none';
-          }, 6000);
-        }, 800);
-      }
-    });
-  }
-
   // Smooth scroll for nav anchor links
   function setupSmoothScroll() {
     document.querySelectorAll('a[href^="#normal-"]').forEach(anchor => {
@@ -357,7 +328,6 @@
     bindToggleTriggers();
     setupBootSkip();
     setupMobileMenu();
-    setupContactForm();
     setupSmoothScroll();
     updateToggleButtons();
   });
