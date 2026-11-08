@@ -1,0 +1,547 @@
+/* ============================================================
+   KenOS Portfolio - Cyber Mode Switch Transition Stylesheet
+   Provides a seamless, futuristic ~3-second cinematic transition
+   when toggling between Web Mode and KenOS Desktop OS Mode
+   ============================================================ */
+
+/* ---------- TRANSITION OVERLAY CONTAINER ---------- */
+.kenos-mode-transition {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999998;
+  background: rgba(6, 11, 18, 0.95);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Active State: Overlay enters */
+.kenos-mode-transition.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* Closing State: Overlay sweeps away and dissolves */
+.kenos-mode-transition.closing {
+  opacity: 0;
+  visibility: visible;
+  pointer-events: all;
+  transform: scale(1.02);
+  filter: blur(5px);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.4s ease;
+}
+
+/* ---------- SCAN BEAM EFFECT ---------- */
+.transition-scan-beam {
+  position: absolute;
+  top: -140px;
+  left: 0;
+  right: 0;
+  height: 140px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 212, 255, 0.05) 30%,
+    rgba(0, 212, 255, 0.28) 80%,
+    #00d4ff 100%
+  );
+  box-shadow: 0 4px 35px rgba(0, 212, 255, 0.75);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+
+.kenos-mode-transition.active .transition-scan-beam {
+  animation: scanBeamSweep 1.5s ease-in-out infinite;
+}
+
+@keyframes scanBeamSweep {
+  0% {
+    top: -140px;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  85% {
+    opacity: 0.95;
+  }
+  100% {
+    top: 105%;
+    opacity: 0;
+  }
+}
+
+/* ---------- BACKGROUND CYBER GRID & AMBIENT GLOW ---------- */
+.transition-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+  background-size: 38px 38px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.transition-ambient-glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.16) 0%, rgba(0, 212, 255, 0.04) 50%, transparent 70%);
+  filter: blur(45px);
+  pointer-events: none;
+  z-index: 1;
+  animation: ambientGlowPulse 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes ambientGlowPulse {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+/* ---------- CYBER HUD CARD ---------- */
+.transition-card {
+  position: relative;
+  z-index: 5;
+  width: 450px;
+  max-width: 90vw;
+  background: rgba(8, 18, 30, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.28);
+  border-radius: 14px;
+  padding: 28px 32px 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85),
+              0 0 35px rgba(0, 212, 255, 0.15),
+              inset 0 0 25px rgba(0, 212, 255, 0.04);
+  text-align: center;
+  transform: scale(0.92) translateY(12px);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s ease;
+}
+
+.kenos-mode-transition.active .transition-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  animation: cardCyberFloat 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes cardCyberFloat {
+  0% {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85),
+                0 0 30px rgba(0, 212, 255, 0.15),
+                inset 0 0 25px rgba(0, 212, 255, 0.04);
+  }
+  100% {
+    box-shadow: 0 20px 70px rgba(0, 0, 0, 0.9),
+                0 0 50px rgba(0, 212, 255, 0.3),
+                inset 0 0 35px rgba(0, 212, 255, 0.08);
+  }
+}
+
+.kenos-mode-transition.closing .transition-card {
+  transform: scale(1.03) translateY(-6px);
+  opacity: 0;
+}
+
+/* ---------- CORNER RETICLES ---------- */
+.corner-reticle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: #00d4ff;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner-reticle.top-left {
+  top: -1px;
+  left: -1px;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: 14px;
+}
+
+.corner-reticle.top-right {
+  top: -1px;
+  right: -1px;
+  border-width: 2px 2px 0 0;
+  border-top-right-radius: 14px;
+}
+
+.corner-reticle.bottom-left {
+  bottom: -1px;
+  left: -1px;
+  border-width: 0 0 2px 2px;
+  border-bottom-left-radius: 14px;
+}
+
+.corner-reticle.bottom-right {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2px 2px 0;
+  border-bottom-right-radius: 14px;
+}
+
+/* ---------- CARD TOP STATUS BAR ---------- */
+.transition-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #8acfe6;
+}
+
+.transition-sys-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.transition-sys-badge .pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 10px #00ff88;
+  display: inline-block;
+  animation: pulseDot 1.4s infinite ease-in-out;
+}
+
+.transition-mode-tag {
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: #00d4ff;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* ---------- ANIMATED ICON WRAPPER ---------- */
+.transition-icon-wrap {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.transition-icon-box {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(0, 212, 255, 0.08);
+  border: 2px solid #00d4ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #00d4ff;
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.35);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.transition-icon-box i {
+  filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.65));
+}
+
+.transition-icon-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  pointer-events: none;
+}
+
+.transition-icon-ring.ring-1 {
+  width: 92px;
+  height: 92px;
+  animation: ringPulse 2s infinite ease-out;
+}
+
+.transition-icon-ring.ring-2 {
+  width: 114px;
+  height: 114px;
+  animation: ringPulse 2s infinite ease-out 0.5s;
+}
+
+@keyframes ringPulse {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.32);
+    opacity: 0;
+  }
+}
+
+/* ---------- TITLES & TERMINAL STATUS ---------- */
+.transition-action-label {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: #66e0ff;
+  opacity: 0.85;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.transition-target-title {
+  font-family: 'Courier New', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  text-shadow: 0 0 18px rgba(0, 212, 255, 0.45);
+}
+
+.transition-status-line {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #a0d8ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 22px;
+  margin-bottom: 18px;
+}
+
+.transition-status-line .terminal-prompt {
+  color: #00d4ff;
+  font-weight: 700;
+}
+
+.transition-status-line .cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: #00d4ff;
+  animation: blinkCursor 0.8s step-end infinite;
+}
+
+/* ---------- PROGRESS BAR ---------- */
+.transition-progress-wrap {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.transition-progress-bar {
+  height: 5px;
+  width: 100%;
+  background: rgba(0, 212, 255, 0.12);
+  border-radius: 4px;
+  overflow: visible;
+  position: relative;
+}
+
+.transition-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00d4ff, #00ff88);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.8), 0 0 25px rgba(0, 255, 136, 0.4);
+  border-radius: 4px;
+  position: relative;
+}
+
+.transition-progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 11px;
+  height: 11px;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ff88, 0 0 20px #00d4ff;
+}
+
+.transition-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: #00ff88;
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+
+/* ---------- LAYOUT CONTENT ENTRANCE & DEPARTURE ANIMATIONS ---------- */
+/* When leaving current mode */
+body.mode-transitioning #desktopArea,
+body.mode-transitioning #normalSite,
+body.mode-transitioning #taskbar {
+  filter: blur(2px);
+  transform: scale(0.99);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+/* Smooth entrance for Normal Web Mode */
+#normalSite.mode-entering {
+  animation: normalSiteEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes normalSiteEnter {
+  0% {
+    opacity: 0 !important;
+    transform: translateY(22px) scale(0.992);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1 !important;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Smooth entrance for KenOS Desktop Mode */
+#desktopArea.mode-entering {
+  animation: desktopAreaEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes desktopAreaEnter {
+  0% {
+    opacity: 0 !important;
+    transform: scale(0.975);
+    filter: blur(5px);
+  }
+  100% {
+    opacity: 1 !important;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+#taskbar.mode-entering {
+  animation: taskbarEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes taskbarEnter {
+  0% {
+    opacity: 0 !important;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1 !important;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- MOBILE DESKTOP SWITCH PILL ---------- */
+.desktop-mobile-switch-pill {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  body.layout-desktop .desktop-mobile-switch-pill {
+    display: flex;
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 10000;
+    background: rgba(6, 16, 28, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 20px;
+    padding: 7px 14px;
+    color: #00d4ff;
+    font-size: 12px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 212, 255, 0.25);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.2s ease;
+  }
+
+  body.layout-desktop .desktop-mobile-switch-pill:active {
+    transform: scale(0.95);
+    background: rgba(0, 212, 255, 0.2);
+  }
+}
+
+/* ---------- RESPONSIVE ADJUSTMENTS ---------- */
+@media (max-width: 480px) {
+  .transition-card {
+    padding: 22px 20px 20px;
+    width: 92vw;
+  }
+  .transition-icon-wrap {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+  }
+  .transition-icon-box {
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+  }
+  .transition-target-title {
+    font-size: 18px;
+    letter-spacing: 1.5px;
+  }
+  .transition-status-line {
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+}
+
+/* ---------- PREFERS REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .kenos-mode-transition {
+    transition: opacity 0.2s linear, visibility 0.2s linear;
+  }
+  .transition-scan-beam,
+  .transition-ambient-glow,
+  .transition-icon-ring {
+    animation: none !important;
+    display: none !important;
+  }
+  .transition-card {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  #normalSite.mode-entering,
+  #desktopArea.mode-entering,
+  #taskbar.mode-entering {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
