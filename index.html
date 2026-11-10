@@ -27,102 +27,208 @@
 
 <body class="layout-desktop">
 
-    <!-- ========== SYSTEM MODE TRANSITION OVERLAY ========== -->
-    <div id="kenosModeTransition" class="kenos-mode-transition" aria-hidden="true">
-      <div class="transition-scan-beam"></div>
-      <div class="transition-grid"></div>
-      <div class="transition-ambient-glow"></div>
-      <div class="transition-card">
-        <span class="corner-reticle top-left"></span>
-        <span class="corner-reticle top-right"></span>
-        <span class="corner-reticle bottom-left"></span>
-        <span class="corner-reticle bottom-right"></span>
+  <!-- ========== SYSTEM MODE TRANSITION OVERLAY ========== -->
+  <div id="kenosModeTransition" class="kenos-mode-transition" aria-hidden="true">
+    <div class="transition-scan-beam"></div>
+    <div class="transition-grid"></div>
+    <div class="transition-ambient-glow"></div>
+    <div class="transition-card">
+      <span class="corner-reticle top-left"></span>
+      <span class="corner-reticle top-right"></span>
+      <span class="corner-reticle bottom-left"></span>
+      <span class="corner-reticle bottom-right"></span>
 
-        <div class="transition-card-top">
-          <div class="transition-sys-badge">
-            <span class="pulse-dot"></span>
-            <span class="sys-code" id="transitionSysCode">SYS::RECONFIG_0x2A</span>
-          </div>
-          <div class="transition-mode-tag" id="transitionModeTag">KENOS_MODE_SWITCH</div>
+      <div class="transition-card-top">
+        <div class="transition-sys-badge">
+          <span class="pulse-dot"></span>
+          <span class="sys-code" id="transitionSysCode">SYS::RECONFIG_0x2A</span>
         </div>
+        <div class="transition-mode-tag" id="transitionModeTag">KENOS_MODE_SWITCH</div>
+      </div>
 
-        <div class="transition-icon-wrap">
-          <div class="transition-icon-ring ring-1"></div>
-          <div class="transition-icon-ring ring-2"></div>
-          <div class="transition-icon-box" id="transitionIconBox">
-            <i class="fas fa-globe" id="transitionIcon"></i>
-          </div>
-        </div>
-
-        <div class="transition-info">
-          <div class="transition-action-label" id="transitionActionLabel">SWITCHING SYSTEM INTERFACE</div>
-          <h3 class="transition-target-title" id="transitionTargetTitle">WEB PORTFOLIO</h3>
-          <div class="transition-status-line">
-            <span class="terminal-prompt">&gt;&gt;</span>
-            <span id="transitionStatusDesc">Mounting responsive web viewport...</span>
-            <span class="cursor"></span>
-          </div>
-        </div>
-
-        <div class="transition-progress-wrap">
-          <div class="transition-progress-bar">
-            <div class="transition-progress-fill" id="transitionProgressFill"></div>
-          </div>
-          <div class="transition-progress-meta">
-            <span id="transitionStageText">[ OK ] MOUNTING INTERFACE</span>
-            <span id="transitionPercentText">100%</span>
-          </div>
+      <div class="transition-icon-wrap">
+        <div class="transition-icon-ring ring-1"></div>
+        <div class="transition-icon-ring ring-2"></div>
+        <div class="transition-icon-box" id="transitionIconBox">
+          <i class="fas fa-globe" id="transitionIcon"></i>
         </div>
       </div>
-    </div>
 
-    <!-- ========== BOOT SCREEN ========== -->
-    <div id="bootScreen">
-      <div class="boot-logo">
-        <i class="fas fa-microchip"></i>
+      <div class="transition-info">
+        <div class="transition-action-label" id="transitionActionLabel">SWITCHING SYSTEM INTERFACE</div>
+        <h3 class="transition-target-title" id="transitionTargetTitle">WEB PORTFOLIO</h3>
+        <div class="transition-status-line">
+          <span class="terminal-prompt">&gt;&gt;</span>
+          <span id="transitionStatusDesc">Mounting responsive web viewport...</span>
+          <span class="cursor"></span>
+        </div>
       </div>
-      <div class="boot-title">Ken<span>OS</span></div>
-      <div class="boot-subtitle">v2.0 · portfolio edition</div>
-      <div class="boot-progress">
-        <div class="boot-progress-bar" id="bootProgressBar"></div>
-      </div>
-      <div class="boot-status" id="bootStatus">
-        <span id="bootStatusText">Initializing system...</span>
-        <span class="cursor"></span>
-      </div>
-      <div class="boot-commands" id="bootCommands">
-        <span id="bootCommandText"><span class="ok">[ OK ]</span> loading kernel modules</span><br>
-        <span id="bootCommandText2"><span class="ok">[ OK ]</span> mounting filesystems</span>
-      </div>
-    </div>
 
-    <!-- ========== FLOATING PARTICLES ========== -->
-    <div class="particle" style="width:4px;height:4px;left:10%;top:20%;animation-duration:25s;"></div>
-    <div class="particle" style="width:6px;height:6px;left:30%;top:40%;animation-duration:30s;animation-delay:5s;">
+      <div class="transition-progress-wrap">
+        <div class="transition-progress-bar">
+          <div class="transition-progress-fill" id="transitionProgressFill"></div>
+        </div>
+        <div class="transition-progress-meta">
+          <span id="transitionStageText">[ OK ] MOUNTING INTERFACE</span>
+          <span id="transitionPercentText">100%</span>
+        </div>
+      </div>
     </div>
-    <div class="particle" style="width:3px;height:3px;left:50%;top:10%;animation-duration:22s;animation-delay:10s;">
-    </div>
-    <div class="particle" style="width:5px;height:5px;left:70%;top:30%;animation-duration:28s;animation-delay:3s;">
-    </div>
-    <div class="particle" style="width:4px;height:4px;left:90%;top:50%;animation-duration:35s;animation-delay:7s;">
-    </div>
+  </div>
 
-    <!-- ========== DESKTOP WATERMARK LOGO ========== -->
-    <div class="desktop-watermark">
+  <!-- ========== BOOT SCREEN ========== -->
+  <div id="bootScreen">
+    <div class="boot-logo">
       <i class="fas fa-microchip"></i>
-      <span class="watermark-text">
-        <span class="ken">Ken</span><span class="os">OS</span>
-      </span>
+    </div>
+    <div class="boot-title">Ken<span>OS</span></div>
+    <div class="boot-subtitle">v2.0 · portfolio edition</div>
+    <div class="boot-progress">
+      <div class="boot-progress-bar" id="bootProgressBar"></div>
+    </div>
+    <div class="boot-status" id="bootStatus">
+      <span id="bootStatusText">Initializing system...</span>
+      <span class="cursor"></span>
+    </div>
+    <div class="boot-commands" id="bootCommands">
+      <span id="bootCommandText"><span class="ok">[ OK ]</span> loading kernel modules</span><br>
+      <span id="bootCommandText2"><span class="ok">[ OK ]</span> mounting filesystems</span>
+    </div>
+  </div>
+
+  <!-- ========== FLOATING PARTICLES ========== -->
+  <div class="particle" style="width:4px;height:4px;left:10%;top:20%;animation-duration:25s;"></div>
+  <div class="particle" style="width:6px;height:6px;left:30%;top:40%;animation-duration:30s;animation-delay:5s;">
+  </div>
+  <div class="particle" style="width:3px;height:3px;left:50%;top:10%;animation-duration:22s;animation-delay:10s;">
+  </div>
+  <div class="particle" style="width:5px;height:5px;left:70%;top:30%;animation-duration:28s;animation-delay:3s;">
+  </div>
+  <div class="particle" style="width:4px;height:4px;left:90%;top:50%;animation-duration:35s;animation-delay:7s;">
+  </div>
+
+  <!-- ========== DESKTOP WATERMARK LOGO ========== -->
+  <div class="desktop-watermark">
+    <i class="fas fa-microchip"></i>
+    <span class="watermark-text">
+      <span class="ken">Ken</span><span class="os">OS</span>
+    </span>
+  </div>
+
+  <!-- ========== CALENDAR WIDGET (Desktop) ========== -->
+  <div class="calendar-widget" id="calendarWidget">
+    <div class="widget-header">
+      <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+      <span class="month-year" id="monthYear">January 2025</span>
+      <span class="status-dot"></span>
+    </div>
+    <div class="day-grid" id="dayGrid">
+      <span class="day-name">S</span>
+      <span class="day-name">M</span>
+      <span class="day-name">T</span>
+      <span class="day-name">W</span>
+      <span class="day-name">T</span>
+      <span class="day-name">F</span>
+      <span class="day-name">S</span>
+    </div>
+    <div class="time-display">
+      <span class="hours" id="clockHours">00:00</span>
+      <span class="seconds" id="clockSeconds">00</span>
+      <span class="ampm" id="clockAmPm">AM</span>
+    </div>
+    <div class="date-display" id="dateDisplay">January 1, 2025</div>
+  </div>
+
+  <!-- ========== QUICK STATS AT BOTTOM ========== -->
+  <div class="quick-stats">
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-briefcase"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">6+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-code"></i></span>
+      <div class="stat-info">
+        <span class="stat-value" id="repoCount">26</span>
+        <span class="stat-label">Repositories</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-icon"><i class="fas fa-certificate"></i></span>
+      <div class="stat-info">
+        <span class="stat-value">6</span>
+        <span class="stat-label">Certifications</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SYSTEM INFO ========== -->
+  <div class="system-info">
+    <span class="highlight">KenOS v2.0</span><br>
+    <span class="highlight">Kernel 5.15.0</span><br>
+    <span class="highlight">Uptime: <span id="uptimeDisplay">00:00:00</span></span>
+  </div>
+
+  <!-- ========== DESKTOP ========== -->
+  <div class="kenos-desktop" id="desktopArea">
+
+    <!-- Experience Icon -->
+    <div class="desktop-icon" id="experienceIcon" onclick="handleIconClick('experienceIcon')">
+      <div class="icon-box"><i class="fas fa-briefcase"></i></div>
+      <span class="icon-label">~$ experience</span>
     </div>
 
-    <!-- ========== CALENDAR WIDGET (Desktop) ========== -->
-    <div class="calendar-widget" id="calendarWidget">
+    <!-- Projects Icon -->
+    <div class="desktop-icon" id="projectsIcon" onclick="handleIconClick('projectsIcon')">
+      <div class="icon-box"><i class="fas fa-folder-open"></i></div>
+      <span class="icon-label">~/projects</span>
+    </div>
+
+    <!-- Tools Icon -->
+    <div class="desktop-icon" id="toolsIcon" onclick="handleIconClick('toolsIcon')">
+      <div class="icon-box"><i class="fas fa-tools"></i></div>
+      <span class="icon-label">~/tools</span>
+    </div>
+
+    <!-- Whoami Icon (About) -->
+    <div class="desktop-icon" id="whoamiIcon" onclick="handleIconClick('whoamiIcon')">
+      <div class="icon-box"><i class="fas fa-user-astronaut"></i></div>
+      <span class="icon-label">~$ whoami</span>
+    </div>
+
+    <!-- Certificates Icon -->
+    <div class="desktop-icon" id="certificatesIcon" onclick="handleIconClick('certificatesIcon')">
+      <div class="icon-box"><i class="fas fa-certificate"></i></div>
+      <span class="icon-label">~/certificates</span>
+    </div>
+
+    <!-- Contact Icon -->
+    <div class="desktop-icon" id="contactIcon" onclick="handleIconClick('contactIcon')">
+      <div class="icon-box"><i class="fas fa-envelope"></i></div>
+      <span class="icon-label">~/contact</span>
+    </div>
+
+    <!-- GitHub Icon -->
+    <div class="desktop-icon" onclick="window.open('https://github.com/Kenitplay', '_blank')">
+      <div class="icon-box"><i class="fab fa-github"></i></div>
+      <span class="icon-label">~/github</span>
+    </div>
+
+    <div class="desktop-icon" onclick="window.open('assets/resume.pdf', '_blank')">
+      <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
+      <span class="icon-label">~/resume</span>
+    </div>
+
+    <!-- MOBILE CALENDAR WIDGET (hidden on phones via CSS) -->
+    <div class="calendar-widget-mobile" id="calendarWidgetMobile">
       <div class="widget-header">
         <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-        <span class="month-year" id="monthYear">January 2025</span>
+        <span class="month-year" id="monthYearMobile">January 2025</span>
         <span class="status-dot"></span>
       </div>
-      <div class="day-grid" id="dayGrid">
+      <div class="day-grid" id="dayGridMobile">
         <span class="day-name">S</span>
         <span class="day-name">M</span>
         <span class="day-name">T</span>
@@ -132,1300 +238,1242 @@
         <span class="day-name">S</span>
       </div>
       <div class="time-display">
-        <span class="hours" id="clockHours">00:00</span>
-        <span class="seconds" id="clockSeconds">00</span>
-        <span class="ampm" id="clockAmPm">AM</span>
+        <span class="hours" id="clockHoursMobile">00:00</span>
+        <span class="seconds" id="clockSecondsMobile">00</span>
+        <span class="ampm" id="clockAmPmMobile">AM</span>
       </div>
-      <div class="date-display" id="dateDisplay">January 1, 2025</div>
+      <div class="date-display" id="dateDisplayMobile">January 1, 2025</div>
     </div>
 
-    <!-- ========== QUICK STATS AT BOTTOM ========== -->
-    <div class="quick-stats">
-      <div class="stat-item">
-        <span class="stat-icon"><i class="fas fa-briefcase"></i></span>
-        <div class="stat-info">
-          <span class="stat-value">6+</span>
-          <span class="stat-label">Years Experience</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <span class="stat-icon"><i class="fas fa-code"></i></span>
-        <div class="stat-info">
-          <span class="stat-value" id="repoCount">26</span>
-          <span class="stat-label">Repositories</span>
-        </div>
-      </div>
-      <div class="stat-item">
-        <span class="stat-icon"><i class="fas fa-certificate"></i></span>
-        <div class="stat-info">
-          <span class="stat-value">6</span>
-          <span class="stat-label">Certifications</span>
-        </div>
-      </div>
+    <!-- Mobile Desktop Mode Toggle Pill (visible on mobile screens where taskbar is hidden) -->
+    <div class="desktop-mobile-switch-pill" id="desktopMobileToggleBtn" title="Switch to Normal Web Mode" role="button"
+      tabindex="0">
+      <i class="fas fa-globe"></i>
+      <span>Web Mode</span>
     </div>
 
-    <!-- ========== SYSTEM INFO ========== -->
-    <div class="system-info">
-      <span class="highlight">KenOS v2.0</span><br>
-      <span class="highlight">Kernel 5.15.0</span><br>
-      <span class="highlight">Uptime: <span id="uptimeDisplay">00:00:00</span></span>
-    </div>
+    <!-- Window Container -->
+    <div id="windowContainer"></div>
+  </div>
 
-    <!-- ========== DESKTOP ========== -->
-    <div class="kenos-desktop" id="desktopArea">
-
-      <!-- Experience Icon -->
-      <div class="desktop-icon" id="experienceIcon" onclick="handleIconClick('experienceIcon')">
-        <div class="icon-box"><i class="fas fa-briefcase"></i></div>
-        <span class="icon-label">~$ experience</span>
+  <!-- ========== TASKBAR ========== -->
+  <div class="kenos-taskbar" id="taskbar">
+    <div class="taskbar-section">
+      <div class="finder-pill">
+        <i class="fas fa-microchip"></i>
+        <span>ken@kenos</span>
       </div>
-
-      <!-- Projects Icon -->
-      <div class="desktop-icon" id="projectsIcon" onclick="handleIconClick('projectsIcon')">
-        <div class="icon-box"><i class="fas fa-folder-open"></i></div>
-        <span class="icon-label">~/projects</span>
-      </div>
-
-      <!-- Tools Icon -->
-      <div class="desktop-icon" id="toolsIcon" onclick="handleIconClick('toolsIcon')">
-        <div class="icon-box"><i class="fas fa-tools"></i></div>
-        <span class="icon-label">~/tools</span>
-      </div>
-
-      <!-- Whoami Icon (About) -->
-      <div class="desktop-icon" id="whoamiIcon" onclick="handleIconClick('whoamiIcon')">
-        <div class="icon-box"><i class="fas fa-user-astronaut"></i></div>
-        <span class="icon-label">~$ whoami</span>
-      </div>
-
-      <!-- Certificates Icon -->
-      <div class="desktop-icon" id="certificatesIcon" onclick="handleIconClick('certificatesIcon')">
-        <div class="icon-box"><i class="fas fa-certificate"></i></div>
-        <span class="icon-label">~/certificates</span>
-      </div>
-
-      <!-- Contact Icon -->
-      <div class="desktop-icon" id="contactIcon" onclick="handleIconClick('contactIcon')">
-        <div class="icon-box"><i class="fas fa-envelope"></i></div>
-        <span class="icon-label">~/contact</span>
-      </div>
-
-      <!-- GitHub Icon -->
-      <div class="desktop-icon" onclick="window.open('https://github.com/Kenitplay', '_blank')">
-        <div class="icon-box"><i class="fab fa-github"></i></div>
-        <span class="icon-label">~/github</span>
-      </div>
-
-      <div class="desktop-icon" onclick="window.open('assets/resume.pdf', '_blank')">
-        <div class="icon-box"><i class="fas fa-file-pdf"></i></div>
-        <span class="icon-label">~/resume</span>
-      </div>
-
-      <!-- MOBILE CALENDAR WIDGET (hidden on phones via CSS) -->
-      <div class="calendar-widget-mobile" id="calendarWidgetMobile">
-        <div class="widget-header">
-          <span class="icon"><i class="fas fa-calendar-alt"></i></span>
-          <span class="month-year" id="monthYearMobile">January 2025</span>
-          <span class="status-dot"></span>
-        </div>
-        <div class="day-grid" id="dayGridMobile">
-          <span class="day-name">S</span>
-          <span class="day-name">M</span>
-          <span class="day-name">T</span>
-          <span class="day-name">W</span>
-          <span class="day-name">T</span>
-          <span class="day-name">F</span>
-          <span class="day-name">S</span>
-        </div>
-        <div class="time-display">
-          <span class="hours" id="clockHoursMobile">00:00</span>
-          <span class="seconds" id="clockSecondsMobile">00</span>
-          <span class="ampm" id="clockAmPmMobile">AM</span>
-        </div>
-        <div class="date-display" id="dateDisplayMobile">January 1, 2025</div>
-      </div>
-
-      <!-- Mobile Desktop Mode Toggle Pill (visible on mobile screens where taskbar is hidden) -->
-      <div class="desktop-mobile-switch-pill" id="desktopMobileToggleBtn" title="Switch to Normal Web Mode" role="button" tabindex="0">
+      <div class="divider-line"></div>
+      <!-- TOGGLE TO NORMAL SITE BUTTON -->
+      <div class="taskbar-layout-pill" id="taskbarLayoutToggleBtn" title="Switch to Normal Website View" role="button"
+        tabindex="0">
         <i class="fas fa-globe"></i>
         <span>Web Mode</span>
       </div>
-
-      <!-- Window Container -->
-      <div id="windowContainer"></div>
-    </div>
-
-    <!-- ========== TASKBAR ========== -->
-    <div class="kenos-taskbar" id="taskbar">
-      <div class="taskbar-section">
-        <div class="finder-pill">
-          <i class="fas fa-microchip"></i>
-          <span>ken@kenos</span>
-        </div>
-        <div class="divider-line"></div>
-        <!-- TOGGLE TO NORMAL SITE BUTTON -->
-        <div class="taskbar-layout-pill" id="taskbarLayoutToggleBtn" title="Switch to Normal Website View" role="button"
-          tabindex="0">
-          <i class="fas fa-globe"></i>
-          <span>Web Mode</span>
-        </div>
-        <div class="divider-line"></div>
-        <div class="finder-pill" style="background:rgba(0,212,255,0.02);padding:5px 12px;">
-          <i class="fas fa-th"></i>
-        </div>
-        <div class="divider-line"></div>
-        <!-- RESET ICON POSITIONS BUTTON -->
-        <div class="taskbar-btn" id="resetIconsBtn" title="Reset icon positions"
-          style="width:36px;height:36px;font-size:16px;">
-          <i class="fas fa-undo-alt"></i>
-        </div>
+      <div class="divider-line"></div>
+      <div class="finder-pill" style="background:rgba(0,212,255,0.02);padding:5px 12px;">
+        <i class="fas fa-th"></i>
       </div>
-      <div class="taskbar-section">
-        <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="taskbar-btn"
-          title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a href="https://www.facebook.com/alken.valledor" target="_blank" class="taskbar-btn" title="Facebook"><i
-            class="fab fa-facebook-f"></i></a>
-        <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="taskbar-btn" title="YouTube"><i
-            class="fab fa-youtube"></i></a>
-        <a href="https://github.com/Kenitplay" target="_blank" class="taskbar-btn" title="GitHub"><i
-            class="fab fa-github"></i></a>
-      </div>
-      <div class="taskbar-section">
-        <div class="time-badge" id="clockDisplay">
-          <i class="far fa-clock" style="margin-right:6px;"></i>
-          <span id="liveTime">--:--</span>
-        </div>
-        <div class="divider-line"></div>
-        <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('📶 Wi-Fi · Connected')">
-          <i class="fas fa-wifi"></i>
-        </div>
-        <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('🔊 Volume 60%')"><i
-            class="fas fa-volume-up"></i></div>
+      <div class="divider-line"></div>
+      <!-- RESET ICON POSITIONS BUTTON -->
+      <div class="taskbar-btn" id="resetIconsBtn" title="Reset icon positions"
+        style="width:36px;height:36px;font-size:16px;">
+        <i class="fas fa-undo-alt"></i>
       </div>
     </div>
+    <div class="taskbar-section">
+      <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="taskbar-btn"
+        title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      <a href="https://www.facebook.com/alken.valledor" target="_blank" class="taskbar-btn" title="Facebook"><i
+          class="fab fa-facebook-f"></i></a>
+      <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="taskbar-btn" title="YouTube"><i
+          class="fab fa-youtube"></i></a>
+      <a href="https://github.com/Kenitplay" target="_blank" class="taskbar-btn" title="GitHub"><i
+          class="fab fa-github"></i></a>
+    </div>
+    <div class="taskbar-section">
+      <div class="time-badge" id="clockDisplay">
+        <i class="far fa-clock" style="margin-right:6px;"></i>
+        <span id="liveTime">--:--</span>
+      </div>
+      <div class="divider-line"></div>
+      <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('📶 Wi-Fi · Connected')">
+        <i class="fas fa-wifi"></i>
+      </div>
+      <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('🔊 Volume 60%')"><i
+          class="fas fa-volume-up"></i></div>
+    </div>
+  </div>
 
-    <!-- ========================================================== -->
-    <!-- ========== NORMAL PORTFOLIO SITE LAYOUT CONTAINER ========== -->
-    <!-- ========================================================== -->
-    <div id="normalSite">
+  <!-- ========================================================== -->
+  <!-- ========== NORMAL PORTFOLIO SITE LAYOUT CONTAINER ========== -->
+  <!-- ========================================================== -->
+  <div id="normalSite">
 
-      <!-- Top Sticky Navigation Bar -->
-      <nav class="normal-navbar" id="normalNavbar">
-        <a href="#normal-hero" class="normal-nav-brand">
-          <i class="fas fa-microchip"></i>
-          <span><span class="brand-ken">Ken</span><span class="brand-os">OS</span></span>
-          <span class="brand-ver">v2.0</span>
+    <!-- Top Sticky Navigation Bar -->
+    <nav class="normal-navbar" id="normalNavbar">
+      <a href="#normal-hero" class="normal-nav-brand">
+        <i class="fas fa-microchip"></i>
+        <span><span class="brand-ken">Ken</span><span class="brand-os">OS</span></span>
+        <span class="brand-ver">v2.0</span>
+      </a>
+
+      <!-- Desktop & Tablet Navigation Links -->
+      <ul class="normal-nav-links">
+        <li><a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About</a></li>
+        <li><a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience</a></li>
+        <li><a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects</a></li>
+        <li><a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills</a></li>
+        <li><a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates</a>
+        </li>
+        <li><a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="normal-nav-actions">
+        <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
+          <i class="fas fa-file-pdf"></i>
+          <span>Resume</span>
         </a>
-
-        <!-- Desktop & Tablet Navigation Links -->
-        <ul class="normal-nav-links">
-          <li><a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About</a></li>
-          <li><a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience</a></li>
-          <li><a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects</a></li>
-          <li><a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills</a></li>
-          <li><a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates</a>
-          </li>
-          <li><a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
-        </ul>
-
-        <!-- Action Buttons -->
-        <div class="normal-nav-actions">
-          <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
-            <i class="fas fa-file-pdf"></i>
-            <span>Resume</span>
-          </a>
-          <button class="nav-btn nav-toggle-btn" id="navDesktopToggleBtn" title="Switch to KenOS Desktop OS">
-            <i class="fas fa-desktop"></i>
-            <span>Desktop OS</span>
-          </button>
-          <button class="normal-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
-            <i class="fas fa-bars"></i>
-          </button>
-        </div>
-      </nav>
-
-      <!-- Mobile Dropdown Menu -->
-      <div class="normal-mobile-menu" id="normalMobileMenu">
-        <a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About (~$ whoami)</a>
-        <a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience (~$
-          experience)</a>
-        <a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects (~/projects)</a>
-        <a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills (~/tools)</a>
-        <a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates
-          (~/certificates)</a>
-        <a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact (~/contact)</a>
-        <div class="mobile-actions">
-          <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
-            <i class="fas fa-file-pdf"></i> Resume PDF
-          </a>
-          <button class="nav-btn nav-toggle-btn" id="mobileMenuDesktopBtn">
-            <i class="fas fa-desktop"></i> Switch to Desktop OS View
-          </button>
-        </div>
+        <button class="nav-btn nav-toggle-btn" id="navDesktopToggleBtn" title="Switch to KenOS Desktop OS">
+          <i class="fas fa-desktop"></i>
+          <span>Desktop OS</span>
+        </button>
+        <button class="normal-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
       </div>
+    </nav>
 
-      <!-- Hero Section -->
-      <section class="normal-hero" id="normal-hero">
-        <div class="hero-terminal-pill">
-          <span class="pulse-dot"></span>
-          <span>ken@developer:~$ system --profile</span>
-        </div>
-
-        <h1 class="hero-title">
-          Hi, I'm <span class="hero-glow-text">Alken Valledor</span>
-        </h1>
-
-        <div class="hero-role">
-          <span>Full-Stack Developer, AI Developer, & App Developer</span><span class="cursor"></span>
-        </div>
-
-        <p class="hero-description">
-          Passionate developer working across full stack, AI, and mobile app development, building high-performance web
-          systems and sleek digital experiences. Merging clean code with modern design to build resilient, intelligent,
-          user-centric software.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#normal-projects" class="normal-btn primary-btn">
-            <i class="fas fa-folder-open"></i> View Projects
-          </a>
-          <a href="#normal-contact" class="normal-btn secondary-btn">
-            <i class="fas fa-envelope"></i> Get In Touch
-          </a>
-          <a href="assets/resume.pdf" target="_blank" class="normal-btn outline-btn">
-            <i class="fas fa-file-pdf"></i> Download Resume
-          </a>
-          <button class="normal-btn outline-btn" id="heroDesktopToggleBtn"
-            title="Experience KenOS in interactive desktop mode">
-            <i class="fas fa-desktop"></i> Desktop OS View
-          </button>
-        </div>
-
-        <!-- Quick Stats Strip -->
-        <div class="hero-stats-grid">
-          <div class="hero-stat-card">
-            <div class="hero-stat-icon"><i class="fas fa-briefcase"></i></div>
-            <div>
-              <div class="hero-stat-val">6+</div>
-              <div class="hero-stat-lbl">Years Experience</div>
-            </div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="hero-stat-icon"><i class="fas fa-code"></i></div>
-            <div>
-              <div class="hero-stat-val">26</div>
-              <div class="hero-stat-lbl">Projects Built</div>
-            </div>
-          </div>
-          <div class="hero-stat-card">
-            <div class="hero-stat-icon"><i class="fas fa-certificate"></i></div>
-            <div>
-              <div class="hero-stat-val">6</div>
-              <div class="hero-stat-lbl">Certifications</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- About Section (~$ whoami) -->
-      <section class="normal-section" id="normal-about">
-        <div class="section-header">
-          <span class="section-tag">// 01. PROFILE</span>
-          <h2 class="section-title"><i class="fas fa-user-astronaut"></i> ~$ whoami</h2>
-          <p class="section-subtitle">Developer background, philosophy, and core technical passions</p>
-        </div>
-
-        <div class="about-grid">
-          <!-- Left: Cyber Terminal Card -->
-          <div class="cyber-window-card">
-            <div class="cyber-window-header">
-              <div class="window-dots">
-                <span class="dot-red"></span>
-                <span class="dot-yellow"></span>
-                <span class="dot-cyan"></span>
-              </div>
-              <div class="window-tab-title">
-                <i class="fas fa-terminal"></i> ken@kenos:~ (bash)
-              </div>
-              <div style="width: 40px;"></div>
-            </div>
-            <div class="cyber-window-body">
-              <div class="about-profile-header">
-                <div class="about-avatar-box">
-                  <i class="fas fa-user-astronaut"></i>
-                </div>
-                <div>
-                  <div class="about-user-tag">ken@developer:~$</div>
-                  <div class="about-status-line">
-                    <span style="color:#00ff88;">●</span> Active · Open to opportunities
-                  </div>
-                  <div class="about-meta-row">
-                    <span class="about-meta-pill"><i class="fas fa-map-marker-alt"></i> Remote · Global</span>
-                    <span class="about-meta-pill"><i class="fas fa-briefcase"></i> 6+ years</span>
-                    <span class="about-meta-pill"><i class="fas fa-graduation-cap"></i> M.Sc. CS</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="about-command-block">
-                <span class="cmd-prompt">ken@kenos:~$</span> echo "I'm a passionate full-stack developer with a love for
-                building clean, efficient, and user-centric applications. I thrive at the intersection of design and
-                engineering, creating digital experiences that are both beautiful and functional."
-              </div>
-
-              <div class="about-quote-box">
-                <i class="fas fa-quote-left" style="color:#00d4ff; opacity:0.4; margin-right:6px;"></i>
-                "The best way to predict the future is to build it."
-                <span class="quote-author">— Alan Kay</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Right: Stats & Passions -->
-          <div class="about-side-cards">
-            <div class="about-stat-grid">
-              <div class="about-stat-cell">
-                <div class="about-stat-num">20+</div>
-                <div class="about-stat-desc">Projects</div>
-              </div>
-              <div class="about-stat-cell">
-                <div class="about-stat-num">∞</div>
-                <div class="about-stat-desc">Curiosity</div>
-              </div>
-            </div>
-
-            <div class="about-passions-card">
-              <div class="about-passions-title">
-                <i class="fas fa-heart" style="color:#ff6b6b;"></i> Core Passions & Focus
-              </div>
-              <div class="about-tags-flex">
-                <span class="normal-badge-tag"><i class="fas fa-laptop-code"></i> Frontend</span>
-                <span class="normal-badge-tag"><i class="fas fa-server"></i> Backend</span>
-                <span class="normal-badge-tag"><i class="fas fa-code"></i> Clean Code</span>
-                <span class="normal-badge-tag"><i class="fas fa-paint-brush"></i> UI/UX Design</span>
-                <span class="normal-badge-tag"><i class="fas fa-robot"></i> AI / ML</span>
-                <span class="normal-badge-tag"><i class="fas fa-mobile-alt"></i> Mobile Responsive</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Experience Section (~$ experience) -->
-      <section class="normal-section" id="normal-experience">
-        <div class="section-header">
-          <span class="section-tag">// 02. CAREER PATH</span>
-          <h2 class="section-title"><i class="fas fa-briefcase"></i> ~$ experience</h2>
-          <p class="section-subtitle">Professional software engineering milestones and technical leadership</p>
-        </div>
-
-        <div class="exp-timeline">
-          <!-- Experience 1 -->
-          <div class="exp-timeline-card">
-            <div class="exp-header-row">
-              <div class="exp-handle">ken@AI/AppDeveloper:~$</div>
-              <span class="normal-badge-tag"
-                style="background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.3); color:#00ff88;">
-                <i class="fas fa-circle" style="font-size:7px;"></i> Current Role
-              </span>
-            </div>
-            <div class="exp-company-badge">
-              <i class="fas fa-building"></i> Sayless · AI/App Developer
-            </div>
-            <div class="exp-desc">
-              Built the company's website and mobile app end-to-end, and developed the Research ERB AI Classification
-              system — an AI-powered tool for classifying research submissions against ethics review board criteria.
-            </div>
-            <div class="exp-tags-row">
-              <span class="normal-badge-tag">AI/ML</span>
-              <span class="normal-badge-tag">App Development</span>
-              <span class="normal-badge-tag">Research ERB</span>
-              <span class="normal-badge-tag">AI Classification</span>
-              <span class="normal-badge-tag">Full Stack</span>
-            </div>
-          </div>
-
-          <!-- Experience 2 -->
-          <div class="exp-timeline-card">
-            <div class="exp-header-row">
-              <div class="exp-handle">ken@Annotator:~$</div>
-              <span class="normal-badge-tag">Jul 2026 – Present</span>
-            </div>
-            <div class="exp-company-badge">
-              <i class="fas fa-building"></i> Aligner · Data Annotator · Contract
-            </div>
-            <div class="exp-desc">
-              Aligning AI-generated responses with human intent and quality standards across coding and reasoning
-              tasks. Ranking and refining model outputs, authoring reference solutions, and providing detailed
-              feedback to improve accuracy and alignment of large language models.
-            </div>
-            <div class="exp-tags-row">
-              <span class="normal-badge-tag">Data Annotation</span>
-              <span class="normal-badge-tag">Alignment</span>
-              <span class="normal-badge-tag">RLHF</span>
-              <span class="normal-badge-tag">LLM Evaluation</span>
-              <span class="normal-badge-tag">Prompt Engineering</span>
-            </div>
-          </div>
-
-          <!-- Experience 3 -->
-          <div class="exp-timeline-card">
-            <div class="exp-header-row">
-              <div class="exp-handle">ken@Annotator:~$</div>
-              <span class="normal-badge-tag">Feb 2026 – Mar 2026</span>
-            </div>
-            <div class="exp-company-badge">
-              <i class="fas fa-building"></i> DataAnnotation · Data Annotator · Contract
-            </div>
-            <div class="exp-desc">
-              Evaluated and ranked AI-generated responses across coding and reasoning tasks, providing detailed
-              feedback to improve model accuracy and alignment. Authored high-quality prompts and reference solutions
-              used to benchmark and fine-tune large language models.
-            </div>
-            <div class="exp-tags-row">
-              <span class="normal-badge-tag">Data Annotation</span>
-              <span class="normal-badge-tag">RLHF</span>
-              <span class="normal-badge-tag">Prompt Engineering</span>
-              <span class="normal-badge-tag">LLM Evaluation</span>
-              <span class="normal-badge-tag">Quality Assurance</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Projects Section (~/projects) -->
-      <section class="normal-section" id="normal-projects">
-        <div class="section-header">
-          <span class="section-tag">// 03. FEATURED WORK</span>
-          <h2 class="section-title"><i class="fas fa-folder-open"></i> ~/projects</h2>
-          <p class="section-subtitle">Real-world applications, interactive systems, and production platforms</p>
-        </div>
-
-        <div class="projects-responsive-grid">
-          <!-- Project 1 -->
-          <div class="normal-project-card">
-            <div class="project-card-content">
-              <h3 class="project-card-title">Patch Perfect</h3>
-              <p class="project-card-desc">A wound tracking system that runs uploaded photos through a pipeline of AI
-                models to
-                determine a wound's severity, healing status, and type.</p>
-            </div>
-          </div>
-
-          <!-- Project 2 -->
-          <div class="normal-project-card">
-            <div class="project-img-wrapper">
-              <img src="assets/ReoMobile.png" alt="WMSU REOC App" loading="lazy" />
-              <span class="project-tag-overlay">Mobile App</span>
-            </div>
-            <div class="project-card-content">
-              <h3 class="project-card-title">WMSU REOC App</h3>
-              <p class="project-card-desc">A Android mobile app for the Western Mindanao State University Research
-                Ethics
-                Oversight
-                Committee — digitizing the ethical review workflow with digital proposal submission, real-time status
-                tracking, and a direct reviewer feedback loop.</p>
-              <div class="project-card-footer">
-                <span class="normal-badge-tag">Flutter · Main App Developer</span>
-                <button class="project-link-btn"
-                  onclick="window.open('https://github.com/Kenitplay/ReoMobile', '_blank', 'noopener')">
-                  View Project <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 3 -->
-          <div class="normal-project-card">
-            <div class="project-img-wrapper">
-              <img src="assets/Fruitvision.png" alt="FruitVision" loading="lazy" />
-              <span class="project-tag-overlay">AI Classifier</span>
-            </div>
-            <div class="project-card-content">
-              <h3 class="project-card-title">FruitVision</h3>
-              <p class="project-card-desc">A fruit classifier that accepts a photo upload or live camera capture, then
-                uses a
-                trained machine learning model to identify the fruit.</p>
-              <div class="project-card-footer">
-                <span class="normal-badge-tag">Django · Tensorflow · Machine Learning</span>
-                <button class="project-link-btn"
-                  onclick="window.open('https://github.com/Kenitplay/FruitVision', '_blank', 'noopener')">
-                  View Project <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 4 -->
-          <div class="normal-project-card">
-            <div class="project-img-wrapper">
-              <img src="assets/SyncSched.png" alt="SyncSched" loading="lazy" />
-              <span class="project-tag-overlay">Scheduling</span>
-            </div>
-            <div class="project-card-content">
-              <h3 class="project-card-title">SyncSched</h3>
-              <p class="project-card-desc">A scheduling system where students can reserve their subjects and time slots
-                based
-                on their college level and section.</p>
-              <div class="project-card-footer">
-                <span class="normal-badge-tag">Tailwind CSS · PHP</span>
-                <button class="project-link-btn"
-                  onclick="window.open('https://github.com/Kenitplay/SyncSched', '_blank', 'noopener')">
-                  View Project <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 5 -->
-          <div class="normal-project-card">
-            <div class="project-img-wrapper">
-              <img src="assets/weedhub.png" alt="WeedHub" loading="lazy" />
-              <span class="project-tag-overlay">Frontend</span>
-            </div>
-            <div class="project-card-content">
-              <h3 class="project-card-title">WeedHub</h3>
-              <p class="project-card-desc">A weed marketplace mockup/parody built as a frontend-only project — playful
-                storefront UI with product browsing and cart interactions.</p>
-              <div class="project-card-footer">
-                <span class="normal-badge-tag">Frontend Only · Bootstrap</span>
-                <button class="project-link-btn"
-                  onclick="window.open('https://weedhub.netlify.app/', '_blank', 'noopener')">
-                  View Project <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 6 -->
-          <div class="normal-project-card">
-            <div class="project-img-wrapper">
-              <img src="assets/Five-Nights-With-Springtrap_434461.png" alt="Five Nights With Springtrap"
-                loading="lazy" />
-              <span class="project-tag-overlay">Horror Survival</span>
-            </div>
-            <div class="project-card-content">
-              <h3 class="project-card-title">Five Nights With Springtrap</h3>
-              <p class="project-card-desc">A horror survival game where you play as a night guard at a storage facility
-                built
-                from the renovated remains of the burned-down Fazbear's Fright.</p>
-              <div class="project-card-footer">
-                <span class="normal-badge-tag">FNAF Engine</span>
-                <button class="project-link-btn"
-                  onclick="window.open('https://gamejolt.com/games/Five-Nights-With-Springtrap/434461', '_blank', 'noopener')">
-                  View Project <i class="fas fa-arrow-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Skills & Tools Section (~/tools) -->
-      <section class="normal-section" id="normal-skills">
-        <div class="section-header">
-          <span class="section-tag">// 04. TECH STACK</span>
-          <h2 class="section-title"><i class="fas fa-tools"></i> ~/tools</h2>
-          <p class="section-subtitle">Programming languages, frameworks, databases, and DevOps toolchains</p>
-        </div>
-
-        <div class="skills-grid-container">
-          <!-- Languages -->
-          <div class="skills-category-card">
-            <div class="skills-category-header">
-              <i class="fas fa-code"></i> Languages
-            </div>
-            <div class="skills-badges-wrap">
-              <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> JavaScript</span>
-              <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Python</span>
-              <span class="skill-pill"><i class="fab fa-java" style="color:#007396;"></i> Java</span>
-              <span class="skill-pill"><i class="fas fa-code" style="color:#3178c6;"></i> TypeScript</span>
-              <span class="skill-pill"><i class="fas fa-database" style="color:#4479a1;"></i> SQL</span>
-              <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> PHP</span>
-              <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby</span>
-              <span class="skill-pill"><i class="fas fa-crown" style="color:#a8b9cc;"></i> Swift</span>
-            </div>
-          </div>
-
-          <!-- Frontend Frameworks -->
-          <div class="skills-category-card">
-            <div class="skills-category-header">
-              <i class="fas fa-paint-brush"></i> Frontend Frameworks
-            </div>
-            <div class="skills-badges-wrap">
-              <span class="skill-pill"><i class="fab fa-react" style="color:#61dafb;"></i> React</span>
-              <span class="skill-pill"><i class="fab fa-vuejs" style="color:#4fc08d;"></i> Vue.js</span>
-              <span class="skill-pill"><i class="fab fa-angular" style="color:#dd0031;"></i> Angular</span>
-              <span class="skill-pill"><i class="fab fa-bootstrap" style="color:#7952b3;"></i> Bootstrap</span>
-              <span class="skill-pill"><i class="fas fa-wind" style="color:#06b6d4;"></i> Tailwind CSS</span>
-              <span class="skill-pill"><i class="fab fa-sass" style="color:#cc6699;"></i> SASS/SCSS</span>
-              <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> jQuery</span>
-              <span class="skill-pill"><i class="fas fa-cube" style="color:#00bcd4;"></i> Three.js</span>
-            </div>
-          </div>
-
-          <!-- Backend Frameworks -->
-          <div class="skills-category-card">
-            <div class="skills-category-header">
-              <i class="fas fa-server"></i> Backend Frameworks
-            </div>
-            <div class="skills-badges-wrap">
-              <span class="skill-pill"><i class="fab fa-node" style="color:#339933;"></i> Node.js</span>
-              <span class="skill-pill"><i class="fas fa-leaf" style="color:#6db33f;"></i> Spring Boot</span>
-              <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Django</span>
-              <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Flask</span>
-              <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby on Rails</span>
-              <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> Laravel</span>
-              <span class="skill-pill"><i class="fas fa-bolt" style="color:#00d4ff;"></i> Express.js</span>
-              <span class="skill-pill"><i class="fas fa-database" style="color:#00684a;"></i> MongoDB</span>
-            </div>
-          </div>
-
-          <!-- DevOps & Tools -->
-          <div class="skills-category-card">
-            <div class="skills-category-header">
-              <i class="fas fa-cloud"></i> DevOps & Cloud
-            </div>
-            <div class="skills-badges-wrap">
-              <span class="skill-pill"><i class="fab fa-docker" style="color:#2496ed;"></i> Docker</span>
-              <span class="skill-pill"><i class="fas fa-cubes" style="color:#326ce5;"></i> Kubernetes</span>
-              <span class="skill-pill"><i class="fab fa-aws" style="color:#ff9900;"></i> AWS</span>
-              <span class="skill-pill"><i class="fab fa-git-alt" style="color:#f05032;"></i> Git</span>
-              <span class="skill-pill"><i class="fab fa-github" style="color:#ffffff;"></i> GitHub Actions</span>
-              <span class="skill-pill"><i class="fas fa-code-branch" style="color:#f34f29;"></i> Terraform</span>
-              <span class="skill-pill"><i class="fas fa-chart-line" style="color:#f7df1e;"></i> Prometheus</span>
-              <span class="skill-pill"><i class="fas fa-terminal" style="color:#00d4ff;"></i> Linux</span>
-              <span class="skill-pill"><i class="fas fa-code" style="color:#007acc;"></i> VS Code</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Certificates Section (~/certificates) -->
-      <section class="normal-section" id="normal-certificates">
-        <div class="section-header">
-          <span class="section-tag">// 05. CREDENTIALS</span>
-          <h2 class="section-title"><i class="fas fa-certificate"></i> ~/certificates</h2>
-          <p class="section-subtitle">Verified industry certifications and professional accreditations</p>
-        </div>
-
-        <div class="certs-grid">
-          <!-- Cert 1 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/aws-cert/500/250" alt="AWS Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fab fa-aws"></i> AWS</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">AWS Certified</div>
-              <div class="cert-subtitle">Solutions Architect - Associate</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2023</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> AWS-12345</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">Cloud</span>
-                <span class="normal-badge-tag">Architecture</span>
-                <span class="normal-badge-tag">DevOps</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cert 2 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/gcp-cert/500/250" alt="Google Cloud Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fab fa-google"></i> GCP</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">Google Certified</div>
-              <div class="cert-subtitle">Professional Cloud Architect</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2022</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> GCP-67890</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">GCP</span>
-                <span class="normal-badge-tag">Kubernetes</span>
-                <span class="normal-badge-tag">Security</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cert 3 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/azure-cert/500/250" alt="Azure Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fab fa-microsoft"></i> Azure</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">Microsoft Certified</div>
-              <div class="cert-subtitle">Azure Solutions Expert</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2021</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> AZ-204</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">Azure</span>
-                <span class="normal-badge-tag">DevOps</span>
-                <span class="normal-badge-tag">Migration</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cert 4 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/python-cert/500/250" alt="Python Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fab fa-python"></i> Python</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">Python Institute</div>
-              <div class="cert-subtitle">PCAP Certified Associate</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2020</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> PCAP-98765</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">Python</span>
-                <span class="normal-badge-tag">Scripting</span>
-                <span class="normal-badge-tag">Automation</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cert 5 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/docker-cert/500/250" alt="Docker Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fab fa-docker"></i> Docker</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">Docker Certified</div>
-              <div class="cert-subtitle">Containerization Expert</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2021</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> DOCK-54321</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">Docker</span>
-                <span class="normal-badge-tag">Kubernetes</span>
-                <span class="normal-badge-tag">Containers</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cert 6 -->
-          <div class="cert-item-card">
-            <div class="cert-img-box">
-              <img src="https://picsum.photos/seed/security-cert/500/250" alt="Security+ Certificate" loading="lazy" />
-              <div class="cert-issuer-badge"><i class="fas fa-shield-alt"></i> CompTIA</div>
-            </div>
-            <div class="cert-body">
-              <div class="cert-title">CompTIA Security+</div>
-              <div class="cert-subtitle">Certified Security Professional</div>
-              <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: 2022</div>
-              <div class="cert-id"><i class="fas fa-id-card"></i> SEC-123456</div>
-              <div class="cert-tags">
-                <span class="normal-badge-tag">Security</span>
-                <span class="normal-badge-tag">Compliance</span>
-                <span class="normal-badge-tag">Auditing</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact Section (~/contact) -->
-      <section class="normal-section" id="normal-contact">
-        <div class="section-header">
-          <span class="section-tag">// 06. TRANSMISSION</span>
-          <h2 class="section-title"><i class="fas fa-envelope"></i> ~/contact</h2>
-          <p class="section-subtitle">Reach out for collaborations, architecture consulting, or full-time opportunities
-          </p>
-        </div>
-
-        <div class="contact-grid">
-          <!-- Contact Options -->
-          <div class="contact-options-list">
-            <!-- Gmail -->
-            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kenitplaygaming@gmail.com&su=Hello%20Ken%20-%20Portfolio%20Inquiry"
-              target="_blank" class="contact-method-card">
-              <div class="contact-icon-box contact-icon-gmail">
-                <i class="fas fa-envelope"></i>
-              </div>
-              <div class="contact-text-box">
-                <div class="contact-label">Email (Gmail)</div>
-                <div class="contact-subtext">kenitplaygaming@gmail.com</div>
-              </div>
-              <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
-            </a>
-
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="contact-method-card">
-              <div class="contact-icon-box contact-icon-linkedin">
-                <i class="fab fa-linkedin-in"></i>
-              </div>
-              <div class="contact-text-box">
-                <div class="contact-label">LinkedIn</div>
-                <div class="contact-subtext">linkedin.com/in/alken-valledor</div>
-              </div>
-              <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
-            </a>
-
-            <!-- GitHub -->
-            <a href="https://github.com/Kenitplay" target="_blank" class="contact-method-card">
-              <div class="contact-icon-box contact-icon-github">
-                <i class="fab fa-github"></i>
-              </div>
-              <div class="contact-text-box">
-                <div class="contact-label">GitHub</div>
-                <div class="contact-subtext">github.com/Kenitplay</div>
-              </div>
-              <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
-            </a>
-
-            <!-- YouTube -->
-            <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="contact-method-card">
-              <div class="contact-icon-box contact-icon-youtube">
-                <i class="fab fa-youtube"></i>
-              </div>
-              <div class="contact-text-box">
-                <div class="contact-label">YouTube</div>
-                <div class="contact-subtext">@KenitplayGaming</div>
-              </div>
-              <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
-            </a>
-
-            <!-- Quick Response Note -->
-            <div class="contact-response-note">
-              <i class="fas fa-robot" style="color:#00d4ff; margin-right:8px;"></i>
-              <span>ken@kenos:~$ echo "I respond within 24 hours"</span>
-              <span style="color:#00ff88; margin-left:6px;">✓</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="normal-footer" id="normalFooter">
-        <div class="footer-content">
-          <div class="footer-brand">
-            <div class="brand-text">
-              <i class="fas fa-microchip" style="color:#00d4ff;"></i> KenOS · Portfolio Edition v2.0
-            </div>
-            <div class="brand-tagline">
-              Engineered for high performance, accessibility, and visual elegance.
-            </div>
-          </div>
-
-          <div class="footer-social-links">
-            <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="footer-social-btn"
-              title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://github.com/Kenitplay" target="_blank" class="footer-social-btn" title="GitHub"><i
-                class="fab fa-github"></i></a>
-            <a href="https://www.facebook.com/alken.valledor" target="_blank" class="footer-social-btn"
-              title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="footer-social-btn"
-              title="YouTube"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
-
-        <div class="footer-bottom-row">
-          <div>© 2025 Alken Valledor. All rights reserved. Built with passion & KenOS.</div>
-          <div>
-            <button class="footer-layout-switch" id="footerDesktopToggleBtn">
-              <i class="fas fa-desktop"></i> Switch to KenOS Desktop
-            </button>
-          </div>
-        </div>
-      </footer>
-
-      <!-- Floating Layout Switcher Pill -->
-      <div class="floating-layout-pill" id="floatingLayoutToggleBtn" title="Switch to KenOS Desktop View">
-        <i class="fas fa-desktop"></i>
-        <span>Desktop OS</span>
+    <!-- Mobile Dropdown Menu -->
+    <div class="normal-mobile-menu" id="normalMobileMenu">
+      <a href="#normal-about" class="normal-nav-link"><i class="fas fa-user-astronaut"></i> About (~$ whoami)</a>
+      <a href="#normal-experience" class="normal-nav-link"><i class="fas fa-briefcase"></i> Experience (~$
+        experience)</a>
+      <a href="#normal-projects" class="normal-nav-link"><i class="fas fa-folder-open"></i> Projects (~/projects)</a>
+      <a href="#normal-skills" class="normal-nav-link"><i class="fas fa-tools"></i> Skills (~/tools)</a>
+      <a href="#normal-certificates" class="normal-nav-link"><i class="fas fa-certificate"></i> Certificates
+        (~/certificates)</a>
+      <a href="#normal-contact" class="normal-nav-link"><i class="fas fa-envelope"></i> Contact (~/contact)</a>
+      <div class="mobile-actions">
+        <a href="assets/resume.pdf" target="_blank" class="nav-btn nav-resume-btn">
+          <i class="fas fa-file-pdf"></i> Resume PDF
+        </a>
+        <button class="nav-btn nav-toggle-btn" id="mobileMenuDesktopBtn">
+          <i class="fas fa-desktop"></i> Switch to Desktop OS View
+        </button>
       </div>
-
     </div>
 
-    <!-- ========== INLINE STYLE: HIDE MOBILE CALENDAR ON PHONES ========== -->
-    <style>
-      @media (max-width: 480px) {
-        .calendar-widget-mobile {
-          display: none !important;
+    <!-- Hero Section -->
+    <section class="normal-hero" id="normal-hero">
+      <div class="hero-terminal-pill">
+        <span class="pulse-dot"></span>
+        <span>ken@developer:~$ system --profile</span>
+      </div>
+
+      <h1 class="hero-title">
+        Hi, I'm <span class="hero-glow-text">Alken Valledor</span>
+      </h1>
+
+      <div class="hero-role">
+        <span>Full-Stack Developer, AI Developer, & App Developer</span><span class="cursor"></span>
+      </div>
+
+      <p class="hero-description">
+        Passionate developer working across full stack, AI, and mobile app development, building high-performance web
+        systems and sleek digital experiences. Merging clean code with modern design to build resilient, intelligent,
+        user-centric software.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#normal-projects" class="normal-btn primary-btn">
+          <i class="fas fa-folder-open"></i> View Projects
+        </a>
+        <a href="#normal-contact" class="normal-btn secondary-btn">
+          <i class="fas fa-envelope"></i> Get In Touch
+        </a>
+        <a href="assets/resume.pdf" target="_blank" class="normal-btn outline-btn">
+          <i class="fas fa-file-pdf"></i> Download Resume
+        </a>
+        <button class="normal-btn outline-btn" id="heroDesktopToggleBtn"
+          title="Experience KenOS in interactive desktop mode">
+          <i class="fas fa-desktop"></i> Desktop OS View
+        </button>
+      </div>
+
+      <!-- Quick Stats Strip -->
+      <div class="hero-stats-grid">
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-briefcase"></i></div>
+          <div>
+            <div class="hero-stat-val">6+</div>
+            <div class="hero-stat-lbl">Years Experience</div>
+          </div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-code"></i></div>
+          <div>
+            <div class="hero-stat-val">26</div>
+            <div class="hero-stat-lbl">Projects Built</div>
+          </div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-icon"><i class="fas fa-certificate"></i></div>
+          <div>
+            <div class="hero-stat-val">6</div>
+            <div class="hero-stat-lbl">Certifications</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section (~$ whoami) -->
+    <section class="normal-section" id="normal-about">
+      <div class="section-header">
+        <span class="section-tag">// 01. PROFILE</span>
+        <h2 class="section-title"><i class="fas fa-user-astronaut"></i> ~$ whoami</h2>
+        <p class="section-subtitle">Developer background, philosophy, and core technical passions</p>
+      </div>
+
+      <div class="about-grid">
+        <!-- Left: Cyber Terminal Card -->
+        <div class="cyber-window-card">
+          <div class="cyber-window-header">
+            <div class="window-dots">
+              <span class="dot-red"></span>
+              <span class="dot-yellow"></span>
+              <span class="dot-cyan"></span>
+            </div>
+            <div class="window-tab-title">
+              <i class="fas fa-terminal"></i> ken@kenos:~ (bash)
+            </div>
+            <div style="width: 40px;"></div>
+          </div>
+          <div class="cyber-window-body">
+            <div class="about-profile-header">
+              <div class="about-avatar-box">
+                <i class="fas fa-user-astronaut"></i>
+              </div>
+              <div>
+                <div class="about-user-tag">ken@developer:~$</div>
+                <div class="about-status-line">
+                  <span style="color:#00ff88;">●</span> Active · Open to opportunities
+                </div>
+                <div class="about-meta-row">
+                  <span class="about-meta-pill"><i class="fas fa-map-marker-alt"></i> Remote · Global</span>
+                  <span class="about-meta-pill"><i class="fas fa-briefcase"></i> 6+ years</span>
+                  <span class="about-meta-pill"><i class="fas fa-graduation-cap"></i> M.Sc. CS</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-command-block">
+              <span class="cmd-prompt">ken@kenos:~$</span> echo "I'm a passionate full-stack developer with a love for
+              building clean, efficient, and user-centric applications. I thrive at the intersection of design and
+              engineering, creating digital experiences that are both beautiful and functional."
+            </div>
+
+            <div class="about-quote-box">
+              <i class="fas fa-quote-left" style="color:#00d4ff; opacity:0.4; margin-right:6px;"></i>
+              "The best way to predict the future is to build it."
+              <span class="quote-author">— Alan Kay</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Stats & Passions -->
+        <div class="about-side-cards">
+          <div class="about-stat-grid">
+            <div class="about-stat-cell">
+              <div class="about-stat-num">20+</div>
+              <div class="about-stat-desc">Projects</div>
+            </div>
+            <div class="about-stat-cell">
+              <div class="about-stat-num">∞</div>
+              <div class="about-stat-desc">Curiosity</div>
+            </div>
+          </div>
+
+          <div class="about-passions-card">
+            <div class="about-passions-title">
+              <i class="fas fa-heart" style="color:#ff6b6b;"></i> Core Passions & Focus
+            </div>
+            <div class="about-tags-flex">
+              <span class="normal-badge-tag"><i class="fas fa-laptop-code"></i> Frontend</span>
+              <span class="normal-badge-tag"><i class="fas fa-server"></i> Backend</span>
+              <span class="normal-badge-tag"><i class="fas fa-code"></i> Clean Code</span>
+              <span class="normal-badge-tag"><i class="fas fa-paint-brush"></i> UI/UX Design</span>
+              <span class="normal-badge-tag"><i class="fas fa-robot"></i> AI / ML</span>
+              <span class="normal-badge-tag"><i class="fas fa-mobile-alt"></i> Mobile Responsive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section (~$ experience) -->
+    <section class="normal-section" id="normal-experience">
+      <div class="section-header">
+        <span class="section-tag">// 02. CAREER PATH</span>
+        <h2 class="section-title"><i class="fas fa-briefcase"></i> ~$ experience</h2>
+        <p class="section-subtitle">Professional software engineering milestones and technical leadership</p>
+      </div>
+
+      <div class="exp-timeline">
+        <!-- Experience 1 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@AI/AppDeveloper:~$</div>
+            <span class="normal-badge-tag"
+              style="background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.3); color:#00ff88;">
+              <i class="fas fa-circle" style="font-size:7px;"></i> Current Role
+            </span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> Sayless · AI/App Developer
+          </div>
+          <div class="exp-desc">
+            Built the company's website and mobile app end-to-end, and developed the Research ERB AI Classification
+            system — an AI-powered tool for classifying research submissions against ethics review board criteria.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">AI/ML</span>
+            <span class="normal-badge-tag">App Development</span>
+            <span class="normal-badge-tag">Research ERB</span>
+            <span class="normal-badge-tag">AI Classification</span>
+            <span class="normal-badge-tag">Full Stack</span>
+          </div>
+        </div>
+
+        <!-- Experience 2 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@Annotator:~$</div>
+            <span class="normal-badge-tag">Jul 2026 – Present</span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> Aligner · Data Annotator · Contract
+          </div>
+          <div class="exp-desc">
+            Aligning AI-generated responses with human intent and quality standards across coding and reasoning
+            tasks. Ranking and refining model outputs, authoring reference solutions, and providing detailed
+            feedback to improve accuracy and alignment of large language models.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">Data Annotation</span>
+            <span class="normal-badge-tag">Alignment</span>
+            <span class="normal-badge-tag">RLHF</span>
+            <span class="normal-badge-tag">LLM Evaluation</span>
+            <span class="normal-badge-tag">Prompt Engineering</span>
+          </div>
+        </div>
+
+        <!-- Experience 3 -->
+        <div class="exp-timeline-card">
+          <div class="exp-header-row">
+            <div class="exp-handle">ken@Annotator:~$</div>
+            <span class="normal-badge-tag">Feb 2026 – Mar 2026</span>
+          </div>
+          <div class="exp-company-badge">
+            <i class="fas fa-building"></i> DataAnnotation · Data Annotator · Contract
+          </div>
+          <div class="exp-desc">
+            Evaluated and ranked AI-generated responses across coding and reasoning tasks, providing detailed
+            feedback to improve model accuracy and alignment. Authored high-quality prompts and reference solutions
+            used to benchmark and fine-tune large language models.
+          </div>
+          <div class="exp-tags-row">
+            <span class="normal-badge-tag">Data Annotation</span>
+            <span class="normal-badge-tag">RLHF</span>
+            <span class="normal-badge-tag">Prompt Engineering</span>
+            <span class="normal-badge-tag">LLM Evaluation</span>
+            <span class="normal-badge-tag">Quality Assurance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section (~/projects) -->
+    <section class="normal-section" id="normal-projects">
+      <div class="section-header">
+        <span class="section-tag">// 03. FEATURED WORK</span>
+        <h2 class="section-title"><i class="fas fa-folder-open"></i> ~/projects</h2>
+        <p class="section-subtitle">Real-world applications, interactive systems, and production platforms</p>
+      </div>
+
+      <div class="projects-responsive-grid">
+        <!-- Project 1 -->
+        <div class="normal-project-card">
+          <div class="project-card-content">
+            <h3 class="project-card-title">Patch Perfect</h3>
+            <p class="project-card-desc">A wound tracking system that runs uploaded photos through a pipeline of AI
+              models to
+              determine a wound's severity, healing status, and type.</p>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="assets/ReoMobile.png" alt="WMSU REOC App" loading="lazy" />
+            <span class="project-tag-overlay">Mobile App</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">WMSU REOC App</h3>
+            <p class="project-card-desc">A Android mobile app for the Western Mindanao State University Research
+              Ethics
+              Oversight
+              Committee — digitizing the ethical review workflow with digital proposal submission, real-time status
+              tracking, and a direct reviewer feedback loop.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Flutter · Main App Developer</span>
+              <button class="project-link-btn"
+                onclick="window.open('https://github.com/Kenitplay/ReoMobile', '_blank', 'noopener')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="assets/Fruitvision.png" alt="FruitVision" loading="lazy" />
+            <span class="project-tag-overlay">AI Classifier</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">FruitVision</h3>
+            <p class="project-card-desc">A fruit classifier that accepts a photo upload or live camera capture, then
+              uses a
+              trained machine learning model to identify the fruit.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Django · Tensorflow · Machine Learning</span>
+              <button class="project-link-btn"
+                onclick="window.open('https://github.com/Kenitplay/FruitVision', '_blank', 'noopener')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="assets/SyncSched.png" alt="SyncSched" loading="lazy" />
+            <span class="project-tag-overlay">Scheduling</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">SyncSched</h3>
+            <p class="project-card-desc">A scheduling system where students can reserve their subjects and time slots
+              based
+              on their college level and section.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Tailwind CSS · PHP</span>
+              <button class="project-link-btn"
+                onclick="window.open('https://github.com/Kenitplay/SyncSched', '_blank', 'noopener')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 5 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="assets/weedhub.png" alt="WeedHub" loading="lazy" />
+            <span class="project-tag-overlay">Frontend</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">WeedHub</h3>
+            <p class="project-card-desc">A weed marketplace mockup/parody built as a frontend-only project — playful
+              storefront UI with product browsing and cart interactions.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">Frontend Only · Bootstrap</span>
+              <button class="project-link-btn"
+                onclick="window.open('https://weedhub.netlify.app/', '_blank', 'noopener')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6 -->
+        <div class="normal-project-card">
+          <div class="project-img-wrapper">
+            <img src="assets/Five-Nights-With-Springtrap_434461.png" alt="Five Nights With Springtrap" loading="lazy" />
+            <span class="project-tag-overlay">Horror Survival</span>
+          </div>
+          <div class="project-card-content">
+            <h3 class="project-card-title">Five Nights With Springtrap</h3>
+            <p class="project-card-desc">A horror survival game where you play as a night guard at a storage facility
+              built
+              from the renovated remains of the burned-down Fazbear's Fright.</p>
+            <div class="project-card-footer">
+              <span class="normal-badge-tag">FNAF Engine</span>
+              <button class="project-link-btn"
+                onclick="window.open('https://gamejolt.com/games/Five-Nights-With-Springtrap/434461', '_blank', 'noopener')">
+                View Project <i class="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills & Tools Section (~/tools) -->
+    <section class="normal-section" id="normal-skills">
+      <div class="section-header">
+        <span class="section-tag">// 04. TECH STACK</span>
+        <h2 class="section-title"><i class="fas fa-tools"></i> ~/tools</h2>
+        <p class="section-subtitle">Programming languages, frameworks, databases, and DevOps toolchains</p>
+      </div>
+
+      <div class="skills-grid-container">
+        <!-- Languages -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-code"></i> Languages
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> JavaScript</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Python</span>
+            <span class="skill-pill"><i class="fab fa-java" style="color:#007396;"></i> Java</span>
+            <span class="skill-pill"><i class="fas fa-code" style="color:#3178c6;"></i> TypeScript</span>
+            <span class="skill-pill"><i class="fas fa-database" style="color:#4479a1;"></i> SQL</span>
+            <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> PHP</span>
+            <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby</span>
+            <span class="skill-pill"><i class="fas fa-crown" style="color:#a8b9cc;"></i> Swift</span>
+          </div>
+        </div>
+
+        <!-- Frontend Frameworks -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-paint-brush"></i> Frontend Frameworks
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-react" style="color:#61dafb;"></i> React</span>
+            <span class="skill-pill"><i class="fab fa-vuejs" style="color:#4fc08d;"></i> Vue.js</span>
+            <span class="skill-pill"><i class="fab fa-angular" style="color:#dd0031;"></i> Angular</span>
+            <span class="skill-pill"><i class="fab fa-bootstrap" style="color:#7952b3;"></i> Bootstrap</span>
+            <span class="skill-pill"><i class="fas fa-wind" style="color:#06b6d4;"></i> Tailwind CSS</span>
+            <span class="skill-pill"><i class="fab fa-sass" style="color:#cc6699;"></i> SASS/SCSS</span>
+            <span class="skill-pill"><i class="fab fa-js" style="color:#f7df1e;"></i> jQuery</span>
+            <span class="skill-pill"><i class="fas fa-cube" style="color:#00bcd4;"></i> Three.js</span>
+          </div>
+        </div>
+
+        <!-- Backend Frameworks -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-server"></i> Backend Frameworks
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-node" style="color:#339933;"></i> Node.js</span>
+            <span class="skill-pill"><i class="fas fa-leaf" style="color:#6db33f;"></i> Spring Boot</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Django</span>
+            <span class="skill-pill"><i class="fab fa-python" style="color:#3776ab;"></i> Flask</span>
+            <span class="skill-pill"><i class="fas fa-gem" style="color:#cc342d;"></i> Ruby on Rails</span>
+            <span class="skill-pill"><i class="fab fa-php" style="color:#777bb4;"></i> Laravel</span>
+            <span class="skill-pill"><i class="fas fa-bolt" style="color:#00d4ff;"></i> Express.js</span>
+            <span class="skill-pill"><i class="fas fa-database" style="color:#00684a;"></i> MongoDB</span>
+          </div>
+        </div>
+
+        <!-- DevOps & Tools -->
+        <div class="skills-category-card">
+          <div class="skills-category-header">
+            <i class="fas fa-cloud"></i> DevOps & Cloud
+          </div>
+          <div class="skills-badges-wrap">
+            <span class="skill-pill"><i class="fab fa-docker" style="color:#2496ed;"></i> Docker</span>
+            <span class="skill-pill"><i class="fas fa-cubes" style="color:#326ce5;"></i> Kubernetes</span>
+            <span class="skill-pill"><i class="fab fa-aws" style="color:#ff9900;"></i> AWS</span>
+            <span class="skill-pill"><i class="fab fa-git-alt" style="color:#f05032;"></i> Git</span>
+            <span class="skill-pill"><i class="fab fa-github" style="color:#ffffff;"></i> GitHub Actions</span>
+            <span class="skill-pill"><i class="fas fa-code-branch" style="color:#f34f29;"></i> Terraform</span>
+            <span class="skill-pill"><i class="fas fa-chart-line" style="color:#f7df1e;"></i> Prometheus</span>
+            <span class="skill-pill"><i class="fas fa-terminal" style="color:#00d4ff;"></i> Linux</span>
+            <span class="skill-pill"><i class="fas fa-code" style="color:#007acc;"></i> VS Code</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates Section (~/certificates) -->
+    <section class="normal-section" id="normal-certificates">
+      <div class="section-header">
+        <span class="section-tag">// 05. CREDENTIALS</span>
+        <h2 class="section-title"><i class="fas fa-certificate"></i> ~/certificates</h2>
+        <p class="section-subtitle">Verified industry certifications and professional accreditations</p>
+      </div>
+
+      <div class="certs-grid">
+        <!-- Cert 1 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Scientific Computing With Python.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Scientific Computing With Python.png" alt="freeCodeCamp Certificate"
+                loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-free-code-camp"></i> freeCodeCamp</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">freeCodeCamp Certified</div>
+            <div class="cert-subtitle">Scientific Computing with Python</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: July 11, 2026</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i>FREECODECAMP-SCI-COMPWITHPYTHON</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Python</span>
+              <span class="normal-badge-tag">Scientific Computing</span>
+              <span class="normal-badge-tag">Data Analysis</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 2 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Google DevFest 2025.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Google DevFest 2025.png" alt="Google DevFest ZamPen 2025 Certificate"
+                loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GDG</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Google DevFest ZamPen 2025</div>
+            <div class="cert-subtitle">Certificate of Participation</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: November 16, 2025</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> DEVFEST-ZAMPEN-2025</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">GDG</span>
+              <span class="normal-badge-tag">DevFest</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 3 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Road To DevFest 2025.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Road To DevFest 2025.png"
+                alt="Road To Google DevFest ZamPen 2025 Certificate" loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GDG</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Road To Google DevFest ZamPen 2025</div>
+            <div class="cert-subtitle">Certificate of Participation</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: November 14, 2025</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> ROAD-TO-DEVFEST-ZAMPEN-2025</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">GDG</span>
+              <span class="normal-badge-tag">DevFest</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 4 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Bluecode Hackathon 2025.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Bluecode Hackathon 2025.png"
+                alt="BlueCode Zamboanga Hackathon 2025 Certificate" loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fas fa-code"></i> BlueCode</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">BlueCode: Zamboanga Hackathon 2025</div>
+            <div class="cert-subtitle">Certificate of Participation — Webinar</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: April 1, 2025</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> BLUECODE-ZAMBOANGA-2025</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Hackathon</span>
+              <span class="normal-badge-tag">Webinar</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 5 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Google IO Extended 2025.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Google IO Extended 2025.png"
+                alt="Google I/O Extended ZamPen 2025 Certificate" loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GDG</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Google I/O Extended ZamPen 2025</div>
+            <div class="cert-subtitle">Certificate Of Participation</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: August 2, 2025</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> GOOGLE-IO-EXTENDED-ZAMPEN-2025</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Google I/O</span>
+              <span class="normal-badge-tag">Extended</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 6 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Google DevFest 2024.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Google DevFest 2024.png" alt="Google DevFest ZamPen 2024 Certificate"
+                loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GDG</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Google DevFest ZamPen 2024</div>
+            <div class="cert-subtitle">Certificate Of Participation</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: November 23, 2024</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> DEVFEST-ZAMPEN-2024</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">GDG</span>
+              <span class="normal-badge-tag">DevFest</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 7 -->
+        <div class="cert-item-card">
+          <div class="cert-img-box">
+            <a href="assets/certificates/Google IO Extended 2024.png" target="_blank" rel="noopener noreferrer"
+              class="cert-img-link">
+              <img src="assets/certificates/Google IO Extended 2024.png"
+                alt="Google I/O Extended ZamPen 2024 Certificate" loading="lazy" />
+            </a>
+            <div class="cert-issuer-badge"><i class="fab fa-google"></i> GDG</div>
+          </div>
+          <div class="cert-body">
+            <div class="cert-title">Google I/O Extended ZamPen 2024</div>
+            <div class="cert-subtitle">Certificate Of Participation</div>
+            <div class="cert-date"><i class="fas fa-calendar-alt"></i> Issued: July 27, 2024</div>
+            <div class="cert-id"><i class="fas fa-id-card"></i> GOOGLE-IO-EXTENDED-ZAMPEN-2024</div>
+            <div class="cert-tags">
+              <span class="normal-badge-tag">Google I/O</span>
+              <span class="normal-badge-tag">Extended</span>
+              <span class="normal-badge-tag">Participation</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact Section (~/contact) -->
+    <section class="normal-section" id="normal-contact">
+      <div class="section-header">
+        <span class="section-tag">// 06. TRANSMISSION</span>
+        <h2 class="section-title"><i class="fas fa-envelope"></i> ~/contact</h2>
+        <p class="section-subtitle">Reach out for collaborations, architecture consulting, or full-time opportunities
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact Options -->
+        <div class="contact-options-list">
+          <!-- Gmail -->
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kenitplaygaming@gmail.com&su=Hello%20Ken%20-%20Portfolio%20Inquiry"
+            target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-gmail">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">Email (Gmail)</div>
+              <div class="contact-subtext">kenitplaygaming@gmail.com</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-linkedin">
+              <i class="fab fa-linkedin-in"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">LinkedIn</div>
+              <div class="contact-subtext">linkedin.com/in/alken-valledor</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- GitHub -->
+          <a href="https://github.com/Kenitplay" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-github">
+              <i class="fab fa-github"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">GitHub</div>
+              <div class="contact-subtext">github.com/Kenitplay</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="contact-method-card">
+            <div class="contact-icon-box contact-icon-youtube">
+              <i class="fab fa-youtube"></i>
+            </div>
+            <div class="contact-text-box">
+              <div class="contact-label">YouTube</div>
+              <div class="contact-subtext">@KenitplayGaming</div>
+            </div>
+            <div class="contact-ext-arrow"><i class="fas fa-external-link-alt"></i></div>
+          </a>
+
+          <!-- Quick Response Note -->
+          <div class="contact-response-note">
+            <i class="fas fa-robot" style="color:#00d4ff; margin-right:8px;"></i>
+            <span>ken@kenos:~$ echo "I respond within 24 hours"</span>
+            <span style="color:#00ff88; margin-left:6px;">✓</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="normal-footer" id="normalFooter">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="brand-text">
+            <i class="fas fa-microchip" style="color:#00d4ff;"></i> KenOS · Portfolio Edition v2.0
+          </div>
+          <div class="brand-tagline">
+            Engineered for high performance, accessibility, and visual elegance.
+          </div>
+        </div>
+
+        <div class="footer-social-links">
+          <a href="https://www.linkedin.com/in/alken-valledor-421ab22a0/" target="_blank" class="footer-social-btn"
+            title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://github.com/Kenitplay" target="_blank" class="footer-social-btn" title="GitHub"><i
+              class="fab fa-github"></i></a>
+          <a href="https://www.facebook.com/alken.valledor" target="_blank" class="footer-social-btn"
+            title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.youtube.com/@KenitplayGaming" target="_blank" class="footer-social-btn"
+            title="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <div>© 2025 Alken Valledor. All rights reserved. Built with passion & KenOS.</div>
+        <div>
+          <button class="footer-layout-switch" id="footerDesktopToggleBtn">
+            <i class="fas fa-desktop"></i> Switch to KenOS Desktop
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Layout Switcher Pill -->
+    <div class="floating-layout-pill" id="floatingLayoutToggleBtn" title="Switch to KenOS Desktop View">
+      <i class="fas fa-desktop"></i>
+      <span>Desktop OS</span>
+    </div>
+
+  </div>
+
+  <!-- ========== INLINE STYLE: HIDE MOBILE CALENDAR ON PHONES ========== -->
+  <style>
+    @media (max-width: 480px) {
+      .calendar-widget-mobile {
+        display: none !important;
+      }
+    }
+  </style>
+
+  <!-- ========================================================== -->
+  <!-- SCRIPT: Config + Calendar + Component System + GitHub API  -->
+  <!-- ========================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
+  </script>
+
+  <script src="js/component.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/github.js"></script>
+  <script src="js/layout.js"></script>
+
+  <!-- ========== DRAG & DROP + RESET SCRIPT ========== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ============================================================
+      // RESPONSIVE LAYOUT CONFIGURATION
+      // ============================================================
+      function getResponsiveConfig() {
+        const w = window.innerWidth;
+
+        if (w <= 480) {
+          // ---- PHONE ----
+          // 4 columns, tight spacing, start below the boot screen area
+          return {
+            startX: 8,
+            startY: 40,
+            gap: 70,
+            rowGap: 82,
+            cols: 4
+          };
+        } else if (w <= 1024) {
+          // ---- TABLET ----
+          return {
+            startX: 20,
+            startY: 20,
+            gap: 88,
+            rowGap: 100,
+            cols: 5
+          };
+        } else {
+          // ---- LAPTOP / DESKTOP ----
+          return {
+            startX: 20,
+            startY: 20,
+            gap: 100,
+            rowGap: 110,
+            cols: 99
+          };
         }
       }
-    </style>
 
-    <!-- ========================================================== -->
-    <!-- SCRIPT: Config + Calendar + Component System + GitHub API  -->
-    <!-- ========================================================== -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
-    </script>
+      // ============================================================
+      // STATE
+      // ============================================================
+      let lastLayoutConfig = null;
+      let resizeTimeout = null;
 
-    <script src="js/component.js"></script>
-    <script src="js/calendar.js"></script>
-    <script src="js/github.js"></script>
-    <script src="js/layout.js"></script>
+      // ============================================================
+      // APPLY DEFAULT LAYOUT (used everywhere)
+      // ============================================================
+      function applyDefaultLayout(forceAll) {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
 
-    <!-- ========== DRAG & DROP + RESET SCRIPT ========== -->
-    <script>
-      (function () {
-        'use strict';
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+        const cfg = getResponsiveConfig();
 
-        // ============================================================
-        // RESPONSIVE LAYOUT CONFIGURATION
-        // ============================================================
-        function getResponsiveConfig() {
-          const w = window.innerWidth;
-
-          if (w <= 480) {
-            // ---- PHONE ----
-            // 4 columns, tight spacing, start below the boot screen area
-            return {
-              startX: 8,
-              startY: 40,
-              gap: 70,
-              rowGap: 82,
-              cols: 4
-            };
-          } else if (w <= 1024) {
-            // ---- TABLET ----
-            return {
-              startX: 20,
-              startY: 20,
-              gap: 88,
-              rowGap: 100,
-              cols: 5
-            };
-          } else {
-            // ---- LAPTOP / DESKTOP ----
-            return {
-              startX: 20,
-              startY: 20,
-              gap: 100,
-              rowGap: 110,
-              cols: 99
-            };
-          }
-        }
-
-        // ============================================================
-        // STATE
-        // ============================================================
-        let lastLayoutConfig = null;
-        let resizeTimeout = null;
-
-        // ============================================================
-        // APPLY DEFAULT LAYOUT (used everywhere)
-        // ============================================================
-        function applyDefaultLayout(forceAll) {
-          const desktop = document.getElementById('desktopArea');
-          if (!desktop) return;
-
-          const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
-          const cfg = getResponsiveConfig();
-
-          icons.forEach(function (icon, index) {
-            if (forceAll || !icon.dataset.hasBeenDragged) {
-              const col = index % cfg.cols;
-              const row = Math.floor(index / cfg.cols);
-
-              icon.style.position = 'absolute';
-              icon.style.left = (cfg.startX + col * cfg.gap) + 'px';
-              icon.style.top = (cfg.startY + row * cfg.rowGap) + 'px';
-            }
-          });
-        }
-
-        // ============================================================
-        // EARLY LAYOUT: run immediately (before DOMContentLoaded / paint)
-        // This is the critical fix for phones — icons get inline left/top
-        // before the browser's first paint, so they are visible instantly.
-        // ============================================================
-        (function applyEarlyLayout() {
-          // The <script> tag is at the end of body, so the DOM above it
-          // is already parsed. Icons exist now.
-          applyDefaultLayout(true);
-        })();
-
-        // ============================================================
-        // RESET ICON POSITIONS
-        // ============================================================
-        window.resetIconPositions = function () {
-          const desktop = document.getElementById('desktopArea');
-          if (!desktop) return;
-
-          const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
-          const cfg = getResponsiveConfig();
-
-          icons.forEach(function (icon, index) {
+        icons.forEach(function (icon, index) {
+          if (forceAll || !icon.dataset.hasBeenDragged) {
             const col = index % cfg.cols;
             const row = Math.floor(index / cfg.cols);
 
-            const left = cfg.startX + col * cfg.gap;
-            const top = cfg.startY + row * cfg.rowGap;
-
-            icon.style.transition = 'left 0.3s ease, top 0.3s ease';
-            icon.style.left = left + 'px';
-            icon.style.top = top + 'px';
-            delete icon.dataset.hasBeenDragged;
-
-            setTimeout(function () {
-              icon.style.transition = '';
-            }, 350);
-          });
-        };
-
-        // ============================================================
-        // DRAG HANDLER
-        // ============================================================
-        function makeDraggable(element, clampTarget) {
-          if (!element || element.dataset.dragBound === 'true') return;
-          element.dataset.dragBound = 'true';
-
-          element.style.userSelect = 'none';
-          element.style.touchAction = 'none';
-
-          if (window.getComputedStyle(element).position !== 'absolute') {
-            element.style.position = 'absolute';
+            icon.style.position = 'absolute';
+            icon.style.left = (cfg.startX + col * cfg.gap) + 'px';
+            icon.style.top = (cfg.startY + row * cfg.rowGap) + 'px';
           }
-
-          let isDragging = false;
-          let startX = 0, startY = 0;
-          let startLeft = 0, startTop = 0;
-          let clickMoved = false;
-          let clickStartX = 0, clickStartY = 0;
-
-          function getLeft() {
-            return parseFloat(element.style.left) || 0;
-          }
-          function getTop() {
-            return parseFloat(element.style.top) || 0;
-          }
-
-          // ---- MOUSE ----
-          function onMouseDown(e) {
-            if (e.button !== 0) return;
-            e.preventDefault();
-
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startLeft = getLeft();
-            startTop = getTop();
-
-            clickStartX = e.clientX;
-            clickStartY = e.clientY;
-            clickMoved = false;
-
-            element.style.cursor = 'grabbing';
-            element.style.opacity = '0.85';
-            element.style.zIndex = '9999';
-
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-          }
-
-          function onMouseMove(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-
-            if (Math.abs(e.clientX - clickStartX) > 5 || Math.abs(e.clientY - clickStartY) > 5) {
-              clickMoved = true;
-            }
-
-            let newLeft = startLeft + dx;
-            let newTop = startTop + dy;
-
-            const clampRect = clampTarget.getBoundingClientRect();
-            const elemRect = element.getBoundingClientRect();
-            const w = elemRect.width;
-            const h = elemRect.height;
-
-            const minLeft = 5;
-            const minTop = 5;
-            const maxLeft = clampRect.width - w - 5;
-            const maxTop = clampRect.height - h - 5;
-
-            newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
-            newTop = Math.max(minTop, Math.min(newTop, maxTop));
-
-            element.style.left = newLeft + 'px';
-            element.style.top = newTop + 'px';
-          }
-
-          function onMouseUp(e) {
-            if (!isDragging) return;
-            isDragging = false;
-
-            element.style.cursor = '';
-            element.style.opacity = '';
-            element.style.zIndex = '';
-
-            if (clickMoved) {
-              element.dataset.hasBeenDragged = 'true';
-            }
-
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-          }
-
-          // ---- TOUCH ----
-          let touchDragging = false;
-          let touchStartX = 0, touchStartY = 0;
-          let touchStartLeft = 0, touchStartTop = 0;
-          let touchMoved = false;
-          let touchClickStartX = 0, touchClickStartY = 0;
-
-          function onTouchStart(e) {
-            const touch = e.touches[0];
-            if (!touch) return;
-
-            touchDragging = true;
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            touchStartLeft = getLeft();
-            touchStartTop = getTop();
-
-            touchClickStartX = touch.clientX;
-            touchClickStartY = touch.clientY;
-            touchMoved = false;
-
-            element.style.cursor = 'grabbing';
-            element.style.opacity = '0.85';
-            element.style.zIndex = '9999';
-
-            document.addEventListener('touchmove', onTouchMove, { passive: false });
-            document.addEventListener('touchend', onTouchEnd);
-            document.addEventListener('touchcancel', onTouchEnd);
-          }
-
-          function onTouchMove(e) {
-            if (!touchDragging) return;
-            const touch = e.touches[0];
-            if (!touch) return;
-            e.preventDefault();
-
-            const dx = touch.clientX - touchStartX;
-            const dy = touch.clientY - touchStartY;
-
-            if (Math.abs(touch.clientX - touchClickStartX) > 5 || Math.abs(touch.clientY - touchClickStartY) > 5) {
-              touchMoved = true;
-            }
-
-            let newLeft = touchStartLeft + dx;
-            let newTop = touchStartTop + dy;
-
-            const clampRect = clampTarget.getBoundingClientRect();
-            const elemRect = element.getBoundingClientRect();
-            const w = elemRect.width;
-            const h = elemRect.height;
-
-            const minLeft = 5;
-            const minTop = 5;
-            const maxLeft = clampRect.width - w - 5;
-            const maxTop = clampRect.height - h - 5;
-
-            newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
-            newTop = Math.max(minTop, Math.min(newTop, maxTop));
-
-            element.style.left = newLeft + 'px';
-            element.style.top = newTop + 'px';
-          }
-
-          function onTouchEnd(e) {
-            if (!touchDragging) return;
-            touchDragging = false;
-
-            element.style.cursor = '';
-            element.style.opacity = '';
-            element.style.zIndex = '';
-
-            if (touchMoved) {
-              element.dataset.hasBeenDragged = 'true';
-            }
-
-            document.removeEventListener('touchmove', onTouchMove);
-            document.removeEventListener('touchend', onTouchEnd);
-            document.removeEventListener('touchcancel', onTouchEnd);
-          }
-
-          element.addEventListener('mousedown', onMouseDown);
-          element.addEventListener('touchstart', onTouchStart, { passive: true });
-          element.addEventListener('dragstart', function (e) { e.preventDefault(); });
-
-          // Block clicks after drag
-          element.addEventListener('click', function (e) {
-            if (clickMoved || touchMoved) {
-              e.stopImmediatePropagation();
-              e.preventDefault();
-              clickMoved = false;
-              touchMoved = false;
-            }
-          }, true);
-        }
-
-        // ============================================================
-        // INIT DRAGGABLE ICONS
-        // ============================================================
-        function initDraggableIcons() {
-          const desktop = document.getElementById('desktopArea');
-          if (!desktop) return;
-
-          const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
-
-          // Bind drag handlers once
-          if (!window.__kenosDragInitialized) {
-            window.__kenosDragInitialized = true;
-            icons.forEach(function (icon) {
-              makeDraggable(icon, desktop);
-            });
-          }
-
-          // Apply responsive default layout if not yet set
-          const currentCfg = getResponsiveConfig();
-          const cfgKey = JSON.stringify(currentCfg);
-
-          if (!lastLayoutConfig || lastLayoutConfig !== cfgKey) {
-            applyDefaultLayout(false);
-            lastLayoutConfig = cfgKey;
-          }
-
-          // Reset button
-          const resetBtn = document.getElementById('resetIconsBtn');
-          if (resetBtn && !resetBtn.dataset.bound) {
-            resetBtn.dataset.bound = 'true';
-            resetBtn.addEventListener('click', function () {
-              window.resetIconPositions();
-              resetBtn.style.transition = 'transform 0.4s ease';
-              resetBtn.style.transform = 'rotate(-360deg)';
-              setTimeout(function () {
-                resetBtn.style.transform = '';
-              }, 400);
-            });
-          }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-          initDraggableIcons();
         });
+      }
 
-        setTimeout(initDraggableIcons, 800);
-        setTimeout(initDraggableIcons, 2000);
-
-        // ============================================================
-        // RESPONSIVE HANDLER: re-apply layout when crossing breakpoints
-        // ============================================================
-        window.addEventListener('resize', function () {
-          clearTimeout(resizeTimeout);
-          resizeTimeout = setTimeout(function () {
-            const cfg = getResponsiveConfig();
-            const cfgKey = JSON.stringify(cfg);
-
-            if (lastLayoutConfig !== cfgKey) {
-              lastLayoutConfig = cfgKey;
-              applyDefaultLayout(false);
-            }
-          }, 150);
-        });
-
+      // ============================================================
+      // EARLY LAYOUT: run immediately (before DOMContentLoaded / paint)
+      // This is the critical fix for phones — icons get inline left/top
+      // before the browser's first paint, so they are visible instantly.
+      // ============================================================
+      (function applyEarlyLayout() {
+        // The <script> tag is at the end of body, so the DOM above it
+        // is already parsed. Icons exist now.
+        applyDefaultLayout(true);
       })();
-    </script>
-  </body>
+
+      // ============================================================
+      // RESET ICON POSITIONS
+      // ============================================================
+      window.resetIconPositions = function () {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
+
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+        const cfg = getResponsiveConfig();
+
+        icons.forEach(function (icon, index) {
+          const col = index % cfg.cols;
+          const row = Math.floor(index / cfg.cols);
+
+          const left = cfg.startX + col * cfg.gap;
+          const top = cfg.startY + row * cfg.rowGap;
+
+          icon.style.transition = 'left 0.3s ease, top 0.3s ease';
+          icon.style.left = left + 'px';
+          icon.style.top = top + 'px';
+          delete icon.dataset.hasBeenDragged;
+
+          setTimeout(function () {
+            icon.style.transition = '';
+          }, 350);
+        });
+      };
+
+      // ============================================================
+      // DRAG HANDLER
+      // ============================================================
+      function makeDraggable(element, clampTarget) {
+        if (!element || element.dataset.dragBound === 'true') return;
+        element.dataset.dragBound = 'true';
+
+        element.style.userSelect = 'none';
+        element.style.touchAction = 'none';
+
+        if (window.getComputedStyle(element).position !== 'absolute') {
+          element.style.position = 'absolute';
+        }
+
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let startLeft = 0, startTop = 0;
+        let clickMoved = false;
+        let clickStartX = 0, clickStartY = 0;
+
+        function getLeft() {
+          return parseFloat(element.style.left) || 0;
+        }
+        function getTop() {
+          return parseFloat(element.style.top) || 0;
+        }
+
+        // ---- MOUSE ----
+        function onMouseDown(e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+
+          isDragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = getLeft();
+          startTop = getTop();
+
+          clickStartX = e.clientX;
+          clickStartY = e.clientY;
+          clickMoved = false;
+
+          element.style.cursor = 'grabbing';
+          element.style.opacity = '0.85';
+          element.style.zIndex = '9999';
+
+          document.addEventListener('mousemove', onMouseMove);
+          document.addEventListener('mouseup', onMouseUp);
+        }
+
+        function onMouseMove(e) {
+          if (!isDragging) return;
+          e.preventDefault();
+
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+
+          if (Math.abs(e.clientX - clickStartX) > 5 || Math.abs(e.clientY - clickStartY) > 5) {
+            clickMoved = true;
+          }
+
+          let newLeft = startLeft + dx;
+          let newTop = startTop + dy;
+
+          const clampRect = clampTarget.getBoundingClientRect();
+          const elemRect = element.getBoundingClientRect();
+          const w = elemRect.width;
+          const h = elemRect.height;
+
+          const minLeft = 5;
+          const minTop = 5;
+          const maxLeft = clampRect.width - w - 5;
+          const maxTop = clampRect.height - h - 5;
+
+          newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+          newTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+        }
+
+        function onMouseUp(e) {
+          if (!isDragging) return;
+          isDragging = false;
+
+          element.style.cursor = '';
+          element.style.opacity = '';
+          element.style.zIndex = '';
+
+          if (clickMoved) {
+            element.dataset.hasBeenDragged = 'true';
+          }
+
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        // ---- TOUCH ----
+        let touchDragging = false;
+        let touchStartX = 0, touchStartY = 0;
+        let touchStartLeft = 0, touchStartTop = 0;
+        let touchMoved = false;
+        let touchClickStartX = 0, touchClickStartY = 0;
+
+        function onTouchStart(e) {
+          const touch = e.touches[0];
+          if (!touch) return;
+
+          touchDragging = true;
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchStartLeft = getLeft();
+          touchStartTop = getTop();
+
+          touchClickStartX = touch.clientX;
+          touchClickStartY = touch.clientY;
+          touchMoved = false;
+
+          element.style.cursor = 'grabbing';
+          element.style.opacity = '0.85';
+          element.style.zIndex = '9999';
+
+          document.addEventListener('touchmove', onTouchMove, { passive: false });
+          document.addEventListener('touchend', onTouchEnd);
+          document.addEventListener('touchcancel', onTouchEnd);
+        }
+
+        function onTouchMove(e) {
+          if (!touchDragging) return;
+          const touch = e.touches[0];
+          if (!touch) return;
+          e.preventDefault();
+
+          const dx = touch.clientX - touchStartX;
+          const dy = touch.clientY - touchStartY;
+
+          if (Math.abs(touch.clientX - touchClickStartX) > 5 || Math.abs(touch.clientY - touchClickStartY) > 5) {
+            touchMoved = true;
+          }
+
+          let newLeft = touchStartLeft + dx;
+          let newTop = touchStartTop + dy;
+
+          const clampRect = clampTarget.getBoundingClientRect();
+          const elemRect = element.getBoundingClientRect();
+          const w = elemRect.width;
+          const h = elemRect.height;
+
+          const minLeft = 5;
+          const minTop = 5;
+          const maxLeft = clampRect.width - w - 5;
+          const maxTop = clampRect.height - h - 5;
+
+          newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+          newTop = Math.max(minTop, Math.min(newTop, maxTop));
+
+          element.style.left = newLeft + 'px';
+          element.style.top = newTop + 'px';
+        }
+
+        function onTouchEnd(e) {
+          if (!touchDragging) return;
+          touchDragging = false;
+
+          element.style.cursor = '';
+          element.style.opacity = '';
+          element.style.zIndex = '';
+
+          if (touchMoved) {
+            element.dataset.hasBeenDragged = 'true';
+          }
+
+          document.removeEventListener('touchmove', onTouchMove);
+          document.removeEventListener('touchend', onTouchEnd);
+          document.removeEventListener('touchcancel', onTouchEnd);
+        }
+
+        element.addEventListener('mousedown', onMouseDown);
+        element.addEventListener('touchstart', onTouchStart, { passive: true });
+        element.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+        // Block clicks after drag
+        element.addEventListener('click', function (e) {
+          if (clickMoved || touchMoved) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            clickMoved = false;
+            touchMoved = false;
+          }
+        }, true);
+      }
+
+      // ============================================================
+      // INIT DRAGGABLE ICONS
+      // ============================================================
+      function initDraggableIcons() {
+        const desktop = document.getElementById('desktopArea');
+        if (!desktop) return;
+
+        const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
+
+        // Bind drag handlers once
+        if (!window.__kenosDragInitialized) {
+          window.__kenosDragInitialized = true;
+          icons.forEach(function (icon) {
+            makeDraggable(icon, desktop);
+          });
+        }
+
+        // Apply responsive default layout if not yet set
+        const currentCfg = getResponsiveConfig();
+        const cfgKey = JSON.stringify(currentCfg);
+
+        if (!lastLayoutConfig || lastLayoutConfig !== cfgKey) {
+          applyDefaultLayout(false);
+          lastLayoutConfig = cfgKey;
+        }
+
+        // Reset button
+        const resetBtn = document.getElementById('resetIconsBtn');
+        if (resetBtn && !resetBtn.dataset.bound) {
+          resetBtn.dataset.bound = 'true';
+          resetBtn.addEventListener('click', function () {
+            window.resetIconPositions();
+            resetBtn.style.transition = 'transform 0.4s ease';
+            resetBtn.style.transform = 'rotate(-360deg)';
+            setTimeout(function () {
+              resetBtn.style.transform = '';
+            }, 400);
+          });
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        initDraggableIcons();
+      });
+
+      setTimeout(initDraggableIcons, 800);
+      setTimeout(initDraggableIcons, 2000);
+
+      // ============================================================
+      // RESPONSIVE HANDLER: re-apply layout when crossing breakpoints
+      // ============================================================
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function () {
+          const cfg = getResponsiveConfig();
+          const cfgKey = JSON.stringify(cfg);
+
+          if (lastLayoutConfig !== cfgKey) {
+            lastLayoutConfig = cfgKey;
+            applyDefaultLayout(false);
+          }
+        }, 150);
+      });
+
+    })();
+  </script>
+</body>
 
 </html>
