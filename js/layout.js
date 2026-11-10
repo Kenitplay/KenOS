@@ -143,10 +143,9 @@
     if (targetMode === currentMode) return;
 
     const overlay = document.getElementById('kenosModeTransition');
-    const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Fallback if overlay element is missing or user prefers reduced motion
-    if (!overlay || isReducedMotion) {
+    // Fallback if overlay element is missing
+    if (!overlay) {
       setLayoutMode(targetMode, userInitiated);
       return;
     }

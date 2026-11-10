@@ -29,14 +29,14 @@
 .kenos-mode-transition.active {
   opacity: 1;
   visibility: visible;
-  pointer-events: all;
+  pointer-events: auto;
 }
 
 /* Closing State: Overlay sweeps away and dissolves */
 .kenos-mode-transition.closing {
   opacity: 0;
   visibility: visible;
-  pointer-events: all;
+  pointer-events: auto;
   transform: scale(1.02);
   filter: blur(5px);
   transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -521,27 +521,4 @@ body.mode-transitioning #taskbar {
   }
 }
 
-/* ---------- PREFERS REDUCED MOTION ---------- */
-@media (prefers-reduced-motion: reduce) {
-  .kenos-mode-transition {
-    transition: opacity 0.2s linear, visibility 0.2s linear;
-  }
-  .transition-scan-beam,
-  .transition-ambient-glow,
-  .transition-icon-ring {
-    animation: none !important;
-    display: none !important;
-  }
-  .transition-card {
-    transition: none !important;
-    transform: none !important;
-    animation: none !important;
-  }
-  #normalSite.mode-entering,
-  #desktopArea.mode-entering,
-  #taskbar.mode-entering {
-    animation: none !important;
-    transform: none !important;
-    filter: none !important;
-  }
-}
+
