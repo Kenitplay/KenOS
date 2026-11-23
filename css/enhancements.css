@@ -84,10 +84,6 @@ body.layout-desktop .skip-link {
   filter: brightness(1.2);
 }
 
-.kenos-window .window-body {
-  overscroll-behavior: contain;
-}
-
 /* ---------- Web mode: active nav link (scroll-spy) ---------- */
 .normal-nav-links .normal-nav-link.active {
   color: #00d4ff;
