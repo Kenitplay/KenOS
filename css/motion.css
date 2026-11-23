@@ -524,9 +524,40 @@ body.enter-normal .floating-layout-pill {
 }
 
 /* ============================================================
-   Reduced motion: keep everything instant and calm
+   6. ICON RESET LIFT-OFF + MUTE BUTTON
+   ============================================================ */
+.desktop-icon.icon-lifting {
+  transform: translateY(-10px) scale(1.1);
+  z-index: 50;
+}
+
+.desktop-icon.icon-lifting .icon-box {
+  color: #9be7ff;
+  filter: drop-shadow(0 0 26px rgba(0, 212, 255, 0.75));
+}
+
+.desktop-icon.icon-lifting .icon-label {
+  border-color: rgba(0, 212, 255, 0.5);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(0, 212, 255, 0.3);
+}
+
+#soundToggleBtn {
+  cursor: pointer;
+}
+
+#soundToggleBtn.is-muted {
+  color: rgba(255, 107, 107, 0.85);
+  border-color: rgba(255, 107, 107, 0.25);
+  background: rgba(255, 107, 107, 0.06);
+}
+
+/* ============================================================
+   Reduced motion: same timing and sounds, calmer visuals
+   (fades instead of zooms, irises, blurs and bounces)
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
+  /* Overlay simply fades in and out */
+  .kenos-mode-transition,
   .kenos-mode-transition.active,
   .kenos-mode-transition.closing {
     clip-path: none;
@@ -534,9 +565,75 @@ body.enter-normal .floating-layout-pill {
     filter: none;
   }
 
+  .kenos-mode-transition.active {
+    transition: opacity 0.5s ease;
+  }
+
+  .kenos-mode-transition.closing {
+    transition: opacity 0.6s ease;
+  }
+
+  .kenos-mode-transition::before,
+  .transition-scan-beam,
+  .transition-icon-ring {
+    display: none;
+  }
+
+  .kenos-mode-transition .transition-card,
+  .kenos-mode-transition.active .transition-card,
+  .kenos-mode-transition.closing .transition-card {
+    transform: none;
+    filter: none;
+  }
+
+  body.mode-transitioning #desktopArea,
+  body.mode-transitioning #normalSite,
+  body.mode-transitioning #taskbar {
+    transform: none;
+    filter: brightness(0.7);
+  }
+
+  /* Constant decorative motion off */
   #bootScreen::before,
-  .boot-ring {
+  .boot-ring,
+  #bootScreen .boot-progress::after,
+  .transition-ambient-glow,
+  .desktop-watermark {
     animation: none !important;
+  }
+
+  .boot-ring {
     opacity: 1;
   }
+
+  /* Entrances become simple fades */
+  body.enter-desktop .desktop-icon,
+  body.enter-desktop .quick-stats .stat-item,
+  body.enter-desktop .calendar-widget,
+  body.enter-normal .normal-hero > *,
+  body.enter-normal .floating-layout-pill,
+  body.enter-normal .normal-navbar {
+    animation-name: calmFade;
+    animation-timing-function: ease;
+  }
+
+  body.enter-desktop .kenos-taskbar {
+    animation: none;
+  }
+
+  #bootScreen.boot-exit {
+    animation-name: calmFadeOut;
+  }
+
+  .desktop-icon.icon-lifting {
+    transform: none;
+  }
+}
+
+@keyframes calmFade {
+  from { opacity: 0; }
+}
+
+@keyframes calmFadeOut {
+  to { opacity: 0; }
 }

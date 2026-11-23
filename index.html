@@ -318,7 +318,8 @@
       <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('📶 Wi-Fi · Connected')">
         <i class="fas fa-wifi"></i>
       </div>
-      <div class="taskbar-btn" style="width:36px;height:36px;font-size:16px;" onclick="alert('🔊 Volume 60%')"><i
+      <div class="taskbar-btn" id="soundToggleBtn" role="button" tabindex="0" aria-pressed="false"
+        title="Mute sounds" aria-label="Mute sounds" style="width:36px;height:36px;font-size:16px;"><i
           class="fas fa-volume-up"></i></div>
     </div>
   </div>
@@ -1136,6 +1137,7 @@
   <!-- SCRIPT: Config + Calendar + Component System + GitHub API  -->
   <!-- ========================================================== -->
 
+  <script src="js/sound.js"></script>
   <script src="js/component.js"></script>
   <script src="js/calendar.js"></script>
   <script src="js/github.js"></script>
@@ -1225,6 +1227,9 @@
       // ============================================================
       // RESET ICON POSITIONS
       // ============================================================
+      // Reset: every icon lifts off, glides home in a staggered wave (spring
+      // overshoot), then lands with a glow + pop sound. Plays even when icons
+      // are already in place, so the button always gives visible feedback.
       window.resetIconPositions = function (options) {
         const desktop = document.getElementById('desktopArea');
         if (!desktop) return;
@@ -1234,41 +1239,79 @@
           window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
         const cfg = getResponsiveConfig();
+        const sound = animate ? window.KenOSSound : null;
+
+        if (sound) sound.resetStart();
 
         icons.forEach(function (icon, index) {
           const col = index % cfg.cols;
           const row = Math.floor(index / cfg.cols);
           const left = cfg.startX + col * cfg.gap;
           const top = cfg.startY + row * cfg.rowGap;
-          const moved = Math.abs((parseFloat(icon.style.left) || 0) - left) > 1 ||
-            Math.abs((parseFloat(icon.style.top) || 0) - top) > 1;
+          const dist = Math.hypot((parseFloat(icon.style.left) || 0) - left, (parseFloat(icon.style.top) || 0) - top);
 
           delete icon.dataset.hasBeenDragged;
-          clearTimeout(icon._resetTimer);
+          (icon._resetTimers || []).forEach(clearTimeout);
+          icon._resetTimers = [];
+          icon.classList.remove('icon-lifting', 'icon-landed');
 
-          if (!animate || reduceMotion) {
+          if (!animate) {
             icon.style.transition = '';
             icon.style.left = left + 'px';
             icon.style.top = top + 'px';
             return;
           }
 
-          // Springy, staggered glide home (slight overshoot), then a landing glow
-          const delay = index * 45;
-          const duration = moved ? 720 : 0;
-          icon.style.transition =
-            'left ' + duration + 'ms cubic-bezier(0.34, 1.45, 0.64, 1) ' + delay + 'ms, ' +
-            'top ' + duration + 'ms cubic-bezier(0.34, 1.45, 0.64, 1) ' + delay + 'ms';
-          icon.style.left = left + 'px';
-          icon.style.top = top + 'px';
+          const later = function (fn, ms) { icon._resetTimers.push(setTimeout(fn, ms)); };
+          const stagger = index * (reduceMotion ? 40 : 70);
 
-          icon._resetTimer = setTimeout(function () {
+          if (reduceMotion) {
+            // Calm version: a plain ease-out glide, no lift or overshoot
+            later(function () {
+              icon.style.transition = 'left 500ms ease-out, top 500ms ease-out';
+              icon.style.left = left + 'px';
+              icon.style.top = top + 'px';
+            }, stagger);
+            later(function () {
+              icon.style.transition = '';
+              if (sound) sound.pop(index);
+            }, stagger + 520);
+            return;
+          }
+
+          // Travel time scales with distance (min 650ms, max 1100ms)
+          const travel = Math.round(Math.min(1100, Math.max(650, 500 + dist * 0.6)));
+          const lift = 200;
+
+          // 1) lift off
+          later(function () {
+            icon.style.transition = 'transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1)';
+            icon.classList.add('icon-lifting');
+          }, stagger);
+
+          // 2) glide home with a springy overshoot
+          later(function () {
+            icon.style.transition =
+              'left ' + travel + 'ms cubic-bezier(0.34, 1.4, 0.64, 1), ' +
+              'top ' + travel + 'ms cubic-bezier(0.34, 1.4, 0.64, 1), ' +
+              'transform 260ms ease';
+            icon.style.left = left + 'px';
+            icon.style.top = top + 'px';
+          }, stagger + lift);
+
+          // 3) land: drop, glow, pop
+          later(function () {
+            icon.classList.remove('icon-lifting');
+            void icon.offsetWidth;
+            icon.classList.add('icon-landed');
+            if (sound) sound.pop(index);
+          }, stagger + lift + travel - 120);
+
+          // 4) clean up
+          later(function () {
             icon.style.transition = '';
             icon.classList.remove('icon-landed');
-            void icon.offsetWidth; // restart the animation
-            icon.classList.add('icon-landed');
-            setTimeout(function () { icon.classList.remove('icon-landed'); }, 700);
-          }, delay + duration);
+          }, stagger + lift + travel + 600);
         });
       };
 

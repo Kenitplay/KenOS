@@ -64,34 +64,6 @@
   let isTransitioning = false;
   let activeTransitionTimeouts = [];
 
-  // Play subtle futuristic cyber chime (Web Audio API)
-  function playCyberTone(freq, type = 'sine', duration = 0.16) {
-    try {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtx) return;
-      const ctx = new AudioCtx();
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-
-      const now = ctx.currentTime;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.type = type;
-      osc.frequency.setValueAtTime(freq, now);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.25, now + duration);
-      gain.gain.setValueAtTime(0.035, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-      osc.start(now);
-      osc.stop(now + duration);
-    } catch (e) {
-      // Audio not permitted / supported, fail silently
-    }
-  }
-
   // Apply layout mode DOM classes and styles
   function setLayoutMode(mode, userInitiated = false) {
     currentMode = mode;
@@ -165,7 +137,6 @@
   let entranceTimer = null;
   function playEntrance(mode) {
     const body = document.body;
-    if (prefersReducedMotion) return;
 
     // Index icons / hero items so CSS can stagger them
     document.querySelectorAll('#desktopArea .desktop-icon').forEach((el, i) => el.style.setProperty('--i', i));
@@ -181,18 +152,31 @@
     }, 1800);
   }
 
-  // Smooth ease used for both the bar and the % counter so they stay in sync
-  function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  // Smooth ease used for both the bar and the % counter so they stay in sync.
+  // Sine in-out keeps the middle stages readable (no rushing through them).
+  function easeInOutSine(t) {
+    return -(Math.cos(Math.PI * t) - 1) / 2;
   }
 
-  // Swap status text with a quick slide/fade
-  function swapText(el, text) {
+  // Type status text out character by character, with soft key clicks
+  let typeTimer = null;
+  function typeText(el, text, speed) {
     if (!el) return;
-    el.textContent = text;
-    el.classList.remove('text-swap');
-    void el.offsetWidth;
-    el.classList.add('text-swap');
+    clearInterval(typeTimer);
+    if (prefersReducedMotion) {
+      el.textContent = text;
+      return;
+    }
+    let i = 0;
+    el.textContent = '';
+    // Finish typing within ~320ms whatever the length
+    speed = speed || Math.max(6, Math.min(22, 320 / text.length));
+    typeTimer = setInterval(() => {
+      i++;
+      el.textContent = text.slice(0, i);
+      if (i % 2 === 0 && window.KenOSSound) window.KenOSSound.type();
+      if (i >= text.length) clearInterval(typeTimer);
+    }, speed);
   }
 
   // Orchestrate the cinematic switch between modes:
@@ -224,30 +208,37 @@
     const progressFill = document.getElementById('transitionProgressFill');
     const percentText = document.getElementById('transitionPercentText');
 
-    // Timeline (ms). Reduced-motion visitors get a short, simple crossfade.
-    const T = prefersReducedMotion
-      ? { progress: 300, swap: 250, out: 350, done: 600 }
-      : { progress: 1900, swap: 1750, out: 2050, done: 2650 };
+    // Timeline (ms): ~5s cinematic sequence. Reduced-motion visitors get the
+    // same length and sounds, but with calm fades instead of zoom/iris motion.
+    const T = { progress: 3900, swap: 3800, out: 4250, done: 5000 };
 
     const toWeb = targetMode === 'normal';
     const header = toWeb
       ? { code: 'SYS::VIEW_WEB_0x5F', tag: 'WEB_MODE', title: 'WEB PORTFOLIO', icon: 'fas fa-globe' }
       : { code: 'SYS::KERNEL_RESTORE_0x8C', tag: 'DESKTOP_OS', title: 'KENOS DESKTOP OS', icon: 'fas fa-desktop' };
 
-    // Stages fire when the eased progress crosses each threshold
+    // Stages fire when the eased progress crosses each threshold; each has its own tone
     const stages = toWeb ? [
-      { at: 0, desc: 'Disconnecting KenOS Desktop workspace...', stage: 'DISCONNECTING_SESSION', tone: [440, 'sine'] },
-      { at: 0.3, desc: 'Unmounting desktop window managers & widgets...', stage: 'UNMOUNTING_WORKSPACE', tone: [520, 'sine'] },
-      { at: 0.55, desc: 'Compiling responsive web layout & navigation...', stage: 'COMPILING_WEB_COMPONENTS', tone: [660, 'sine'] },
-      { at: 0.8, desc: 'Mounting portfolio sections & DOM viewport...', stage: 'RENDERING_VIEWPORT', tone: [784, 'sine'] },
-      { at: 1, desc: 'Web portfolio interface ready.', stage: 'SYSTEM_SYNCHRONIZED', tone: [880, 'sine', 0.22], ok: true }
+      { at: 0, desc: 'Disconnecting KenOS Desktop workspace...', stage: 'DISCONNECTING_SESSION', tone: 392 },
+      { at: 0.14, desc: 'Saving desktop session state...', stage: 'SAVING_SESSION', tone: 440 },
+      { at: 0.28, desc: 'Unmounting window managers & widgets...', stage: 'UNMOUNTING_WORKSPACE', tone: 494 },
+      { at: 0.42, desc: 'Fetching portfolio content modules...', stage: 'FETCHING_MODULES', tone: 523 },
+      { at: 0.56, desc: 'Compiling responsive web layout & navigation...', stage: 'COMPILING_WEB_COMPONENTS', tone: 587 },
+      { at: 0.7, desc: 'Applying KenOS web theme...', stage: 'APPLYING_THEME', tone: 659 },
+      { at: 0.84, desc: 'Mounting portfolio sections & viewport...', stage: 'RENDERING_VIEWPORT', tone: 740 },
+      { at: 1, desc: 'Web portfolio interface ready.', stage: 'SYSTEM_SYNCHRONIZED', ok: true }
     ] : [
-      { at: 0, desc: 'Suspending Web Portfolio runtime...', stage: 'SUSPENDING_WEB_VIEW', tone: [520, 'triangle'] },
-      { at: 0.3, desc: 'Initializing KenOS Kernel v2.0 subsystems...', stage: 'LOADING_KERNEL_MODULES', tone: [620, 'triangle'] },
-      { at: 0.55, desc: 'Mounting desktop filesystem & taskbar services...', stage: 'MOUNTING_ENVIRONMENT', tone: [740, 'triangle'] },
-      { at: 0.8, desc: 'Aligning desktop coordinates & widgets...', stage: 'ATTACHING_DESKTOP_ENV', tone: [880, 'triangle'] },
-      { at: 1, desc: 'KenOS Desktop OS ready.', stage: 'KERNEL_ATTACHED', tone: [987, 'triangle', 0.22], ok: true }
+      { at: 0, desc: 'Suspending Web Portfolio runtime...', stage: 'SUSPENDING_WEB_VIEW', tone: 330 },
+      { at: 0.14, desc: 'Booting KenOS Kernel v2.0...', stage: 'BOOTING_KERNEL', tone: 392 },
+      { at: 0.28, desc: 'Loading kernel modules & drivers...', stage: 'LOADING_KERNEL_MODULES', tone: 440 },
+      { at: 0.42, desc: 'Mounting desktop filesystem...', stage: 'MOUNTING_FILESYSTEM', tone: 494 },
+      { at: 0.56, desc: 'Starting taskbar & window services...', stage: 'STARTING_SERVICES', tone: 523 },
+      { at: 0.7, desc: 'Restoring widgets: calendar, clock, stats...', stage: 'RESTORING_WIDGETS', tone: 587 },
+      { at: 0.84, desc: 'Aligning desktop icon grid...', stage: 'ATTACHING_DESKTOP_ENV', tone: 659 },
+      { at: 1, desc: 'KenOS Desktop OS ready.', stage: 'KERNEL_ATTACHED', ok: true }
     ];
+    const sfx = window.KenOSSound;
+    const wave = toWeb ? 'sine' : 'triangle';
 
     // HUD setup
     if (icon) icon.className = header.icon;
@@ -255,7 +246,7 @@
     if (targetTitle) targetTitle.textContent = header.title;
     if (modeTag) modeTag.textContent = header.tag;
     if (sysCode) sysCode.textContent = header.code;
-    if (statusDesc) statusDesc.textContent = stages[0].desc;
+    if (statusDesc) statusDesc.textContent = '';
     if (stageText) stageText.textContent = '[ 0% ] ' + stages[0].stage;
     if (progressFill) {
       progressFill.style.transition = 'none';
@@ -289,12 +280,17 @@
 
     // Step 2: one eased timeline drives bar, %, and stage text together
     let stageIndex = 0;
-    playCyberTone(stages[0].tone[0], stages[0].tone[1], stages[0].tone[2] || 0.14);
+    if (sfx) {
+      sfx.whoosh('up', { duration: 0.8, volume: 0.1 });
+      sfx.humStart(toWeb ? 65.41 : 55);
+      sfx.step(stages[0].tone, wave);
+    }
+    typeText(statusDesc, stages[0].desc);
     const startTime = performance.now();
     function tick(now) {
       if (!isTransitioning) return;
       const t = Math.min(1, (now - startTime) / T.progress);
-      const p = easeInOutCubic(t);
+      const p = easeInOutSine(t);
       const pct = Math.round(p * 100);
       if (progressFill) progressFill.style.width = (p * 100).toFixed(2) + '%';
       if (percentText) percentText.textContent = pct + '%';
@@ -302,9 +298,16 @@
       while (stageIndex < stages.length - 1 && p >= stages[stageIndex + 1].at) {
         stageIndex++;
         const st = stages[stageIndex];
-        swapText(statusDesc, st.desc);
-        playCyberTone(st.tone[0], st.tone[1], st.tone[2] || 0.12);
-        if (st.ok) overlay.classList.add('complete');
+        typeText(statusDesc, st.desc);
+        if (st.ok) {
+          overlay.classList.add('complete');
+          if (sfx) {
+            sfx.humStop();
+            sfx.ready(toWeb ? 587.33 : 523.25);
+          }
+        } else if (sfx) {
+          sfx.step(st.tone, wave);
+        }
       }
       if (stageText) {
         const st = stages[stageIndex];
@@ -326,6 +329,7 @@
       document.body.classList.remove('mode-transitioning');
       overlay.classList.remove('active');
       overlay.classList.add('closing');
+      if (sfx) sfx.whoosh('down', { duration: 0.7, volume: 0.07 });
       playEntrance(targetMode);
     }, T.out));
 

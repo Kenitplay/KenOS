@@ -1,9 +1,6 @@
 (function () {
   'use strict';
 
-  const prefersReducedMotion = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // ============================================================
   // BOOT SEQUENCE (OS mode only)
   // Smooth, eased progress driven by requestAnimationFrame, with
@@ -28,33 +25,15 @@
     ['Welcome to KenOS Portfolio!', 'system ready']
   ];
 
-  const BOOT_DURATION = prefersReducedMotion ? 500 : 3400;
+  const BOOT_DURATION = 3400; // same length for everyone; reduced motion only calms the visuals
   const MAX_LOG_LINES = 4;
   let bootFinished = false;
   let bootStepShown = -1;
   let bootStart = 0;
 
-  // Short ascending chime when the desktop appears
+  // Ascending chime when the desktop appears (browsers only allow it after an interaction)
   function playBootSound() {
-    try {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return;
-      const ctx = new Ctx();
-      [[440, 0, 0.1, 0.08], [660, 0.15, 0.25, 0.07], [880, 0.35, 0.5, 0.06], [1100, 0.55, 0.65, 0.05]]
-        .forEach(([freq, start, stop, vol]) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          gain.gain.value = vol;
-          osc.start(ctx.currentTime + start);
-          osc.stop(ctx.currentTime + stop);
-        });
-    } catch (e) {
-      // Audio not permitted / supported
-    }
+    if (window.KenOSSound) window.KenOSSound.boot();
   }
 
   // Progress curve: quick start, a couple of gentle "loading" plateaus, smooth finish
@@ -70,6 +49,7 @@
     line.className = 'boot-line' + (isFinal ? ' boot-line-final' : '');
     line.innerHTML = '<span class="ok">[  OK  ]</span> ' + text;
     bootCommands.appendChild(line);
+    if (window.KenOSSound) window.KenOSSound.type();
     while (bootCommands.children.length > MAX_LOG_LINES) {
       bootCommands.removeChild(bootCommands.firstElementChild);
     }
@@ -111,7 +91,7 @@
     setTimeout(() => {
       bootScreen.classList.add('hidden');
       bootScreen.classList.remove('boot-exit');
-    }, prefersReducedMotion ? 50 : 750);
+    }, 750);
   }
 
   function skipOnKey() {
@@ -143,7 +123,7 @@
         pushBootLine(bootSteps[bootStepShown][1], true);
       }
       bootScreen && bootScreen.classList.add('boot-complete');
-      setTimeout(() => finishBoot(true), prefersReducedMotion ? 50 : 450);
+      setTimeout(() => finishBoot(true), 450);
     }
   }
 
@@ -161,7 +141,7 @@
     // Any key or click skips the boot animation
     document.addEventListener('keydown', skipOnKey);
     bootScreen.addEventListener('click', () => finishBoot(false));
-    setTimeout(() => requestAnimationFrame(bootFrame), prefersReducedMotion ? 0 : 450);
+    setTimeout(() => requestAnimationFrame(bootFrame), 450);
   }
 
   // layout.js decides the mode after this script runs, so start on DOM ready
@@ -183,7 +163,8 @@
     win.style.zIndex = zCounter;
   }
 
-  function hideWindow(win) {
+  function hideWindow(win, silent) {
+    if (!silent && win.style.display !== 'none' && window.KenOSSound) window.KenOSSound.windowClose();
     win.style.display = 'none';
     win.classList.remove('fullscreen');
   }
@@ -370,6 +351,7 @@
   }
 
   function showWindow(win) {
+    if (window.KenOSSound) window.KenOSSound.windowOpen();
     win.style.display = 'flex';
     win.classList.remove('fullscreen');
     bringToFront(win);
@@ -448,9 +430,36 @@
   if (desktop) {
     desktop.addEventListener('dblclick', e => {
       if (e.target === desktop) {
-        Object.values(windows).forEach(hideWindow);
+        Object.values(windows).forEach(win => hideWindow(win));
       }
     });
+  }
+
+  // Taskbar speaker button: mute / unmute all KenOS sounds
+  const soundBtn = document.getElementById('soundToggleBtn');
+  function renderSoundBtn() {
+    if (!soundBtn || !window.KenOSSound) return;
+    const isMuted = window.KenOSSound.muted;
+    const icon = soundBtn.querySelector('i');
+    if (icon) icon.className = isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+    const label = isMuted ? 'Unmute sounds' : 'Mute sounds';
+    soundBtn.title = label;
+    soundBtn.setAttribute('aria-label', label);
+    soundBtn.setAttribute('aria-pressed', isMuted ? 'true' : 'false');
+    soundBtn.classList.toggle('is-muted', isMuted);
+  }
+  if (soundBtn) {
+    soundBtn.addEventListener('click', () => {
+      if (window.KenOSSound) window.KenOSSound.toggleMute();
+    });
+    soundBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        soundBtn.click();
+      }
+    });
+    document.addEventListener('kenos:mute', renderSoundBtn);
+    renderSoundBtn();
   }
 
   // Reset-icons button is a div: give it keyboard activation too

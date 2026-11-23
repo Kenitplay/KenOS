@@ -206,14 +206,12 @@ body.layout-desktop .skip-link {
   color: #ffffff;
 }
 
-/* ---------- Reduced motion ---------- */
+/* ---------- Reduced motion ----------
+   Visitors who ask the OS for less motion still get the key feedback
+   animations (calmer versions live in motion.css); only constant decorative
+   movement is switched off here. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html {
     scroll-behavior: auto !important;
   }
 
@@ -222,8 +220,8 @@ body.layout-desktop .skip-link {
   }
 
   .reveal {
-    opacity: 1;
     transform: none;
+    transition: opacity 0.5s ease var(--reveal-delay, 0ms);
   }
 }
 
