@@ -31,10 +31,8 @@
   let bootStepShown = -1;
   let bootStart = 0;
 
-  // Ascending chime when the desktop appears (browsers only allow it after an interaction)
-  function playBootSound() {
-    if (window.KenOSSound) window.KenOSSound.boot();
-  }
+  const sfx = () => window.KenOSSound;
+  let lastChatter = 0;
 
   // Progress curve: quick start, a couple of gentle "loading" plateaus, smooth finish
   function bootCurve(t) {
@@ -43,13 +41,15 @@
     return Math.min(1, Math.max(0, ease + wobble));
   }
 
-  function pushBootLine(text, isFinal) {
+  function pushBootLine(text, index) {
     if (!bootCommands) return;
+    const isFinal = index === bootSteps.length - 1;
     const line = document.createElement('div');
     line.className = 'boot-line' + (isFinal ? ' boot-line-final' : '');
     line.innerHTML = '<span class="ok">[  OK  ]</span> ' + text;
     bootCommands.appendChild(line);
-    if (window.KenOSSound) window.KenOSSound.type();
+    // Disk-seek clicks + a tone that climbs with each line (the last one is the chord)
+    if (sfx() && !isFinal) sfx().bootStep(index, bootSteps.length);
     while (bootCommands.children.length > MAX_LOG_LINES) {
       bootCommands.removeChild(bootCommands.firstElementChild);
     }
@@ -63,7 +63,7 @@
     bootStatusText.classList.add('boot-status-swap');
   }
 
-  function revealAfterBoot(withSound) {
+  function revealAfterBoot() {
     if (document.body.classList.contains('layout-normal')) {
       const normalSite = document.getElementById('normalSite');
       if (normalSite) normalSite.style.display = 'block';
@@ -72,22 +72,28 @@
       if (desktop) desktop.classList.add('visible');
       if (taskbar) taskbar.classList.add('visible');
       if (window.KenOSMotion) window.KenOSMotion.playEntrance('desktop');
-      if (withSound) playBootSound();
     }
   }
 
-  function finishBoot(withSound) {
+  function finishBoot() {
     if (bootFinished || !bootScreen) return;
     bootFinished = true;
     document.removeEventListener('keydown', skipOnKey);
+    document.removeEventListener('keydown', powerOnFromKey);
 
     if (bootScreen.style.display === 'none' || bootScreen.classList.contains('hidden')) {
       return; // web mode: boot screen was never shown
     }
 
+    if (sfx()) {
+      sfx().humStop();
+      sfx().bootExit();
+    }
+
     // Zoom-through exit; the desktop cascades in underneath
+    bootScreen.classList.remove('boot-awaiting', 'boot-running');
     bootScreen.classList.add('boot-exit');
-    revealAfterBoot(withSound);
+    revealAfterBoot();
     setTimeout(() => {
       bootScreen.classList.add('hidden');
       bootScreen.classList.remove('boot-exit');
@@ -95,7 +101,7 @@
   }
 
   function skipOnKey() {
-    finishBoot(false);
+    finishBoot();
   }
 
   function bootFrame(now) {
@@ -111,7 +117,13 @@
     while (bootStepShown < step) {
       bootStepShown++;
       setBootStatus(bootSteps[bootStepShown][0]);
-      pushBootLine(bootSteps[bootStepShown][1], bootStepShown === bootSteps.length - 1);
+      pushBootLine(bootSteps[bootStepShown][1], bootStepShown);
+    }
+
+    // Quiet "computing" chatter at irregular intervals
+    if (sfx() && t < 0.92 && now - lastChatter > 70 + Math.random() * 160) {
+      lastChatter = now;
+      sfx().chatter();
     }
 
     if (t < 1) {
@@ -120,11 +132,51 @@
       if (bootStepShown < bootSteps.length - 1) {
         bootStepShown = bootSteps.length - 1;
         setBootStatus(bootSteps[bootStepShown][0]);
-        pushBootLine(bootSteps[bootStepShown][1], true);
+        pushBootLine(bootSteps[bootStepShown][1], bootStepShown);
       }
       bootScreen && bootScreen.classList.add('boot-complete');
-      setTimeout(() => finishBoot(true), 450);
+      // Completion chord lands with the logo's green flash
+      if (sfx()) {
+        sfx().humStop();
+        sfx().boot();
+      }
+      setTimeout(finishBoot, 700);
     }
+  }
+
+  // ---- Power-on step ----
+  // Browsers block sound until the visitor interacts, so OS mode starts at a power
+  // button; that press unlocks audio and starts the boot (skipped if sound is already allowed).
+  let bootStarted = false;
+
+  function runBoot() {
+    if (bootStarted || bootFinished) return;
+    if (bootScreen.style.display === 'none' || bootScreen.classList.contains('hidden')) return;
+    bootStarted = true;
+    document.removeEventListener('keydown', powerOnFromKey);
+    bootScreen.classList.remove('boot-awaiting');
+    bootScreen.classList.add('boot-running');
+
+    if (sfx()) {
+      sfx().powerOn();
+      sfx().humStart(41.2);
+    }
+
+    // After power-on, any key or click skips the rest (delay so the power-on press doesn't count)
+    setTimeout(() => {
+      if (bootFinished) return;
+      document.addEventListener('keydown', skipOnKey);
+      bootScreen.addEventListener('click', finishBoot);
+    }, 600);
+
+    setTimeout(() => requestAnimationFrame(bootFrame), 450);
+  }
+
+  function powerOnFromKey(e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'Tab') return;
+    e.preventDefault();
+    runBoot();
   }
 
   function startBoot() {
@@ -134,14 +186,32 @@
       bootFinished = true;
       bootScreen.classList.add('hidden');
       bootScreen.style.display = 'none';
-      revealAfterBoot(false);
+      revealAfterBoot();
       return;
     }
     if (bootCommands) bootCommands.innerHTML = '';
-    // Any key or click skips the boot animation
-    document.addEventListener('keydown', skipOnKey);
-    bootScreen.addEventListener('click', () => finishBoot(false));
-    setTimeout(() => requestAnimationFrame(bootFrame), 450);
+
+    // Sound already allowed (e.g. returning visitor the browser trusts): boot straight away
+    if (sfx() && sfx().canPlay()) {
+      runBoot();
+      return;
+    }
+
+    bootScreen.classList.add('boot-awaiting');
+    const powerBtn = document.getElementById('bootPowerBtn');
+    if (powerBtn) {
+      powerBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        runBoot();
+      });
+      setTimeout(() => powerBtn.focus({ preventScroll: true }), 50);
+    }
+    bootScreen.addEventListener('pointerdown', function onScreenPress(e) {
+      if (e.target.closest && e.target.closest('#bootPowerBtn')) return;
+      bootScreen.removeEventListener('pointerdown', onScreenPress);
+      runBoot();
+    });
+    document.addEventListener('keydown', powerOnFromKey);
   }
 
   // layout.js decides the mode after this script runs, so start on DOM ready

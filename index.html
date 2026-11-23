@@ -92,7 +92,7 @@
   </div>
 
   <!-- ========== BOOT SCREEN ========== -->
-  <div id="bootScreen" title="Click or press any key to skip">
+  <div id="bootScreen">
     <div class="boot-logo">
       <span class="boot-ring boot-ring-1" aria-hidden="true"></span>
       <span class="boot-ring boot-ring-2" aria-hidden="true"></span>
@@ -100,6 +100,11 @@
     </div>
     <div class="boot-title">Ken<span>OS</span></div>
     <div class="boot-subtitle">v2.0 · portfolio edition</div>
+    <button type="button" class="boot-power" id="bootPowerBtn" aria-label="Power on KenOS">
+      <span class="boot-power-icon"><i class="fas fa-power-off"></i></span>
+      <span class="boot-power-label">Press any key or click to power on</span>
+      <span class="boot-power-hint"><i class="fas fa-volume-up"></i> sound on</span>
+    </button>
     <div class="boot-progress">
       <div class="boot-progress-bar" id="bootProgressBar"></div>
     </div>
