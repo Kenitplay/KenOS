@@ -249,6 +249,115 @@
   visibility: hidden;
 }
 
+/* ---------- Power-on step (unlocks sound) ---------- */
+.boot-power {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 4px;
+  padding: 10px 18px;
+  background: none;
+  border: none;
+  color: #66e0ff;
+  font-family: 'Courier New', monospace;
+  cursor: pointer;
+}
+
+#bootScreen.boot-awaiting .boot-power {
+  display: flex;
+  animation: bootFadeUp 0.7s var(--ease-out-expo) 0.6s both;
+}
+
+.boot-power-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #00d4ff;
+  border: 2px solid rgba(0, 212, 255, 0.55);
+  background: rgba(0, 212, 255, 0.06);
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.25);
+  animation: powerPulse 1.8s ease-in-out infinite;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.boot-power:hover .boot-power-icon,
+.boot-power:focus-visible .boot-power-icon {
+  transform: scale(1.08);
+  background: rgba(0, 212, 255, 0.16);
+  color: #ffffff;
+}
+
+.boot-power:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.boot-power:focus-visible .boot-power-icon {
+  outline: 2px solid #00d4ff;
+  outline-offset: 4px;
+}
+
+@keyframes powerPulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(0, 212, 255, 0.2), 0 0 0 0 rgba(0, 212, 255, 0.35); }
+  50% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.45), 0 0 0 14px rgba(0, 212, 255, 0); }
+}
+
+.boot-power-label {
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  animation: blink-soft 2.4s ease-in-out infinite;
+}
+
+.boot-power-hint {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(102, 224, 255, 0.45);
+}
+
+@keyframes blink-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* While waiting: no progress/log yet, logo idles dimmer */
+#bootScreen.boot-awaiting .boot-progress,
+#bootScreen.boot-awaiting .boot-percent,
+#bootScreen.boot-awaiting .boot-status,
+#bootScreen.boot-awaiting .boot-commands {
+  display: none;
+}
+
+#bootScreen.boot-awaiting .boot-logo i {
+  opacity: 0.55;
+}
+
+#bootScreen.boot-awaiting .boot-ring {
+  animation-duration: 0.8s, 7s;
+}
+
+/* Power-on: logo surges, screen flickers on like a CRT */
+#bootScreen.boot-running .boot-logo i {
+  animation:
+    bootLogoIn 0.9s var(--ease-out-expo) both,
+    bootLogoBreathe 2.4s ease-in-out 0.9s infinite;
+}
+
+#bootScreen.boot-running {
+  animation: crtOn 0.5s ease-out;
+}
+
+@keyframes crtOn {
+  0% { filter: brightness(2.2) contrast(1.4); }
+  15% { filter: brightness(0.6); }
+  30% { filter: brightness(1.6); }
+  100% { filter: none; }
+}
+
 /* ============================================================
    2. OS <-> WEB TRANSITION OVERLAY (circular reveal)
    ============================================================ */
@@ -595,6 +704,9 @@ body.enter-normal .floating-layout-pill {
 
   /* Constant decorative motion off */
   #bootScreen::before,
+  #bootScreen.boot-running,
+  .boot-power-icon,
+  .boot-power-label,
   .boot-ring,
   #bootScreen .boot-progress::after,
   .transition-ambient-glow,

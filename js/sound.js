@@ -258,9 +258,52 @@
       tone(700, { type: 'sine', duration: 0.12, volume: 0.03, glideTo: 350 });
     },
 
-    // Boot chime (only audible if the visitor has already interacted)
+    // ---------- OS boot screen ----------
+
+    // True when the browser will actually play sound right now
+    canPlay() {
+      const c = getCtx();
+      return !!c && c.state === 'running';
+    },
+
+    // Power button pressed: low thump + noise burst + rising fan/CRT whine
+    powerOn() {
+      const c = ready();
+      if (!c) return;
+      tone(90, { type: 'sine', duration: 0.5, volume: 0.12, glideTo: 38, attack: 0.004 });
+      tone(180, { type: 'triangle', duration: 0.18, volume: 0.04, glideTo: 90 });
+      whoosh('up', { duration: 0.35, volume: 0.06 });
+      click({ volume: 0.06, freq: 800 });
+      tone(220, { type: 'sine', duration: 1.6, volume: 0.012, glideTo: 2400, delay: 0.15, attack: 0.4 });
+      tone(330, { type: 'sine', duration: 1.6, volume: 0.008, glideTo: 3600, delay: 0.2, attack: 0.4 });
+    },
+
+    // Each boot-log line: disk-seek clicks + a step tone that rises with progress
+    bootStep(index, total) {
+      const scale = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
+      const f = scale[Math.min(scale.length - 1, Math.round((index / Math.max(1, total - 1)) * (scale.length - 1)))];
+      tone(f, { type: 'triangle', duration: 0.16, volume: 0.04 });
+      tone(f * 2, { type: 'sine', duration: 0.1, volume: 0.012, delay: 0.04 });
+      for (let i = 0; i < 3; i++) {
+        click({ volume: 0.025 + Math.random() * 0.015, freq: 1200 + Math.random() * 2000, delay: 0.02 + i * (0.03 + Math.random() * 0.03) });
+      }
+    },
+
+    // Quiet random "computing" chirps while loading
+    chatter() {
+      const f = 1400 + Math.random() * 1800;
+      tone(f, { type: 'square', duration: 0.03 + Math.random() * 0.03, volume: 0.006 + Math.random() * 0.006 });
+    },
+
+    // Boot complete: bright chord + shimmer
     boot() {
       Sound.ready(440);
+      tone(1760, { type: 'sine', duration: 0.9, volume: 0.015, delay: 0.32, glideTo: 2637 });
+    },
+
+    // Boot screen zooms away into the desktop
+    bootExit() {
+      whoosh('down', { duration: 0.7, volume: 0.07 });
     }
   };
 
