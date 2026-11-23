@@ -1,470 +1,407 @@
-(function() {
-      // ----- BOOT SEQUENCE -----
-      const bootScreen = document.getElementById('bootScreen');
-      const bootProgress = document.getElementById('bootProgressBar');
-      const bootStatusText = document.getElementById('bootStatusText');
-      const bootCommandText = document.getElementById('bootCommandText');
-      const bootCommandText2 = document.getElementById('bootCommandText2');
-      const desktop = document.getElementById('desktopArea');
-      const taskbar = document.getElementById('taskbar');
+(function () {
+  'use strict';
 
-      const bootMessages = [
-        'Loading KenOS kernel...',
-        'Initializing hardware...',
-        'Setting up network interfaces...',
-        'Mounting filesystems...',
-        'Starting system services...',
-        'Loading user profile...',
-        'Starting desktop environment...',
-        'Welcome to KenOS Portfolio!'
-      ];
+  const prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      const bootCommands = [
-        '[  OK  ] loading kernel modules',
-        '[  OK  ] initializing hardware',
-        '[  OK  ] setting up network interfaces',
-        '[  OK  ] mounting filesystems',
-        '[  OK  ] starting system services',
-        '[  OK  ] loading user profile',
-        '[  OK  ] starting desktop environment',
-        '[  OK  ] system ready'
-      ];
+  // ============================================================
+  // BOOT SEQUENCE
+  // ============================================================
+  const bootScreen = document.getElementById('bootScreen');
+  const bootProgress = document.getElementById('bootProgressBar');
+  const bootStatusText = document.getElementById('bootStatusText');
+  const bootCommandText = document.getElementById('bootCommandText');
+  const bootCommandText2 = document.getElementById('bootCommandText2');
+  const desktop = document.getElementById('desktopArea');
+  const taskbar = document.getElementById('taskbar');
 
-      let progress = 0;
-      let messageIndex = 0;
-      let audioContext = null;
+  const bootMessages = [
+    'Loading KenOS kernel...',
+    'Initializing hardware...',
+    'Setting up network interfaces...',
+    'Mounting filesystems...',
+    'Starting system services...',
+    'Loading user profile...',
+    'Starting desktop environment...',
+    'Welcome to KenOS Portfolio!'
+  ];
 
-      // Create audio context and play a boot sound
-      function playBootSound() {
-        try {
-          audioContext = new(window.AudioContext || window.webkitAudioContext)();
+  const bootCommands = [
+    'loading kernel modules',
+    'initializing hardware',
+    'setting up network interfaces',
+    'mounting filesystems',
+    'starting system services',
+    'loading user profile',
+    'starting desktop environment',
+    'system ready'
+  ].map(cmd => '<span class="ok">[  OK  ]</span> ' + cmd);
 
-          // First beep - lower tone
-          const osc1 = audioContext.createOscillator();
-          const gain1 = audioContext.createGain();
-          osc1.connect(gain1);
-          gain1.connect(audioContext.destination);
-          osc1.frequency.value = 440;
-          osc1.type = 'sine';
-          gain1.gain.value = 0.08;
-          osc1.start();
-          osc1.stop(audioContext.currentTime + 0.1);
+  let progress = 0;
+  let messageIndex = 0;
+  let bootFinished = false;
 
-          // Second beep - higher tone
-          const osc2 = audioContext.createOscillator();
-          const gain2 = audioContext.createGain();
-          osc2.connect(gain2);
-          gain2.connect(audioContext.destination);
-          osc2.frequency.value = 660;
-          osc2.type = 'sine';
-          gain2.gain.value = 0.07;
-          osc2.start(audioContext.currentTime + 0.15);
-          osc2.stop(audioContext.currentTime + 0.25);
+  // Short ascending chime when the desktop appears
+  function playBootSound() {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      const ctx = new Ctx();
+      [[440, 0, 0.1, 0.08], [660, 0.15, 0.25, 0.07], [880, 0.35, 0.5, 0.06], [1100, 0.55, 0.65, 0.05]]
+        .forEach(([freq, start, stop, vol]) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.value = vol;
+          osc.start(ctx.currentTime + start);
+          osc.stop(ctx.currentTime + stop);
+        });
+    } catch (e) {
+      // Audio not permitted / supported
+    }
+  }
 
-          // Third beep - success tone (nice chord)
-          const osc3 = audioContext.createOscillator();
-          const gain3 = audioContext.createGain();
-          osc3.connect(gain3);
-          gain3.connect(audioContext.destination);
-          osc3.frequency.value = 880;
-          osc3.type = 'sine';
-          gain3.gain.value = 0.06;
-          osc3.start(audioContext.currentTime + 0.35);
-          osc3.stop(audioContext.currentTime + 0.50);
+  function finishBoot(withSound) {
+    if (bootFinished || !bootScreen) return;
+    bootFinished = true;
+    bootScreen.classList.add('hidden');
+    if (document.body.classList.contains('layout-normal')) {
+      const normalSite = document.getElementById('normalSite');
+      if (normalSite) normalSite.style.display = 'block';
+    } else {
+      if (desktop) desktop.classList.add('visible');
+      if (taskbar) taskbar.classList.add('visible');
+      if (withSound) playBootSound();
+    }
+    document.removeEventListener('keydown', skipOnKey);
+  }
 
-          // Fourth beep - slight higher for final
-          const osc4 = audioContext.createOscillator();
-          const gain4 = audioContext.createGain();
-          osc4.connect(gain4);
-          gain4.connect(audioContext.destination);
-          osc4.frequency.value = 1100;
-          osc4.type = 'sine';
-          gain4.gain.value = 0.05;
-          osc4.start(audioContext.currentTime + 0.55);
-          osc4.stop(audioContext.currentTime + 0.65);
+  function skipOnKey() {
+    finishBoot(false);
+  }
 
-          console.log('🔊 KenOS boot sound played!');
-        } catch (e) {
-          console.warn('Audio not supported:', e);
-        }
+  function updateBootScreen() {
+    if (bootFinished) return;
+    // Reduced-motion visitors get a much quicker boot
+    progress += prefersReducedMotion ? 25 : Math.random() * 2.5 + 1;
+    if (progress > 100) progress = 100;
+
+    if (bootProgress) bootProgress.style.width = progress + '%';
+
+    if (messageIndex < bootMessages.length) {
+      if (bootStatusText) bootStatusText.textContent = bootMessages[messageIndex];
+      if (bootCommandText) bootCommandText.innerHTML = bootCommands[messageIndex];
+      if (bootCommandText2 && messageIndex > 0) bootCommandText2.innerHTML = bootCommands[messageIndex - 1];
+      messageIndex++;
+    }
+
+    if (progress < 100) {
+      setTimeout(updateBootScreen, Math.random() * 120 + 80);
+    } else {
+      setTimeout(() => finishBoot(true), 500);
+    }
+  }
+
+  if (bootScreen && bootScreen.style.display !== 'none') {
+    // Any key or click skips the boot animation
+    document.addEventListener('keydown', skipOnKey);
+    bootScreen.addEventListener('click', () => finishBoot(false));
+  }
+  setTimeout(updateBootScreen, prefersReducedMotion ? 100 : 500);
+
+  // ============================================================
+  // WINDOW MANAGER
+  // ============================================================
+  const container = document.getElementById('windowContainer');
+  const windows = {};          // iconId -> window element
+  let zCounter = 1000;         // monotonically increasing stack order
+
+  function bringToFront(win) {
+    zCounter += 1;
+    win.style.zIndex = zCounter;
+  }
+
+  function hideWindow(win) {
+    win.style.display = 'none';
+    win.classList.remove('fullscreen');
+  }
+
+  function topVisibleWindow() {
+    let top = null;
+    Object.values(windows).forEach(win => {
+      if (win.style.display === 'none') return;
+      if (!top || (parseInt(win.style.zIndex, 10) || 0) > (parseInt(top.style.zIndex, 10) || 0)) {
+        top = win;
       }
+    });
+    return top;
+  }
 
-      function updateBootScreen() {
-        progress += Math.random() * 2.5 + 1;
-        if (progress > 100) progress = 100;
+  function setupWindow(windowEl) {
+    windowEl.setAttribute('role', 'dialog');
+    const titleEl = windowEl.querySelector('.window-title');
+    if (titleEl) windowEl.setAttribute('aria-label', titleEl.textContent.trim());
 
-        bootProgress.style.width = progress + '%';
+    // Clicking anywhere in a window raises it
+    windowEl.addEventListener('mousedown', () => bringToFront(windowEl));
+    windowEl.addEventListener('touchstart', () => bringToFront(windowEl), { passive: true });
 
-        if (messageIndex < bootMessages.length) {
-          bootStatusText.textContent = bootMessages[messageIndex];
-          if (messageIndex < bootCommands.length) {
-            bootCommandText.innerHTML = bootCommands[messageIndex];
-            if (messageIndex > 0) {
-              bootCommandText2.innerHTML = bootCommands[messageIndex - 1];
-            }
-          }
-          messageIndex++;
+    // Make the traffic-light controls real, keyboard-reachable buttons
+    [
+      ['#closeWindowBtn', 'Close window'],
+      ['#minimizeWindowBtn', 'Minimize window'],
+      ['#zoomWindowBtn', 'Toggle full screen']
+    ].forEach(([sel, label]) => {
+      const btn = windowEl.querySelector(sel);
+      if (!btn) return;
+      btn.setAttribute('role', 'button');
+      btn.setAttribute('tabindex', '0');
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
         }
+      });
+    });
 
-        if (progress < 100) {
-          const delay = Math.random() * 120 + 80;
-          setTimeout(updateBootScreen, delay);
+    const closeBtn = windowEl.querySelector('#closeWindowBtn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        hideWindow(windowEl);
+      });
+    }
+
+    const minBtn = windowEl.querySelector('#minimizeWindowBtn');
+    if (minBtn) {
+      minBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        hideWindow(windowEl);
+      });
+    }
+
+    const zoomBtn = windowEl.querySelector('#zoomWindowBtn');
+    if (zoomBtn) {
+      zoomBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (!windowEl.classList.contains('fullscreen')) {
+          // Remember current geometry before going full screen
+          windowEl.dataset.origWidth = windowEl.style.width || '700px';
+          windowEl.dataset.origHeight = windowEl.style.height || 'auto';
+          windowEl.dataset.origTop = windowEl.style.top || '';
+          windowEl.dataset.origLeft = windowEl.style.left || '';
+          windowEl.classList.add('fullscreen');
         } else {
-          // Boot complete
-          setTimeout(() => {
-            bootScreen.classList.add('hidden');
-            const normalSite = document.getElementById('normalSite');
-            if (document.body.classList.contains('layout-normal')) {
-              if (normalSite) normalSite.style.display = 'block';
-            } else {
-              desktop.classList.add('visible');
-              taskbar.classList.add('visible');
-              playBootSound();
-            }
-            console.log('✅ KenOS boot complete!');
-          }, 500);
+          windowEl.classList.remove('fullscreen');
+          windowEl.style.width = windowEl.dataset.origWidth || '700px';
+          windowEl.style.height = windowEl.dataset.origHeight || 'auto';
+          windowEl.style.top = windowEl.dataset.origTop || '';
+          windowEl.style.left = windowEl.dataset.origLeft || '';
         }
+        bringToFront(windowEl);
+      });
+    }
+
+    // Double-click title bar toggles full screen, like a real OS
+    const header = windowEl.querySelector('#windowHeader');
+    if (header && zoomBtn) {
+      header.addEventListener('dblclick', e => {
+        if (e.target.closest('.window-controls')) return;
+        zoomBtn.click();
+      });
+    }
+
+    // ----- Resize (drag bottom-right corner) -----
+    const resizeHandle = windowEl.querySelector('.resize-handle');
+    if (resizeHandle) {
+      let isResizing = false;
+      let startX, startY, startWidth, startHeight;
+
+      resizeHandle.addEventListener('mousedown', e => {
+        if (windowEl.classList.contains('fullscreen')) return;
+        e.stopPropagation();
+        isResizing = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        const cs = getComputedStyle(windowEl);
+        startWidth = parseInt(cs.width, 10);
+        startHeight = parseInt(cs.height, 10);
+        document.body.style.cursor = 'nwse-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!isResizing) return;
+        windowEl.style.width = Math.max(300, startWidth + (e.clientX - startX)) + 'px';
+        windowEl.style.height = Math.max(200, startHeight + (e.clientY - startY)) + 'px';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!isResizing) return;
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      });
+    }
+
+    // ----- Drag by title bar -----
+    if (header) {
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      header.addEventListener('mousedown', e => {
+        if (e.button !== 0) return;
+        if (e.target.closest('.window-controls')) return;
+        if (windowEl.style.display === 'none') return;
+        if (windowEl.classList.contains('fullscreen')) return;
+        isDragging = true;
+        const rect = windowEl.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        header.style.cursor = 'grabbing';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        const maxX = window.innerWidth - 200;
+        const maxY = window.innerHeight - 180;
+        windowEl.style.left = Math.min(Math.max(e.clientX - offsetX, 10), maxX) + 'px';
+        windowEl.style.top = Math.min(Math.max(e.clientY - offsetY, 10), maxY) + 'px';
+        windowEl.style.right = 'auto';
+        windowEl.style.bottom = 'auto';
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        header.style.cursor = '';
+        document.body.style.userSelect = '';
+      });
+    }
+  }
+
+  // ----- Component loader (fetch external HTML) -----
+  function loadComponent(url, callback) {
+    fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
+      })
+      .then(html => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html.trim();
+        callback(wrapper.firstElementChild);
+      })
+      .catch(err => {
+        console.warn('Component load failed:', err);
+        const fallback = document.createElement('div');
+        fallback.innerHTML =
+          `<div style="background:rgba(0,212,255,0.03);padding:20px;border-radius:6px;color:#00d4ff;border:1px solid rgba(0,212,255,0.06);font-family:'Courier New',monospace;">⚠️ Could not load component. Please check network.</div>`;
+        callback(fallback.firstElementChild);
+      });
+  }
+
+  function showWindow(win) {
+    win.style.display = 'flex';
+    win.classList.remove('fullscreen');
+    bringToFront(win);
+    const closeBtn = win.querySelector('#closeWindowBtn');
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+  }
+
+  const loading = {};
+  function openWindow(iconId, url) {
+    if (windows[iconId]) {
+      showWindow(windows[iconId]);
+      return;
+    }
+    if (loading[iconId]) return; // ignore repeat clicks while fetching
+    loading[iconId] = true;
+    loadComponent(url, element => {
+      loading[iconId] = false;
+      windows[iconId] = element;
+      container.appendChild(element);
+      setupWindow(element);
+      showWindow(element);
+    });
+  }
+
+  const windowComponents = {
+    experienceIcon: 'html/experience-component.html',
+    projectsIcon: 'html/projects-component.html',
+    toolsIcon: 'html/tools-component.html',
+    whoamiIcon: 'html/whoami-component.html',
+    certificatesIcon: 'html/certificates-component.html',
+    contactIcon: 'html/contact-component.html'
+  };
+
+  Object.keys(windowComponents).forEach(iconId => {
+    const icon = document.getElementById(iconId);
+    if (!icon) return;
+    icon.addEventListener('dblclick', e => {
+      e.stopPropagation();
+      openWindow(iconId, windowComponents[iconId]);
+    });
+  });
+
+  // Link-style desktop icons (GitHub, Resume) open on single click
+  document.querySelectorAll('.desktop-icon[data-href]').forEach(icon => {
+    icon.addEventListener('click', () => {
+      window.open(icon.dataset.href, '_blank', 'noopener');
+    });
+  });
+
+  // Keyboard: Enter / Space on a focused desktop icon opens it
+  document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      if (icon.dataset.href) {
+        window.open(icon.dataset.href, '_blank', 'noopener');
+      } else if (windowComponents[icon.id]) {
+        openWindow(icon.id, windowComponents[icon.id]);
       }
+    });
+  });
 
-      // Start boot sequence after a short delay
-      setTimeout(updateBootScreen, 500);
+  // Keyboard: Escape closes the top-most window
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || !bootFinished) return;
+    const top = topVisibleWindow();
+    if (top) {
+      hideWindow(top);
+      const iconId = Object.keys(windows).find(k => windows[k] === top);
+      const icon = iconId && document.getElementById(iconId);
+      if (icon) icon.focus({ preventScroll: true });
+    }
+  });
 
-      // ----- CLOCK -----
-      function updateClock() {
-        const now = new Date();
-        let h = now.getHours();
-        const m = now.getMinutes();
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        h = h % 12 || 12;
-        document.getElementById('liveTime').textContent = `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+  // Double-click empty desktop → close all windows
+  if (desktop) {
+    desktop.addEventListener('dblclick', e => {
+      if (e.target === desktop) {
+        Object.values(windows).forEach(hideWindow);
       }
-      updateClock();
-      setInterval(updateClock, 1000);
+    });
+  }
 
-      // ----- HELPERS: make window draggable & wire controls -----
-      function setupWindow(windowEl) {
-        // Close
-        const closeBtn = windowEl.querySelector('#closeWindowBtn');
-        if (closeBtn) {
-          closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            windowEl.style.display = 'none';
-            windowEl.classList.remove('fullscreen');
-          });
-        }
-
-        // Minimize (hide)
-        const minBtn = windowEl.querySelector('#minimizeWindowBtn');
-        if (minBtn) {
-          minBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            windowEl.style.display = 'none';
-            windowEl.classList.remove('fullscreen');
-          });
-        }
-
-        // Zoom (toggle fullscreen)
-        const zoomBtn = windowEl.querySelector('#zoomWindowBtn');
-        if (zoomBtn) {
-          zoomBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            // Toggle fullscreen class
-            windowEl.classList.toggle('fullscreen');
-
-            // If not fullscreen, restore original size
-            if (!windowEl.classList.contains('fullscreen')) {
-              const w = windowEl.dataset.origWidth || '700px';
-              const h = windowEl.dataset.origHeight || 'auto';
-              windowEl.style.width = w;
-              windowEl.style.height = h;
-              windowEl.style.top = '70px';
-              windowEl.style.left = '100px';
-            } else {
-              // Store current dimensions before fullscreen
-              if (!windowEl.dataset.origWidth) {
-                windowEl.dataset.origWidth = windowEl.style.width || '700px';
-              }
-              if (!windowEl.dataset.origHeight) {
-                windowEl.dataset.origHeight = windowEl.style.height || 'auto';
-              }
-            }
-          });
-        }
-
-        // ----- Resize functionality (drag from bottom-right corner) -----
-        const resizeHandle = windowEl.querySelector('.resize-handle');
-        if (resizeHandle) {
-          let isResizing = false;
-          let startX, startY, startWidth, startHeight;
-
-          resizeHandle.addEventListener('mousedown', function(e) {
-            if (windowEl.classList.contains('fullscreen')) return;
-            e.stopPropagation();
-            isResizing = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startWidth = parseInt(document.defaultView.getComputedStyle(windowEl).width, 10);
-            startHeight = parseInt(document.defaultView.getComputedStyle(windowEl).height, 10);
-            document.body.style.cursor = 'nwse-resize';
-            document.body.style.userSelect = 'none';
-            e.preventDefault();
-          });
-
-          document.addEventListener('mousemove', function(e) {
-            if (!isResizing) return;
-            const newWidth = Math.max(300, startWidth + (e.clientX - startX));
-            const newHeight = Math.max(200, startHeight + (e.clientY - startY));
-            windowEl.style.width = newWidth + 'px';
-            windowEl.style.height = newHeight + 'px';
-          });
-
-          document.addEventListener('mouseup', function() {
-            if (isResizing) {
-              isResizing = false;
-              document.body.style.cursor = '';
-              document.body.style.userSelect = '';
-            }
-          });
-        }
-
-        // ----- Drag functionality -----
-        const header = windowEl.querySelector('#windowHeader');
-        if (header) {
-          let isDragging = false;
-          let offsetX = 0,
-            offsetY = 0;
-
-          header.addEventListener('mousedown', function(e) {
-            if (e.button !== 0) return;
-            if (windowEl.style.display === 'none') return;
-            if (windowEl.classList.contains('fullscreen')) return;
-            isDragging = true;
-            const rect = windowEl.getBoundingClientRect();
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-            windowEl.style.cursor = 'grabbing';
-            document.body.style.userSelect = 'none';
-            e.preventDefault();
-          });
-
-          document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            const newLeft = e.clientX - offsetX;
-            const newTop = e.clientY - offsetY;
-            const maxX = window.innerWidth - 200;
-            const maxY = window.innerHeight - 180;
-            windowEl.style.left = Math.min(Math.max(newLeft, 10), maxX) + 'px';
-            windowEl.style.top = Math.min(Math.max(newTop, 10), maxY) + 'px';
-            windowEl.style.right = 'auto';
-            windowEl.style.bottom = 'auto';
-          });
-
-          document.addEventListener('mouseup', function() {
-            if (isDragging) {
-              isDragging = false;
-              windowEl.style.cursor = '';
-              document.body.style.userSelect = '';
-            }
-          });
-        }
+  // Reset-icons button is a div: give it keyboard activation too
+  const resetBtn = document.getElementById('resetIconsBtn');
+  if (resetBtn) {
+    resetBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        resetBtn.click();
       }
-
-      // ----- COMPONENT LOADER (fetch external HTML) -----
-      function loadComponent(url, callback) {
-        fetch(url)
-          .then(response => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.text();
-          })
-          .then(html => {
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = html;
-            const element = wrapper.firstElementChild;
-            callback(element);
-          })
-          .catch(err => {
-            console.warn('Component load failed:', err);
-            // fallback: show inline placeholder
-            const fallback = document.createElement('div');
-            fallback.innerHTML =
-              `<div style="background:rgba(0,212,255,0.03);padding:20px;border-radius:6px;color:#00d4ff;border:1px solid rgba(0,212,255,0.06);font-family:'Courier New',monospace;">⚠️ Could not load component. Please check network.</div>`;
-            callback(fallback.firstElementChild);
-          });
-      }
-
-      // ----- COMPONENT FACTORIES -----
-      const container = document.getElementById('windowContainer');
-
-      let experienceWindow = null;
-      let projectsWindow = null;
-      let toolsWindow = null;
-      let whoamiWindow = null;
-      let certificatesWindow = null;
-      let contactWindow = null;
-
-      // ----- OPEN EXPERIENCE (external component) -----
-      document.getElementById('experienceIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (experienceWindow) {
-          experienceWindow.style.display = 'flex';
-          experienceWindow.style.zIndex = 1000 + Date.now() % 100;
-          experienceWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the experience component from external file
-        loadComponent('html/experience-component.html', function(element) {
-          experienceWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN PROJECTS (external component) -----
-      document.getElementById('projectsIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (projectsWindow) {
-          projectsWindow.style.display = 'flex';
-          projectsWindow.style.zIndex = 1000 + Date.now() % 100;
-          projectsWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the projects component from external file
-        loadComponent('html/projects-component.html', function(element) {
-          projectsWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN TOOLS (external component) -----
-      document.getElementById('toolsIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (toolsWindow) {
-          toolsWindow.style.display = 'flex';
-          toolsWindow.style.zIndex = 1000 + Date.now() % 100;
-          toolsWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the tools component from external file
-        loadComponent('html/tools-component.html', function(element) {
-          toolsWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN WHOAMI (external component) -----
-      document.getElementById('whoamiIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (whoamiWindow) {
-          whoamiWindow.style.display = 'flex';
-          whoamiWindow.style.zIndex = 1000 + Date.now() % 100;
-          whoamiWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the whoami component from external file
-        loadComponent('html/whoami-component.html', function(element) {
-          whoamiWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- OPEN CERTIFICATES (external component) -----
-      document.getElementById('certificatesIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (certificatesWindow) {
-          certificatesWindow.style.display = 'flex';
-          certificatesWindow.style.zIndex = 1000 + Date.now() % 100;
-          certificatesWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the certificates component from external file
-        loadComponent('html/certificates-component.html', function(element) {
-          certificatesWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-      
-
-      // ----- OPEN CONTACT (external component) -----
-      document.getElementById('contactIcon').addEventListener('dblclick', function(e) {
-        e.stopPropagation();
-
-        // if window already exists, just show it
-        if (contactWindow) {
-          contactWindow.style.display = 'flex';
-          contactWindow.style.zIndex = 1000 + Date.now() % 100;
-          contactWindow.classList.remove('fullscreen');
-          return;
-        }
-
-        // load the contact component from external file
-        loadComponent('html/contact-component.html', function(element) {
-          contactWindow = element;
-          container.appendChild(element);
-          element.style.display = 'flex';
-          element.style.zIndex = 1000 + Date.now() % 100;
-          setupWindow(element);
-        });
-      });
-
-      // ----- Double-click desktop → close all windows -----
-      const desktopEl = document.getElementById('desktopArea');
-      desktopEl.addEventListener('dblclick', function(e) {
-        if (e.target === desktopEl || e.target.classList.contains('kenos-desktop')) {
-          if (experienceWindow) {
-            experienceWindow.style.display = 'none';
-            experienceWindow.classList.remove('fullscreen');
-          }
-          if (projectsWindow) {
-            projectsWindow.style.display = 'none';
-            projectsWindow.classList.remove('fullscreen');
-          }
-          if (toolsWindow) {
-            toolsWindow.style.display = 'none';
-            toolsWindow.classList.remove('fullscreen');
-          }
-          if (whoamiWindow) {
-            whoamiWindow.style.display = 'none';
-            whoamiWindow.classList.remove('fullscreen');
-          }
-          if (certificatesWindow) {
-            certificatesWindow.style.display = 'none';
-            certificatesWindow.classList.remove('fullscreen');
-          }
-          if (contactWindow) {
-            contactWindow.style.display = 'none';
-            contactWindow.classList.remove('fullscreen');
-          }
-        }
-      });
-
-      console.log('✨ KenOS components ready. Double-click Experience, Projects, Tools, Whoami, Certificates, or Contact icons.');
+    });
+  }
 })();
