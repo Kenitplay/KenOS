@@ -11,6 +11,15 @@
   // Storage key for user preference
   const STORAGE_KEY = 'kenos_layout_mode_v3';
 
+  // localStorage can throw (private mode, sandboxed iframes) — never let that break the page
+  function readSavedMode() {
+    try {
+      return localStorage.getItem(STORAGE_KEY);
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Accurate detection for mobile phones (small handheld screens)
   function isPhoneOrTablet() {
     const isMobileUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -22,7 +31,7 @@
   // 1. Mobile phones default to 'normal' (Web Mode)
   // 2. Laptops, PCs, and 4K views default onto 'desktop' (Desktop OS Mode)
   function getInitialMode() {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = readSavedMode();
     if (saved === 'normal' || saved === 'desktop') {
       return saved;
     }
@@ -397,7 +406,7 @@
     const bootScreen = document.getElementById('bootScreen');
     if (!bootScreen) return;
 
-    if (isPhoneOrTablet() && localStorage.getItem(STORAGE_KEY) === null) {
+    if (isPhoneOrTablet() && readSavedMode() === null) {
       bootScreen.classList.add('hidden');
       bootScreen.style.display = 'none';
       const normalSite = document.getElementById('normalSite');
