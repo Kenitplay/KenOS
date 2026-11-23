@@ -5,41 +5,34 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ============================================================
-  // BOOT SEQUENCE
+  // BOOT SEQUENCE (OS mode only)
+  // Smooth, eased progress driven by requestAnimationFrame, with
+  // boot-log lines scrolling in and a zoom-out exit into the desktop.
   // ============================================================
   const bootScreen = document.getElementById('bootScreen');
   const bootProgress = document.getElementById('bootProgressBar');
+  const bootPercent = document.getElementById('bootPercent');
   const bootStatusText = document.getElementById('bootStatusText');
-  const bootCommandText = document.getElementById('bootCommandText');
-  const bootCommandText2 = document.getElementById('bootCommandText2');
+  const bootCommands = document.getElementById('bootCommands');
   const desktop = document.getElementById('desktopArea');
   const taskbar = document.getElementById('taskbar');
 
-  const bootMessages = [
-    'Loading KenOS kernel...',
-    'Initializing hardware...',
-    'Setting up network interfaces...',
-    'Mounting filesystems...',
-    'Starting system services...',
-    'Loading user profile...',
-    'Starting desktop environment...',
-    'Welcome to KenOS Portfolio!'
+  const bootSteps = [
+    ['Loading KenOS kernel...', 'loading kernel modules'],
+    ['Initializing hardware...', 'initializing hardware'],
+    ['Setting up network interfaces...', 'setting up network interfaces'],
+    ['Mounting filesystems...', 'mounting filesystems'],
+    ['Starting system services...', 'starting system services'],
+    ['Loading user profile...', 'loading user profile'],
+    ['Starting desktop environment...', 'starting desktop environment'],
+    ['Welcome to KenOS Portfolio!', 'system ready']
   ];
 
-  const bootCommands = [
-    'loading kernel modules',
-    'initializing hardware',
-    'setting up network interfaces',
-    'mounting filesystems',
-    'starting system services',
-    'loading user profile',
-    'starting desktop environment',
-    'system ready'
-  ].map(cmd => '<span class="ok">[  OK  ]</span> ' + cmd);
-
-  let progress = 0;
-  let messageIndex = 0;
+  const BOOT_DURATION = prefersReducedMotion ? 500 : 3400;
+  const MAX_LOG_LINES = 4;
   let bootFinished = false;
+  let bootStepShown = -1;
+  let bootStart = 0;
 
   // Short ascending chime when the desktop appears
   function playBootSound() {
@@ -64,53 +57,119 @@
     }
   }
 
-  function finishBoot(withSound) {
-    if (bootFinished || !bootScreen) return;
-    bootFinished = true;
-    bootScreen.classList.add('hidden');
+  // Progress curve: quick start, a couple of gentle "loading" plateaus, smooth finish
+  function bootCurve(t) {
+    const ease = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
+    const wobble = Math.sin(t * Math.PI * 3) * 0.025 * (1 - t);              // subtle stalls
+    return Math.min(1, Math.max(0, ease + wobble));
+  }
+
+  function pushBootLine(text, isFinal) {
+    if (!bootCommands) return;
+    const line = document.createElement('div');
+    line.className = 'boot-line' + (isFinal ? ' boot-line-final' : '');
+    line.innerHTML = '<span class="ok">[  OK  ]</span> ' + text;
+    bootCommands.appendChild(line);
+    while (bootCommands.children.length > MAX_LOG_LINES) {
+      bootCommands.removeChild(bootCommands.firstElementChild);
+    }
+  }
+
+  function setBootStatus(text) {
+    if (!bootStatusText) return;
+    bootStatusText.textContent = text;
+    bootStatusText.classList.remove('boot-status-swap');
+    void bootStatusText.offsetWidth;
+    bootStatusText.classList.add('boot-status-swap');
+  }
+
+  function revealAfterBoot(withSound) {
     if (document.body.classList.contains('layout-normal')) {
       const normalSite = document.getElementById('normalSite');
       if (normalSite) normalSite.style.display = 'block';
+      if (window.KenOSMotion) window.KenOSMotion.playEntrance('normal');
     } else {
       if (desktop) desktop.classList.add('visible');
       if (taskbar) taskbar.classList.add('visible');
+      if (window.KenOSMotion) window.KenOSMotion.playEntrance('desktop');
       if (withSound) playBootSound();
     }
+  }
+
+  function finishBoot(withSound) {
+    if (bootFinished || !bootScreen) return;
+    bootFinished = true;
     document.removeEventListener('keydown', skipOnKey);
+
+    if (bootScreen.style.display === 'none' || bootScreen.classList.contains('hidden')) {
+      return; // web mode: boot screen was never shown
+    }
+
+    // Zoom-through exit; the desktop cascades in underneath
+    bootScreen.classList.add('boot-exit');
+    revealAfterBoot(withSound);
+    setTimeout(() => {
+      bootScreen.classList.add('hidden');
+      bootScreen.classList.remove('boot-exit');
+    }, prefersReducedMotion ? 50 : 750);
   }
 
   function skipOnKey() {
     finishBoot(false);
   }
 
-  function updateBootScreen() {
+  function bootFrame(now) {
     if (bootFinished) return;
-    // Reduced-motion visitors get a much quicker boot
-    progress += prefersReducedMotion ? 25 : Math.random() * 2.5 + 1;
-    if (progress > 100) progress = 100;
+    if (!bootStart) bootStart = now;
+    const t = Math.min(1, (now - bootStart) / BOOT_DURATION);
+    const p = bootCurve(t);
 
-    if (bootProgress) bootProgress.style.width = progress + '%';
+    if (bootProgress) bootProgress.style.width = (p * 100).toFixed(2) + '%';
+    if (bootPercent) bootPercent.textContent = Math.round(p * 100) + '%';
 
-    if (messageIndex < bootMessages.length) {
-      if (bootStatusText) bootStatusText.textContent = bootMessages[messageIndex];
-      if (bootCommandText) bootCommandText.innerHTML = bootCommands[messageIndex];
-      if (bootCommandText2 && messageIndex > 0) bootCommandText2.innerHTML = bootCommands[messageIndex - 1];
-      messageIndex++;
+    const step = Math.min(bootSteps.length - 1, Math.floor(p * bootSteps.length));
+    while (bootStepShown < step) {
+      bootStepShown++;
+      setBootStatus(bootSteps[bootStepShown][0]);
+      pushBootLine(bootSteps[bootStepShown][1], bootStepShown === bootSteps.length - 1);
     }
 
-    if (progress < 100) {
-      setTimeout(updateBootScreen, Math.random() * 120 + 80);
+    if (t < 1) {
+      requestAnimationFrame(bootFrame);
     } else {
-      setTimeout(() => finishBoot(true), 500);
+      if (bootStepShown < bootSteps.length - 1) {
+        bootStepShown = bootSteps.length - 1;
+        setBootStatus(bootSteps[bootStepShown][0]);
+        pushBootLine(bootSteps[bootStepShown][1], true);
+      }
+      bootScreen && bootScreen.classList.add('boot-complete');
+      setTimeout(() => finishBoot(true), prefersReducedMotion ? 50 : 450);
     }
   }
 
-  if (bootScreen && bootScreen.style.display !== 'none') {
+  function startBoot() {
+    if (!bootScreen) return;
+    // Web mode never shows the OS boot screen
+    if (document.body.classList.contains('layout-normal') || bootScreen.style.display === 'none') {
+      bootFinished = true;
+      bootScreen.classList.add('hidden');
+      bootScreen.style.display = 'none';
+      revealAfterBoot(false);
+      return;
+    }
+    if (bootCommands) bootCommands.innerHTML = '';
     // Any key or click skips the boot animation
     document.addEventListener('keydown', skipOnKey);
     bootScreen.addEventListener('click', () => finishBoot(false));
+    setTimeout(() => requestAnimationFrame(bootFrame), prefersReducedMotion ? 0 : 450);
   }
-  setTimeout(updateBootScreen, prefersReducedMotion ? 100 : 500);
+
+  // layout.js decides the mode after this script runs, so start on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startBoot);
+  } else {
+    startBoot();
+  }
 
   // ============================================================
   // WINDOW MANAGER

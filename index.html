@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="css/normal-site.css" />
   <link rel="stylesheet" href="css/transition.css" />
   <link rel="stylesheet" href="css/enhancements.css" />
+  <link rel="stylesheet" href="css/motion.css" />
 </head>
 
 <body class="layout-desktop">
@@ -93,6 +94,8 @@
   <!-- ========== BOOT SCREEN ========== -->
   <div id="bootScreen" title="Click or press any key to skip">
     <div class="boot-logo">
+      <span class="boot-ring boot-ring-1" aria-hidden="true"></span>
+      <span class="boot-ring boot-ring-2" aria-hidden="true"></span>
       <i class="fas fa-microchip"></i>
     </div>
     <div class="boot-title">Ken<span>OS</span></div>
@@ -100,6 +103,7 @@
     <div class="boot-progress">
       <div class="boot-progress-bar" id="bootProgressBar"></div>
     </div>
+    <div class="boot-percent" id="bootPercent" aria-hidden="true">0%</div>
     <div class="boot-status" id="bootStatus" role="status" aria-live="polite">
       <span id="bootStatusText">Initializing system...</span>
       <span class="cursor"></span>
@@ -1221,28 +1225,50 @@
       // ============================================================
       // RESET ICON POSITIONS
       // ============================================================
-      window.resetIconPositions = function () {
+      window.resetIconPositions = function (options) {
         const desktop = document.getElementById('desktopArea');
         if (!desktop) return;
 
+        const animate = !(options && options.animate === false);
+        const reduceMotion = window.matchMedia &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const icons = Array.from(desktop.querySelectorAll('.desktop-icon'));
         const cfg = getResponsiveConfig();
 
         icons.forEach(function (icon, index) {
           const col = index % cfg.cols;
           const row = Math.floor(index / cfg.cols);
-
           const left = cfg.startX + col * cfg.gap;
           const top = cfg.startY + row * cfg.rowGap;
+          const moved = Math.abs((parseFloat(icon.style.left) || 0) - left) > 1 ||
+            Math.abs((parseFloat(icon.style.top) || 0) - top) > 1;
 
-          icon.style.transition = 'left 0.3s ease, top 0.3s ease';
+          delete icon.dataset.hasBeenDragged;
+          clearTimeout(icon._resetTimer);
+
+          if (!animate || reduceMotion) {
+            icon.style.transition = '';
+            icon.style.left = left + 'px';
+            icon.style.top = top + 'px';
+            return;
+          }
+
+          // Springy, staggered glide home (slight overshoot), then a landing glow
+          const delay = index * 45;
+          const duration = moved ? 720 : 0;
+          icon.style.transition =
+            'left ' + duration + 'ms cubic-bezier(0.34, 1.45, 0.64, 1) ' + delay + 'ms, ' +
+            'top ' + duration + 'ms cubic-bezier(0.34, 1.45, 0.64, 1) ' + delay + 'ms';
           icon.style.left = left + 'px';
           icon.style.top = top + 'px';
-          delete icon.dataset.hasBeenDragged;
 
-          setTimeout(function () {
+          icon._resetTimer = setTimeout(function () {
             icon.style.transition = '';
-          }, 350);
+            icon.classList.remove('icon-landed');
+            void icon.offsetWidth; // restart the animation
+            icon.classList.add('icon-landed');
+            setTimeout(function () { icon.classList.remove('icon-landed'); }, 700);
+          }, delay + duration);
         });
       };
 
@@ -1470,11 +1496,12 @@
           resetBtn.dataset.bound = 'true';
           resetBtn.addEventListener('click', function () {
             window.resetIconPositions();
-            resetBtn.style.transition = 'transform 0.4s ease';
-            resetBtn.style.transform = 'rotate(-360deg)';
+            resetBtn.classList.remove('is-spinning');
+            void resetBtn.offsetWidth;
+            resetBtn.classList.add('is-spinning');
             setTimeout(function () {
-              resetBtn.style.transform = '';
-            }, 400);
+              resetBtn.classList.remove('is-spinning');
+            }, 700);
           });
         }
       }

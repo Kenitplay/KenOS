@@ -1,45 +1,64 @@
 // ============================================================
 // KenOS Portfolio - Layout Switching & Mode Transition Controller
-// 3-Second Cinematic Cyber Transition between Web Mode and Desktop OS
-// Laptops, PCs & 4K displays default onto Desktop OS mode
-// Mobile phones default onto Web Mode
+// Cinematic circular-reveal transition between Web Mode and Desktop OS
+// Desktops & laptops (>= 1024px with a mouse/trackpad) default to Desktop OS;
+// phones, tablets and smaller windows default to the website
 // ============================================================
 
 (function () {
   'use strict';
 
-  // Storage key for user preference
-  const STORAGE_KEY = 'kenos_layout_mode_v3';
+  // Desktop OS is the default on desktops & laptops (wide screen + mouse/trackpad);
+  // phones, tablets and narrow windows default to the website.
+  const LARGE_SCREEN_MIN = 1024;
+  const STORAGE_PREFIX = 'kenos_layout_mode_v4_';
 
-  // localStorage can throw (private mode, sandboxed iframes) — never let that break the page
-  function readSavedMode() {
+  function isLargeScreen() {
+    const wide = window.innerWidth >= LARGE_SCREEN_MIN;
+    const finePointer = !window.matchMedia ||
+      window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    return wide && finePointer;
+  }
+
+  function screenClass() {
+    return isLargeScreen() ? 'large' : 'small';
+  }
+
+  function defaultModeFor(cls) {
+    return cls === 'large' ? 'desktop' : 'normal';
+  }
+
+  // A visitor's explicit choice is remembered per screen class, so switching to
+  // the website on a laptop doesn't force the OS view onto their phone (or vice versa).
+  // localStorage can throw (private mode, sandboxed iframes) — never let that break the page.
+  function readSavedMode(cls) {
     try {
-      return localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STORAGE_PREFIX + (cls || screenClass()));
+      return saved === 'normal' || saved === 'desktop' ? saved : null;
     } catch (e) {
       return null;
     }
   }
 
-  // Accurate detection for mobile phones (small handheld screens)
-  function isPhoneOrTablet() {
-    const isMobileUA = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isSmallScreen = window.innerWidth <= 600;
-    return isMobileUA || isSmallScreen;
+  function saveMode(mode) {
+    try {
+      localStorage.setItem(STORAGE_PREFIX + screenClass(), mode);
+    } catch (e) {
+      // Storage unavailable — the choice just won't persist
+    }
   }
 
-  // Determine initial layout mode:
-  // 1. Mobile phones default to 'normal' (Web Mode)
-  // 2. Laptops, PCs, and 4K views default onto 'desktop' (Desktop OS Mode)
-  function getInitialMode() {
-    const saved = readSavedMode();
-    if (saved === 'normal' || saved === 'desktop') {
-      return saved;
-    }
-    if (isPhoneOrTablet()) {
-      return 'normal';
-    }
-    return 'desktop';
+  // Kept for the public API (older callers)
+  function isPhoneOrTablet() {
+    return !isLargeScreen();
   }
+
+  function getInitialMode() {
+    return readSavedMode() || defaultModeFor(screenClass());
+  }
+
+  const prefersReducedMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let currentMode = getInitialMode();
   let isTransitioning = false;
@@ -82,11 +101,7 @@
     const taskbar = document.getElementById('taskbar');
 
     if (userInitiated) {
-      try {
-        localStorage.setItem(STORAGE_KEY, mode);
-      } catch (e) {
-        console.warn('Storage unavailable:', e);
-      }
+      saveMode(mode);
     }
 
     if (mode === 'normal') {
@@ -114,7 +129,6 @@
         window.scrollTo({ top: 0, behavior: 'instant' });
       }
 
-      console.log('🌐 Active: Normal Website Mode');
     } else {
       body.classList.remove('layout-normal');
       body.classList.add('layout-desktop');
@@ -131,10 +145,9 @@
 
       // Re-align desktop icons if function exists
       if (typeof window.resetIconPositions === 'function') {
-        setTimeout(window.resetIconPositions, 40);
+        window.resetIconPositions({ animate: false });
       }
 
-      console.log('💻 Active: KenOS Desktop Mode');
     }
 
     updateToggleButtons();
@@ -146,23 +159,61 @@
     activeTransitionTimeouts = [];
   }
 
-  // Orchestrate a rich, ~3-second Cyber Transition sequence between modes
-  function switchModeWithTransition(targetMode, userInitiated = true) {
+  // ------------------------------------------------------------
+  // Entrance choreography after boot / mode switch
+  // ------------------------------------------------------------
+  let entranceTimer = null;
+  function playEntrance(mode) {
+    const body = document.body;
+    if (prefersReducedMotion) return;
+
+    // Index icons / hero items so CSS can stagger them
+    document.querySelectorAll('#desktopArea .desktop-icon').forEach((el, i) => el.style.setProperty('--i', i));
+    document.querySelectorAll('.normal-hero > *').forEach((el, i) => el.style.setProperty('--i', i));
+
+    body.classList.remove('enter-desktop', 'enter-normal');
+    void body.offsetWidth; // restart animations
+    body.classList.add(mode === 'normal' ? 'enter-normal' : 'enter-desktop');
+
+    clearTimeout(entranceTimer);
+    entranceTimer = setTimeout(() => {
+      body.classList.remove('enter-desktop', 'enter-normal');
+    }, 1800);
+  }
+
+  // Smooth ease used for both the bar and the % counter so they stay in sync
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  // Swap status text with a quick slide/fade
+  function swapText(el, text) {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('text-swap');
+    void el.offsetWidth;
+    el.classList.add('text-swap');
+  }
+
+  // Orchestrate the cinematic switch between modes:
+  //  1. overlay irises open from the button that was clicked
+  //  2. HUD card + progress bar run on one eased timeline
+  //  3. layout swaps underneath, overlay dissolves, new view cascades in
+  function switchModeWithTransition(targetMode, userInitiated = true, originEl = null) {
     if (isTransitioning) return;
     if (targetMode === currentMode) return;
 
     const overlay = document.getElementById('kenosModeTransition');
 
-    // Fallback if overlay element is missing
     if (!overlay) {
       setLayoutMode(targetMode, userInitiated);
+      playEntrance(targetMode);
       return;
     }
 
     isTransitioning = true;
     clearTransitionTimeouts();
 
-    // Elements inside overlay
     const icon = document.getElementById('transitionIcon');
     const actionLabel = document.getElementById('transitionActionLabel');
     const targetTitle = document.getElementById('transitionTargetTitle');
@@ -173,191 +224,117 @@
     const progressFill = document.getElementById('transitionProgressFill');
     const percentText = document.getElementById('transitionPercentText');
 
-    // Multi-stage message tables for ~3 second sequence
-    const stages = targetMode === 'normal' ? [
-      {
-        time: 0,
-        code: 'SYS::VIEW_WEB_0x5F',
-        tag: 'WEB_MODE',
-        action: 'SWITCHING SYSTEM INTERFACE',
-        title: 'WEB PORTFOLIO',
-        desc: 'Disconnecting KenOS Desktop workspace...',
-        stage: '[ 12% ] DISCONNECTING_SESSION',
-        sound: () => playCyberTone(440, 'sine', 0.14)
-      },
-      {
-        time: 650,
-        desc: 'Unmounting desktop window managers & widgets...',
-        stage: '[ 38% ] UNMOUNTING_WORKSPACE',
-        sound: () => playCyberTone(520, 'sine', 0.12)
-      },
-      {
-        time: 1350,
-        desc: 'Compiling responsive web layout & navigation...',
-        stage: '[ 65% ] COMPILING_WEB_COMPONENTS',
-        sound: () => playCyberTone(660, 'sine', 0.14)
-      },
-      {
-        time: 2050,
-        desc: 'Mounting portfolio sections & DOM viewport...',
-        stage: '[ 88% ] RENDERING_VIEWPORT',
-        sound: () => playCyberTone(784, 'sine', 0.12)
-      },
-      {
-        time: 2600,
-        desc: 'Web portfolio interface ready.',
-        stage: '[ OK ] SYSTEM_SYNCHRONIZED',
-        sound: () => playCyberTone(880, 'sine', 0.22)
-      }
+    // Timeline (ms). Reduced-motion visitors get a short, simple crossfade.
+    const T = prefersReducedMotion
+      ? { progress: 300, swap: 250, out: 350, done: 600 }
+      : { progress: 1900, swap: 1750, out: 2050, done: 2650 };
+
+    const toWeb = targetMode === 'normal';
+    const header = toWeb
+      ? { code: 'SYS::VIEW_WEB_0x5F', tag: 'WEB_MODE', title: 'WEB PORTFOLIO', icon: 'fas fa-globe' }
+      : { code: 'SYS::KERNEL_RESTORE_0x8C', tag: 'DESKTOP_OS', title: 'KENOS DESKTOP OS', icon: 'fas fa-desktop' };
+
+    // Stages fire when the eased progress crosses each threshold
+    const stages = toWeb ? [
+      { at: 0, desc: 'Disconnecting KenOS Desktop workspace...', stage: 'DISCONNECTING_SESSION', tone: [440, 'sine'] },
+      { at: 0.3, desc: 'Unmounting desktop window managers & widgets...', stage: 'UNMOUNTING_WORKSPACE', tone: [520, 'sine'] },
+      { at: 0.55, desc: 'Compiling responsive web layout & navigation...', stage: 'COMPILING_WEB_COMPONENTS', tone: [660, 'sine'] },
+      { at: 0.8, desc: 'Mounting portfolio sections & DOM viewport...', stage: 'RENDERING_VIEWPORT', tone: [784, 'sine'] },
+      { at: 1, desc: 'Web portfolio interface ready.', stage: 'SYSTEM_SYNCHRONIZED', tone: [880, 'sine', 0.22], ok: true }
     ] : [
-      {
-        time: 0,
-        code: 'SYS::KERNEL_RESTORE_0x8C',
-        tag: 'DESKTOP_OS',
-        action: 'SWITCHING SYSTEM INTERFACE',
-        title: 'KENOS DESKTOP OS',
-        desc: 'Suspending Web Portfolio runtime...',
-        stage: '[ 12% ] SUSPENDING_WEB_VIEW',
-        sound: () => playCyberTone(520, 'triangle', 0.14)
-      },
-      {
-        time: 650,
-        desc: 'Initializing KenOS Kernel v2.0 subsystems...',
-        stage: '[ 38% ] LOADING_KERNEL_MODULES',
-        sound: () => playCyberTone(620, 'triangle', 0.12)
-      },
-      {
-        time: 1350,
-        desc: 'Mounting desktop filesystem & taskbar services...',
-        stage: '[ 65% ] MOUNTING_ENVIRONMENT',
-        sound: () => playCyberTone(740, 'triangle', 0.14)
-      },
-      {
-        time: 2050,
-        desc: 'Aligning desktop coordinates & widgets...',
-        stage: '[ 88% ] ATTACHING_DESKTOP_ENV',
-        sound: () => playCyberTone(880, 'triangle', 0.12)
-      },
-      {
-        time: 2600,
-        desc: 'KenOS Desktop OS ready.',
-        stage: '[ OK ] KERNEL_ATTACHED',
-        sound: () => playCyberTone(987, 'triangle', 0.22)
-      }
+      { at: 0, desc: 'Suspending Web Portfolio runtime...', stage: 'SUSPENDING_WEB_VIEW', tone: [520, 'triangle'] },
+      { at: 0.3, desc: 'Initializing KenOS Kernel v2.0 subsystems...', stage: 'LOADING_KERNEL_MODULES', tone: [620, 'triangle'] },
+      { at: 0.55, desc: 'Mounting desktop filesystem & taskbar services...', stage: 'MOUNTING_ENVIRONMENT', tone: [740, 'triangle'] },
+      { at: 0.8, desc: 'Aligning desktop coordinates & widgets...', stage: 'ATTACHING_DESKTOP_ENV', tone: [880, 'triangle'] },
+      { at: 1, desc: 'KenOS Desktop OS ready.', stage: 'KERNEL_ATTACHED', tone: [987, 'triangle', 0.22], ok: true }
     ];
 
-    // Initial HUD setup
-    if (icon) icon.className = targetMode === 'normal' ? 'fas fa-globe' : 'fas fa-desktop';
-    if (actionLabel) actionLabel.textContent = stages[0].action;
-    if (targetTitle) targetTitle.textContent = stages[0].title;
+    // HUD setup
+    if (icon) icon.className = header.icon;
+    if (actionLabel) actionLabel.textContent = 'SWITCHING SYSTEM INTERFACE';
+    if (targetTitle) targetTitle.textContent = header.title;
+    if (modeTag) modeTag.textContent = header.tag;
+    if (sysCode) sysCode.textContent = header.code;
     if (statusDesc) statusDesc.textContent = stages[0].desc;
-    if (modeTag) modeTag.textContent = stages[0].tag;
-    if (sysCode) sysCode.textContent = stages[0].code;
-    if (stageText) stageText.textContent = stages[0].stage;
-
-    // Reset progress bar
+    if (stageText) stageText.textContent = '[ 0% ] ' + stages[0].stage;
     if (progressFill) {
       progressFill.style.transition = 'none';
       progressFill.style.width = '0%';
     }
     if (percentText) percentText.textContent = '0%';
 
-    // Step 1: Activate overlay and start departure
+    // Iris origin: centre of the clicked control (falls back to screen centre)
+    let ox = window.innerWidth / 2;
+    let oy = window.innerHeight / 2;
+    if (originEl && originEl.getBoundingClientRect) {
+      const r = originEl.getBoundingClientRect();
+      if (r.width || r.height) {
+        ox = r.left + r.width / 2;
+        oy = r.top + r.height / 2;
+      }
+    }
+    const radius = Math.hypot(Math.max(ox, window.innerWidth - ox), Math.max(oy, window.innerHeight - oy)) + 40;
+    overlay.style.setProperty('--tx', ox + 'px');
+    overlay.style.setProperty('--ty', oy + 'px');
+    overlay.style.setProperty('--tr', radius + 'px');
+    overlay.style.setProperty('--tr-n', (radius / 10).toFixed(1));
+    overlay.classList.toggle('to-web', toWeb);
+    overlay.classList.toggle('to-desktop', !toWeb);
+
+    // Step 1: open overlay (old view recedes underneath)
     document.body.classList.add('mode-transitioning');
-    overlay.classList.remove('closing');
+    overlay.classList.remove('closing', 'complete');
+    void overlay.offsetWidth;
     overlay.classList.add('active');
-    stages[0].sound();
 
-    // Animate progress bar fill smoothly over ~2.6s
-    requestAnimationFrame(() => {
-      if (progressFill) {
-        progressFill.style.transition = 'width 2.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
-        progressFill.style.width = '100%';
-      }
-    });
-
-    // Smooth percentage counter 0% -> 100%
-    const animStartTime = performance.now();
-    const animDuration = 2600;
-    function updateCounter(now) {
+    // Step 2: one eased timeline drives bar, %, and stage text together
+    let stageIndex = 0;
+    playCyberTone(stages[0].tone[0], stages[0].tone[1], stages[0].tone[2] || 0.14);
+    const startTime = performance.now();
+    function tick(now) {
       if (!isTransitioning) return;
-      const elapsed = now - animStartTime;
-      const pct = Math.min(100, Math.round((elapsed / animDuration) * 100));
+      const t = Math.min(1, (now - startTime) / T.progress);
+      const p = easeInOutCubic(t);
+      const pct = Math.round(p * 100);
+      if (progressFill) progressFill.style.width = (p * 100).toFixed(2) + '%';
       if (percentText) percentText.textContent = pct + '%';
-      if (elapsed < animDuration) {
-        requestAnimationFrame(updateCounter);
+
+      while (stageIndex < stages.length - 1 && p >= stages[stageIndex + 1].at) {
+        stageIndex++;
+        const st = stages[stageIndex];
+        swapText(statusDesc, st.desc);
+        playCyberTone(st.tone[0], st.tone[1], st.tone[2] || 0.12);
+        if (st.ok) overlay.classList.add('complete');
       }
+      if (stageText) {
+        const st = stages[stageIndex];
+        stageText.textContent = (st.ok ? '[ OK ] ' : '[ ' + pct + '% ] ') + st.stage;
+      }
+      if (t < 1) requestAnimationFrame(tick);
     }
-    requestAnimationFrame(updateCounter);
+    requestAnimationFrame(tick);
 
-    // Schedule intermediate stage updates
-    for (let i = 1; i < stages.length; i++) {
-      const stage = stages[i];
-      const tid = setTimeout(() => {
-        if (!isTransitioning) return;
-        if (statusDesc) statusDesc.textContent = stage.desc;
-        if (stageText) stageText.textContent = stage.stage;
-        if (typeof stage.sound === 'function') stage.sound();
-      }, stage.time);
-      activeTransitionTimeouts.push(tid);
-    }
-
-    // Step 2: Swap layout underneath overlay at ~2050ms
-    const swapTid = setTimeout(() => {
+    // Step 3: swap layout underneath the overlay
+    activeTransitionTimeouts.push(setTimeout(() => {
       if (!isTransitioning) return;
-
       setLayoutMode(targetMode, userInitiated);
+    }, T.swap));
 
-      const desktopArea = document.getElementById('desktopArea');
-      const normalSite = document.getElementById('normalSite');
-      const taskbar = document.getElementById('taskbar');
-
-      if (targetMode === 'normal') {
-        if (normalSite) {
-          normalSite.classList.remove('mode-entering');
-          void normalSite.offsetWidth; // Force reflow
-          normalSite.classList.add('mode-entering');
-        }
-      } else {
-        if (desktopArea) {
-          desktopArea.classList.remove('mode-entering');
-          void desktopArea.offsetWidth;
-          desktopArea.classList.add('mode-entering');
-        }
-        if (taskbar) {
-          taskbar.classList.remove('mode-entering');
-          void taskbar.offsetWidth;
-          taskbar.classList.add('mode-entering');
-        }
-      }
-    }, 2050);
-    activeTransitionTimeouts.push(swapTid);
-
-    // Step 3: Transition out (dissolve overlay starting at ~2750ms)
-    const outTid = setTimeout(() => {
+    // Step 4: dissolve overlay and play the new view's entrance
+    activeTransitionTimeouts.push(setTimeout(() => {
       if (!isTransitioning) return;
+      document.body.classList.remove('mode-transitioning');
       overlay.classList.remove('active');
       overlay.classList.add('closing');
+      playEntrance(targetMode);
+    }, T.out));
 
-      // Step 4: Final cleanup at ~3150ms (~3.15s total)
-      const finishTid = setTimeout(() => {
-        overlay.classList.remove('closing');
-        document.body.classList.remove('mode-transitioning');
-
-        const normalSite = document.getElementById('normalSite');
-        const desktopArea = document.getElementById('desktopArea');
-        const taskbar = document.getElementById('taskbar');
-
-        if (normalSite) normalSite.classList.remove('mode-entering');
-        if (desktopArea) desktopArea.classList.remove('mode-entering');
-        if (taskbar) taskbar.classList.remove('mode-entering');
-
-        isTransitioning = false;
-        clearTransitionTimeouts();
-      }, 400);
-      activeTransitionTimeouts.push(finishTid);
-    }, 2750);
-    activeTransitionTimeouts.push(outTid);
+    // Step 5: cleanup
+    activeTransitionTimeouts.push(setTimeout(() => {
+      overlay.classList.remove('closing', 'complete', 'to-web', 'to-desktop');
+      isTransitioning = false;
+      clearTransitionTimeouts();
+    }, T.done));
   }
 
   // Update button visibility & titles
@@ -399,33 +376,6 @@
     if (mobileDesktopPill) {
       mobileDesktopPill.style.display = currentMode === 'desktop' ? '' : 'none';
     }
-  }
-
-  // Fast boot on mobile / click to skip on desktop
-  function setupBootSkip() {
-    const bootScreen = document.getElementById('bootScreen');
-    if (!bootScreen) return;
-
-    if (isPhoneOrTablet() && readSavedMode() === null) {
-      bootScreen.classList.add('hidden');
-      bootScreen.style.display = 'none';
-      const normalSite = document.getElementById('normalSite');
-      if (normalSite) normalSite.style.display = 'block';
-      return;
-    }
-
-    bootScreen.addEventListener('click', function () {
-      bootScreen.classList.add('hidden');
-      const desktop = document.getElementById('desktopArea');
-      const taskbar = document.getElementById('taskbar');
-      if (currentMode === 'normal') {
-        const normalSite = document.getElementById('normalSite');
-        if (normalSite) normalSite.style.display = 'block';
-      } else {
-        if (desktop) desktop.classList.add('visible');
-        if (taskbar) taskbar.classList.add('visible');
-      }
-    });
   }
 
   // Mobile menu dropdown
@@ -546,12 +496,12 @@
       taskbarBtn.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        switchModeWithTransition('normal', true);
+        switchModeWithTransition('normal', true, e.currentTarget);
       });
       taskbarBtn.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          switchModeWithTransition('normal', true);
+          switchModeWithTransition('normal', true, e.currentTarget);
         }
       });
     }
@@ -561,7 +511,7 @@
     if (navBtn) {
       navBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        switchModeWithTransition('desktop', true);
+        switchModeWithTransition('desktop', true, e.currentTarget);
       });
     }
 
@@ -570,7 +520,7 @@
     if (heroBtn) {
       heroBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        switchModeWithTransition('desktop', true);
+        switchModeWithTransition('desktop', true, e.currentTarget);
       });
     }
 
@@ -579,7 +529,7 @@
     if (footerBtn) {
       footerBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        switchModeWithTransition('desktop', true);
+        switchModeWithTransition('desktop', true, e.currentTarget);
       });
     }
 
@@ -589,13 +539,13 @@
       floatingBtn.addEventListener('click', function (e) {
         e.preventDefault();
         const nextMode = currentMode === 'normal' ? 'desktop' : 'normal';
-        switchModeWithTransition(nextMode, true);
+        switchModeWithTransition(nextMode, true, e.currentTarget);
       });
       floatingBtn.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           const nextMode = currentMode === 'normal' ? 'desktop' : 'normal';
-          switchModeWithTransition(nextMode, true);
+          switchModeWithTransition(nextMode, true, e.currentTarget);
         }
       });
     }
@@ -612,7 +562,7 @@
           const icon = toggleBtn.querySelector('i');
           if (icon) icon.className = 'fas fa-bars';
         }
-        switchModeWithTransition('desktop', true);
+        switchModeWithTransition('desktop', true, e.currentTarget);
       });
     }
 
@@ -622,34 +572,58 @@
       mobileDesktopPill.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        switchModeWithTransition('normal', true);
+        switchModeWithTransition('normal', true, e.currentTarget);
       });
       mobileDesktopPill.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          switchModeWithTransition('normal', true);
+          switchModeWithTransition('normal', true, e.currentTarget);
         }
       });
     }
   }
 
-  // Early setup (before full page load)
+  // Early setup (before first paint): pick the mode, and skip the OS boot screen for the website
   (function earlyInit() {
     const initialMode = getInitialMode();
+    document.body.classList.toggle('layout-normal', initialMode === 'normal');
+    document.body.classList.toggle('layout-desktop', initialMode !== 'normal');
     if (initialMode === 'normal') {
-      document.body.classList.add('layout-normal');
-      document.body.classList.remove('layout-desktop');
-    } else {
-      document.body.classList.add('layout-desktop');
-      document.body.classList.remove('layout-normal');
+      const bootScreen = document.getElementById('bootScreen');
+      if (bootScreen) {
+        bootScreen.classList.add('hidden');
+        bootScreen.style.display = 'none';
+      }
     }
   })();
+
+  // Follow the screen-size default live (e.g. resizing a browser window or rotating a tablet),
+  // unless the visitor has picked a mode for that screen class themselves.
+  let lastScreenClass = screenClass();
+  let resizeModeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeModeTimer);
+    resizeModeTimer = setTimeout(function () {
+      const cls = screenClass();
+      if (cls === lastScreenClass) return;
+      lastScreenClass = cls;
+      if (isTransitioning) return;
+      const next = readSavedMode(cls) || defaultModeFor(cls);
+      if (next === currentMode) return;
+      const bootScreen = document.getElementById('bootScreen');
+      if (bootScreen) {
+        bootScreen.classList.add('hidden');
+        bootScreen.style.display = 'none';
+      }
+      setLayoutMode(next, false);
+      playEntrance(next);
+    }, 250);
+  });
 
   // Document ready
   document.addEventListener('DOMContentLoaded', function () {
     setLayoutMode(getInitialMode(), false);
     bindToggleTriggers();
-    setupBootSkip();
     setupMobileMenu();
     setupSmoothScroll();
     setupScrollSpy();
@@ -657,10 +631,13 @@
     updateToggleButtons();
   });
 
+  window.KenOSMotion = { playEntrance: playEntrance };
+
   // Expose global controller for external triggers or debugging
   window.KenOSLayout = {
     getMode: () => currentMode,
     isPhoneOrTablet: isPhoneOrTablet,
+    isLargeScreen: isLargeScreen,
     setMode: (mode) => switchModeWithTransition(mode, true),
     toggle: () => switchModeWithTransition(currentMode === 'normal' ? 'desktop' : 'normal', true)
   };

@@ -1,0 +1,542 @@
+/* ============================================================
+   KenOS · Motion layer
+   Boot screen, OS <-> Web transition, entrance choreography,
+   and the icon-reset spring. Loaded last.
+   ============================================================ */
+
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quint: cubic-bezier(0.83, 0, 0.17, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================
+   1. BOOT SCREEN
+   ============================================================ */
+#bootScreen {
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(0, 212, 255, 0.07), transparent 55%),
+    #070a0e;
+  transition: none;
+  overflow: hidden;
+}
+
+/* Subtle CRT scanlines + vignette */
+#bootScreen::before,
+#bootScreen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#bootScreen::before {
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px);
+  animation: bootScan 8s linear infinite;
+}
+
+#bootScreen::after {
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55));
+}
+
+@keyframes bootScan {
+  to { background-position: 0 120px; }
+}
+
+#bootScreen > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo assembles: blur + scale in, then breathes */
+#bootScreen .boot-logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 128px;
+  height: 128px;
+  margin-bottom: 18px;
+  animation: none;
+}
+
+#bootScreen .boot-logo i {
+  animation:
+    bootLogoIn 0.9s var(--ease-out-expo) both,
+    bootLogoBreathe 2.4s ease-in-out 0.9s infinite;
+}
+
+@keyframes bootLogoIn {
+  0% { opacity: 0; transform: scale(0.55) rotate(-12deg); filter: blur(14px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: scale(1) rotate(0); filter: blur(0); }
+}
+
+@keyframes bootLogoBreathe {
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.35)); transform: scale(1); }
+  50% { filter: drop-shadow(0 0 34px rgba(0, 212, 255, 0.65)); transform: scale(1.04); }
+}
+
+/* Orbiting rings */
+.boot-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.18);
+  border-top-color: #00d4ff;
+  opacity: 0;
+  animation:
+    bootRingIn 0.8s var(--ease-out-expo) 0.25s forwards,
+    bootRingSpin 2.6s linear infinite;
+}
+
+.boot-ring-2 {
+  inset: -14px;
+  border-color: rgba(255, 107, 107, 0.12);
+  border-bottom-color: rgba(255, 107, 107, 0.7);
+  animation:
+    bootRingIn 0.8s var(--ease-out-expo) 0.4s forwards,
+    bootRingSpin 4s linear infinite reverse;
+}
+
+@keyframes bootRingIn {
+  from { opacity: 0; transform: scale(0.7); }
+  to { opacity: 1; }
+}
+
+@keyframes bootRingSpin {
+  to { rotate: 360deg; }
+}
+
+/* Title tracks in, subtitle follows */
+#bootScreen .boot-title {
+  animation: bootTitleIn 1s var(--ease-out-expo) 0.2s both;
+}
+
+@keyframes bootTitleIn {
+  from { opacity: 0; letter-spacing: 22px; filter: blur(6px); }
+  to { opacity: 1; letter-spacing: 6px; filter: blur(0); }
+}
+
+#bootScreen .boot-subtitle {
+  animation: bootFadeUp 0.7s var(--ease-out-expo) 0.45s both;
+}
+
+#bootScreen .boot-progress,
+#bootScreen .boot-percent,
+#bootScreen .boot-status {
+  animation: bootFadeUp 0.7s var(--ease-out-expo) 0.6s both;
+}
+
+@keyframes bootFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Progress bar: JS drives width each frame; a light sweep travels along it */
+#bootScreen .boot-progress {
+  position: relative;
+  height: 4px;
+  overflow: visible;
+}
+
+#bootScreen .boot-progress-bar {
+  position: relative;
+  transition: none;
+  border-radius: 4px;
+}
+
+#bootScreen .boot-progress-bar::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px #ff6b6b, 0 0 22px #00d4ff;
+}
+
+#bootScreen .boot-progress::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  background-size: 35% 100%;
+  background-repeat: no-repeat;
+  animation: bootSweep 1.4s ease-in-out infinite;
+  mix-blend-mode: overlay;
+  border-radius: 4px;
+}
+
+@keyframes bootSweep {
+  from { background-position: -40% 0; }
+  to { background-position: 140% 0; }
+}
+
+.boot-percent {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(102, 224, 255, 0.55);
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.boot-status-swap {
+  display: inline-block;
+  animation: textSwap 0.28s var(--ease-out-expo);
+}
+
+/* Boot log: newest line slides in, older lines fade */
+#bootScreen .boot-commands {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 80px;
+  opacity: 1;
+  margin-top: 16px;
+}
+
+.boot-line {
+  color: rgba(77, 201, 255, 0.35);
+  animation: bootLineIn 0.4s var(--ease-out-expo) both;
+  transition: opacity 0.4s ease, color 0.4s ease;
+}
+
+.boot-line:last-child {
+  color: rgba(153, 221, 255, 0.85);
+}
+
+.boot-line:nth-last-child(3) { opacity: 0.6; }
+.boot-line:nth-last-child(4) { opacity: 0.3; }
+
+.boot-line-final {
+  color: #00ff88 !important;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+}
+
+@keyframes bootLineIn {
+  from { opacity: 0; transform: translateY(8px); filter: blur(3px); }
+  to { filter: blur(0); }
+}
+
+/* Completion flash on the logo */
+#bootScreen.boot-complete .boot-logo i {
+  animation: bootComplete 0.45s ease-out forwards;
+}
+
+@keyframes bootComplete {
+  50% { transform: scale(1.12); filter: drop-shadow(0 0 48px rgba(0, 255, 136, 0.8)); color: #5fffc0; }
+  100% { transform: scale(1); filter: drop-shadow(0 0 24px rgba(0, 212, 255, 0.6)); }
+}
+
+/* Exit: zoom through the screen into the desktop */
+#bootScreen.boot-exit {
+  animation: bootExit 0.75s var(--ease-in-out-quint) forwards;
+  pointer-events: none;
+}
+
+@keyframes bootExit {
+  0% { opacity: 1; transform: scale(1); filter: blur(0); }
+  100% { opacity: 0; transform: scale(1.12); filter: blur(10px); }
+}
+
+#bootScreen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ============================================================
+   2. OS <-> WEB TRANSITION OVERLAY (circular reveal)
+   ============================================================ */
+.kenos-mode-transition {
+  opacity: 0;
+  visibility: hidden;
+  clip-path: circle(0px at var(--tx, 50%) var(--ty, 50%));
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+.kenos-mode-transition.active {
+  opacity: 1;
+  visibility: visible;
+  clip-path: circle(var(--tr, 150vmax) at var(--tx, 50%) var(--ty, 50%));
+  transition: clip-path 0.7s var(--ease-in-out-quint);
+}
+
+.kenos-mode-transition.closing {
+  opacity: 0;
+  visibility: visible;
+  clip-path: circle(var(--tr, 150vmax) at var(--tx, 50%) var(--ty, 50%));
+  transform: scale(1.06);
+  filter: blur(8px);
+  transition:
+    opacity 0.55s var(--ease-out-expo),
+    transform 0.6s var(--ease-out-expo),
+    filter 0.55s ease;
+}
+
+/* Expanding ring that traces the iris edge */
+.kenos-mode-transition::before {
+  content: '';
+  position: absolute;
+  left: var(--tx, 50%);
+  top: var(--ty, 50%);
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 212, 255, 0.7);
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.kenos-mode-transition.active::before {
+  animation: irisRing 0.9s var(--ease-out-expo) forwards;
+}
+
+@keyframes irisRing {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(calc(var(--tr-n, 120))); }
+}
+
+/* Destination tint */
+.kenos-mode-transition.to-web .transition-ambient-glow {
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.18) 0%, rgba(92, 225, 230, 0.05) 50%, transparent 70%);
+}
+
+.kenos-mode-transition.to-desktop .transition-ambient-glow {
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.14) 0%, rgba(255, 107, 107, 0.06) 50%, transparent 70%);
+}
+
+/* HUD card: rises in after the iris has opened */
+.kenos-mode-transition .transition-card {
+  transform: translateY(24px) scale(0.94);
+  opacity: 0;
+  filter: blur(6px);
+  transition: none;
+}
+
+.kenos-mode-transition.active .transition-card {
+  transform: none;
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    transform 0.7s var(--ease-out-expo) 0.25s,
+    opacity 0.5s ease 0.25s,
+    filter 0.5s ease 0.25s;
+}
+
+.kenos-mode-transition.closing .transition-card {
+  transform: translateY(-14px) scale(1.03);
+  opacity: 0;
+  transition: transform 0.5s var(--ease-out-expo), opacity 0.4s ease;
+}
+
+/* Icon flips into the destination glyph */
+.kenos-mode-transition.active .transition-icon-box i {
+  animation: iconFlipIn 0.8s var(--ease-spring) 0.35s both;
+}
+
+@keyframes iconFlipIn {
+  from { transform: rotateY(90deg) scale(0.6); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+/* Title letter-tracks in */
+.kenos-mode-transition.active .transition-target-title {
+  animation: hudTitleIn 0.8s var(--ease-out-expo) 0.4s both;
+}
+
+@keyframes hudTitleIn {
+  from { opacity: 0; letter-spacing: 10px; filter: blur(4px); }
+  to { opacity: 1; filter: blur(0); }
+}
+
+/* Progress fill is driven per-frame by JS */
+.transition-progress-fill {
+  transition: none !important;
+}
+
+.text-swap {
+  display: inline-block;
+  animation: textSwap 0.35s var(--ease-out-expo);
+}
+
+@keyframes textSwap {
+  from { opacity: 0.35; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* "Ready" state: green confirmation pulse */
+.kenos-mode-transition.complete .transition-icon-box {
+  border-color: #00ff88;
+  color: #00ff88;
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.55);
+  animation: readyPulse 0.5s var(--ease-spring);
+}
+
+.kenos-mode-transition.complete .transition-icon-box i {
+  filter: drop-shadow(0 0 14px rgba(0, 255, 136, 0.7));
+}
+
+@keyframes readyPulse {
+  50% { transform: scale(1.12); }
+}
+
+/* Outgoing view recedes while the overlay is open */
+body.mode-transitioning #desktopArea,
+body.mode-transitioning #normalSite,
+body.mode-transitioning #taskbar {
+  filter: blur(4px) brightness(0.7);
+  transform: scale(0.97);
+  transition: filter 0.6s ease, transform 0.7s var(--ease-out-expo);
+}
+
+/* ============================================================
+   3. ENTRANCE CHOREOGRAPHY
+   ============================================================ */
+
+/* ---- Desktop OS ---- */
+body.enter-desktop .desktop-icon {
+  animation: iconCascade 0.75s var(--ease-spring) backwards;
+  animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+}
+
+@keyframes iconCascade {
+  0% { opacity: 0; transform: translateY(26px) scale(0.6); filter: blur(6px); }
+  60% { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: none; }
+}
+
+body.enter-desktop .kenos-taskbar {
+  animation: taskbarRise 0.8s var(--ease-out-expo) 0.05s backwards;
+}
+
+@keyframes taskbarRise {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+
+body.enter-desktop .calendar-widget {
+  animation: calendarIn 0.9s var(--ease-out-expo) 0.35s backwards;
+}
+
+@keyframes calendarIn {
+  from { opacity: 0; transform: translate(60px, -50%); }
+  to { opacity: 1; transform: translate(0, -50%); }
+}
+
+body.enter-desktop .quick-stats .stat-item {
+  animation: fadeRise 0.7s var(--ease-out-expo) backwards;
+}
+
+body.enter-desktop .quick-stats .stat-item:nth-child(1) { animation-delay: 0.5s; }
+body.enter-desktop .quick-stats .stat-item:nth-child(2) { animation-delay: 0.6s; }
+body.enter-desktop .quick-stats .stat-item:nth-child(3) { animation-delay: 0.7s; }
+
+body.enter-desktop .desktop-watermark i,
+body.enter-desktop .desktop-watermark .watermark-text {
+  animation: watermarkIn 1.4s ease 0.2s backwards;
+}
+
+@keyframes watermarkIn {
+  from { opacity: 0; filter: blur(16px); }
+}
+
+@keyframes fadeRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- Website ---- */
+body.enter-normal .normal-navbar {
+  animation: navDrop 0.7s var(--ease-out-expo) backwards;
+}
+
+@keyframes navDrop {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+body.enter-normal .normal-hero > * {
+  animation: heroRise 0.8s var(--ease-out-expo) backwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+}
+
+@keyframes heroRise {
+  from { opacity: 0; transform: translateY(28px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+
+body.enter-normal .floating-layout-pill {
+  animation: fadeRise 0.7s var(--ease-out-expo) 0.9s backwards;
+}
+
+/* ============================================================
+   4. ICON RESET
+   ============================================================ */
+.desktop-icon.icon-landed .icon-box {
+  animation: iconLand 0.65s var(--ease-out-expo);
+}
+
+.desktop-icon.icon-landed .icon-label {
+  animation: labelLand 0.65s ease;
+}
+
+@keyframes iconLand {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.14) translateY(-3px); filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.8)); color: #9be7ff; }
+  100% { transform: none; }
+}
+
+@keyframes labelLand {
+  30% { border-color: rgba(0, 212, 255, 0.6); box-shadow: 0 0 16px rgba(0, 212, 255, 0.35); color: #fff; }
+}
+
+#resetIconsBtn.is-spinning i {
+  animation: resetSpin 0.7s var(--ease-out-expo);
+}
+
+@keyframes resetSpin {
+  from { transform: rotate(0); }
+  to { transform: rotate(-360deg); }
+}
+
+/* ============================================================
+   5. WINDOWS: open with a quick zoom
+   ============================================================ */
+@media (min-width: 769px) {
+  .kenos-window {
+    animation: windowOpen 0.35s var(--ease-out-expo);
+  }
+}
+
+@keyframes windowOpen {
+  from { opacity: 0; transform: scale(0.94) translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   Reduced motion: keep everything instant and calm
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .kenos-mode-transition.active,
+  .kenos-mode-transition.closing {
+    clip-path: none;
+    transform: none;
+    filter: none;
+  }
+
+  #bootScreen::before,
+  .boot-ring {
+    animation: none !important;
+    opacity: 1;
+  }
+}
